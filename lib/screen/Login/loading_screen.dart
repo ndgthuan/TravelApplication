@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'login_chosen.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -18,6 +20,16 @@ class _LoadingScreenState extends State<LoadingScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
+
+    // Navigate to login chosen screen after 3 seconds
+    Timer(const Duration(seconds: 5), () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginChosenScreen()),
+        );
+      }
+    });
   }
 
   @override
@@ -42,8 +54,8 @@ class _LoadingScreenState extends State<LoadingScreen>
           children: [
             // Loading text and animated spinner
             Positioned(
-              left: 140,
-              bottom: 240,
+              left: 145,
+              top: 270,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -52,7 +64,7 @@ class _LoadingScreenState extends State<LoadingScreen>
                     style: TextStyle(
                       fontFamily: 'Urbanist-Regular',
                       fontSize: 24,
-                      color: Colors.yellow,
+                      color: Colors.white,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -64,9 +76,7 @@ class _LoadingScreenState extends State<LoadingScreen>
                       height: 24,
                       child: CircularProgressIndicator(
                         strokeWidth: 3,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Colors.yellow,
-                        ),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                       ),
                     ),
                   ),
