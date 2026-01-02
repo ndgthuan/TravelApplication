@@ -39,7 +39,7 @@ class _StartScreenState extends State<StartScreen>
 
     // Controller cho nút - slide từ phải sang trái
     _buttonController = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 1),
       vsync: this,
     );
 
@@ -107,8 +107,9 @@ class _StartScreenState extends State<StartScreen>
               child: FadeTransition(
                 opacity: _orionFadeAnimation,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 75, top: 120),
+                  padding: const EdgeInsets.only(top: 120),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // Icon la bàn
                       const Icon(Icons.explore, color: Colors.white, size: 90),
