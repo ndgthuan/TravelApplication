@@ -1,10 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:developer';
 import 'package:flutter/gestures.dart';
-import 'package:travel_app/screen/Plan/screens/plan_screen.dart';
 import 'login_screen.dart';
+import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -19,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isRegisterPressed = false;
 
   // Tạo các phương thức đăng ký
-  String email = "", password = "", username = "", reenterpassword = "";
+  String email = "", password = "";
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -28,35 +27,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // Tạo form key để bọc xung quanh các hộp đăng ký
   final _formkey = GlobalKey<FormState>();
 
-  // Tạo phương thức đăng ký
-  registration() async {
-    if (nameController.text != "" &&
-        emailController.text != "" &&
-        reenterpasswordController.text == passwordController.text) {
-      email = emailController.text;
-      password = passwordController.text;
-      try {
-        // Khởi tạo password và email
-        // ignore: unused_local_variable
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
-        log('REGISTRATION COMPLETED');
-        // CHuyển trang
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const PlanScreen()),
-        );
-      } on FirebaseException catch (e) {
-        if (e.code == 'weak-password') {
-          log('WEAK PASSWORD');
-        } else if (e.code == 'email-already-in-use') {
-          log('EMAIL EXISTED');
-        } else if (e.code == 'invalid-email') {
-          log('INVALID EMAIL');
-        }
-      }
-    }
-  }
+  // Tạo instance của AuthService
+  final AuthService _authService = AuthService();
+
+  String? _emailError; // Lưu lỗi email từ Firebase
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Tạo phương thức đăng ký
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      log("NAME HAS NOT ENTERED YET");
-                      return "NAME HAS NOT ENTERED YET";
+                      return "Username is empty";
                     }
                     return null;
                   },
@@ -122,8 +95,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Tạo phương thức đăng ký
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      log("EMAIL HAS NOT ENTERED YET");
-                      return "EMAIL HAS NOT ENTERED YET";
+                      return "Email is empty";
+                    }
+                    if (_emailError != null) {
+                      return _emailError; // Hiện lỗi từ Firebase
                     }
                     return null;
                   },
@@ -150,8 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Tạo phương thức đăng ký
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      log("PASSWORD HAS NOT ENTERED YET");
-                      return "PASSWORD HAS NOT ENTERED YET";
+                      return "Password is empty";
                     }
                     return null;
                   },
@@ -192,12 +166,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // Tạo phương thức đăng ký
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      log("REENTER PASSWORD HAS NOT ENTERED YET");
-                      return "REENTER PASSWORD HAS NOT ENTERED YET";
+                      return "Password is empty";
                     }
                     if (value != passwordController.text) {
-                      log("REENTER PASSWORD IS NOT CORRECT");
-                      return "REENTER PASSWORD IS NOT CORRECT";
+                      return "Password is not correct";
                     }
                     return null;
                   },
@@ -237,15 +209,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onTapDown: (_) => setState(() => _isRegisterPressed = true),
                 onTapUp: (_) => setState(() => _isRegisterPressed = false),
                 onTapCancel: () => setState(() => _isRegisterPressed = false),
-                onTap: () {
+                onTap: () async {
+                  // Reset lỗi cũ
+                  setState(() {
+                    _emailError = null;
+                  });
                   // Tạo form đăng ký
                   if (_formkey.currentState!.validate()) {
-                    setState(() {
-                      username = nameController.text;
-                      email = emailController.text;
-                      password = passwordController.text;
-                    });
-                    registration();
+                    String? result = await _authService.signUp(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
+
+                    // Kiểm tra nếu đăng ký thành công
+                    if (result == null) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    } else {
+                      // Lưu lỗi vào state
+                      setState(() {
+                        _emailError =
+                            result; // "Email is existed", "Invalid email"
+                      });
+
+                      _formkey.currentState!.validate();
+                      // Validate lại để hiện lỗi trong TextFormField
+                    }
                   }
                   log('ENAIL REGISTER');
                 },
@@ -322,7 +313,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   builder: (context) => const LoginScreen(),
                                 ),
                               );
-                              log("LOGIN");
                             },
                         ),
                       ],
