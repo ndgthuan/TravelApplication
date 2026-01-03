@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -107,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
 
-            // thanh đăng nhập
+            // Thanh đăng nhập
             GestureDetector(
               onTapDown: (_) => setState(() => _isLoginPressed = true),
               onTapUp: (_) => setState(() => _isLoginPressed = false),
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Container(
                   padding: EdgeInsets.only(
                     top: 15,
-                    left: 179,
+                    left: 175,
                     right: 175,
                     bottom: 15,
                   ),
@@ -247,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     // Tạo text span hộp để chứa các text chung
                     children: <TextSpan>[
-                      TextSpan(text: "You don't have an account?"),
+                      TextSpan(text: "Don't have an account?"),
                       TextSpan(
                         text: ' Sign up',
                         style: GoogleFonts.poppins(
@@ -256,6 +257,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
+                            // Khi nhấn vào sign up sẽ chuyển sang trang Register
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterScreen(),
+                              ),
+                            );
                             log("SIGN UP");
                           },
                       ),
