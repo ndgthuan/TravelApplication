@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animations/animations.dart';
-import 'login_screen.dart';
+import '../../Auth/screens/login_screen.dart';
 
 // Hàm khởi tạo để truyền tham số nhanh hơn
 class StartScreen extends StatefulWidget {
