@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/screen/Login/services/password_service.dart';
-import 'package:travel_app/screen/Login/widgets/button_widget.dart';
-import 'package:travel_app/screen/Login/widgets/password_widget.dart';
+import 'package:travel_app/screen/Auth/services/password_service.dart';
+import 'package:travel_app/screen/Auth/widgets/button_widget.dart';
+import 'package:travel_app/screen/Auth/widgets/password_widget.dart';
 import 'login_screen.dart';
 import '../services/auth_service.dart';
 import '../widgets/textfield_widget.dart';
