@@ -25,7 +25,7 @@ int checkPasswordStrength(String password) {
     strength += 1;
   }
   if (RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
-    strength += 1;
+    strength += 2;
   }
 
   return strength;
