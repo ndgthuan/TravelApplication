@@ -53,6 +53,7 @@ dependencies {
 
 
   // Add the dependencies for any other desired Firebase products
+  implementation("com.facebook.android:facebook-login:latest.release")
   // https://firebase.google.com/docs/android/setup#available-libraries
 }
 

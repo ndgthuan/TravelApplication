@@ -1,10 +1,12 @@
-import 'dart:developer';
-import 'package:flutter/gestures.dart';
+import '../widgets/dialog_widget.dart';
 import '../services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
 import '../../Plan/screens/plan_screen.dart';
+import '../widgets/button_widget.dart';
+import '../widgets/textfield_widget.dart';
+import 'package:animations/animations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,11 +16,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  // Các bién
   bool _isLoading = false;
-  bool _isShowing = true;
-  bool _isLoginPressed = false;
-  bool _isGooglePressed = false;
-  bool _isFacebookPressed = false;
+  final bool _isShowing = true;
+  final bool _isLoginPressed = false;
+  final bool _isGooglePressed = false;
+  final bool _isFacebookPressed = false;
+  final _resetEmail = TextEditingController();
 
   // Tạo instance của AuthService
   final AuthService _authService = AuthService();
@@ -31,15 +35,45 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formkey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    _resetEmail.dispose();
+    super.dispose();
+  }
+
+  void createForgotPassForm() {
+    showModal(
+      context: context,
+      configuration: const FadeScaleTransitionConfiguration(
+        transitionDuration: Duration(milliseconds: 500), // Thời gian mở
+        reverseTransitionDuration: Duration(
+          milliseconds: 300,
+        ), // Thời gian đóng
+        barrierDismissible: true, // Tap ngoài để đóng
+        barrierColor: Colors.black54, // Màu overlay
+        barrierLabel: 'Dismiss',
+      ),
+      builder: (context) {
+        return ForgotPasDialog(controller: _resetEmail);
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('lib/assets/images/login_screen.png'),
-            fit: BoxFit.cover,
+          gradient: const LinearGradient(
+            colors: [
+              Colors.white, // Màu xám bạc (#bdc3c7)
+              Colors.black, // Màu xanh đen (#2c3e50)
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
         child: Form(
@@ -52,8 +86,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   "Welcome back!",
-                  style: GoogleFonts.abrilFatface(
-                    fontSize: 40,
+                  style: GoogleFonts.pacifico(
+                    fontSize: 50,
                     color: Colors.white,
                   ),
                 ),
@@ -61,73 +95,29 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
 
               // Hộp nhập email
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextFormField(
-                  controller: emailController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Email is empty";
-                    }
-                    if (_emailError != null) {
-                      return _emailError;
-                    }
-                    return null;
-                  },
-                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Email",
-                    labelStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.black.withValues(alpha: 0.3),
-                    filled: true,
-
-                    // Tạo icon nằm ở trước hộp nhập
-                    prefixIcon: Icon(Icons.email_outlined, color: Colors.white),
-                  ),
-                ),
+              EmailTextField(
+                labelText: "Email",
+                prefixIcon: Icons.email_outlined,
+                controller: emailController,
+                textReturn: "Email is empty",
+                stringError: _emailError,
               ),
               const SizedBox(height: 10),
 
-              // Hộp nhập password
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextFormField(
-                  controller: passwordController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Password is empty";
-                    }
-                    if (_passwordError != null) {
-                      return _passwordError;
-                    }
-                    return null;
-                  },
-                  obscureText: _isShowing,
-                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Password",
-                    labelStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.black.withValues(alpha: 0.3),
-                    filled: true,
-
-                    // Tạo icon nằm ở trước hộp nhập
-                    prefixIcon: Icon(Icons.lock_outline, color: Colors.white),
-
-                    // Tạo icon con mắt ở sau hộp nhập
-                    suffixIcon: IconButton(
-                      // Nếu ấn vào thì chuyển sang icon còn lại
-                      onPressed: () => setState(() {
-                        _isShowing = !_isShowing;
-                      }),
-                      icon: Icon(
-                        _isShowing ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+              PasswordTextField(
+                isShowing: _isShowing,
+                labelText: "Password",
+                prefixIcon: Icons.lock_outline,
+                controller: passwordController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Password is empty";
+                  }
+                  if (_passwordError != null) {
+                    return _passwordError;
+                  }
+                  return null;
+                },
               ),
 
               // Nút quên mật khẩu
@@ -136,20 +126,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () => log('FORGOT PASSWORD'),
+                    onPressed: () {
+                      createForgotPassForm();
+                    },
                     child: Text(
                       "Forgot password",
-                      style: GoogleFonts.poppins(color: Colors.white),
+                      style: GoogleFonts.nunito(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
               ),
 
               // Thanh đăng nhập
-              GestureDetector(
-                onTapDown: (_) => setState(() => _isLoginPressed = true),
-                onTapUp: (_) => setState(() => _isLoginPressed = false),
-                onTapCancel: () => setState(() => _isLoginPressed = false),
+              ActionButton(
+                isPress: _isLoginPressed,
+                buttonText: "Login",
                 onTap: () async {
                   // Nếu đang loading thì trả về
                   if (_isLoading) return;
@@ -169,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                     if (result == null) {
                       Navigator.pushReplacement(
+                        // ignore: use_build_context_synchronously
                         context,
                         MaterialPageRoute(builder: (context) => PlanScreen()),
                       );
@@ -195,48 +190,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     _isLoading = false;
                   });
                 },
-                child: AnimatedScale(
-                  scale: _isLoginPressed ? 0.9 : 1.0,
-                  duration: const Duration(milliseconds: 150),
-                  curve: Curves.easeInOut,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      top: 15,
-                      left: 175,
-                      right: 175,
-                      bottom: 15,
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.white,
-                          Color(
-                            0xFFE0E0E0,
-                          ), // Xám cực nhạt Hơi tím nhẹ (để hợp với dải ngân hà)
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-
-                      // Thêm hiệu ứng box shadow làm nổi bật nút login
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white.withValues(alpha: 0.4),
-                          blurRadius: 15,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      "Login",
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ),
               ),
               const SizedBox(height: 20),
 
@@ -250,9 +203,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
-                        "Or",
-                        style: GoogleFonts.dmSerifDisplay(
-                          fontStyle: FontStyle.italic,
+                        "Or login with",
+                        style: GoogleFonts.nunito(
                           color: Colors.white,
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -271,49 +223,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Google Logo
-                  Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: GestureDetector(
-                      onTapDown: (_) => setState(() => _isGooglePressed = true),
-                      onTapUp: (_) => setState(() => _isGooglePressed = false),
-                      onTapCancel: () =>
-                          setState(() => _isGooglePressed = false),
-                      onTap: () => log('GOOGLE LOGIN'),
-                      child: AnimatedScale(
-                        scale: _isGooglePressed ? 0.9 : 1.0,
-                        duration: const Duration(milliseconds: 150),
-                        curve: Curves.easeInOut,
-                        child: Image.asset(
-                          'lib/assets/images/google_logo.png',
-                          width: 70,
-                          height: 70,
-                        ),
-                      ),
-                    ),
+                  SocialIconButton(
+                    isPressed: _isGooglePressed,
+                    imagePath: "lib/assets/images/google_logo.png",
+                    authFunction: _authService.signInWithGoogle,
                   ),
 
                   // Facebook Logo
-                  Padding(
-                    padding: EdgeInsets.only(left: 10),
-                    child: GestureDetector(
-                      onTapDown: (_) =>
-                          setState(() => _isFacebookPressed = true),
-                      onTapUp: (_) =>
-                          setState(() => _isFacebookPressed = false),
-                      onTapCancel: () =>
-                          setState(() => _isFacebookPressed = false),
-                      onTap: () => log('FACEBOOK LOGIN'),
-                      child: AnimatedScale(
-                        scale: _isFacebookPressed ? 0.9 : 1.0,
-                        duration: const Duration(milliseconds: 150),
-                        curve: Curves.easeInOut,
-                        child: Image.asset(
-                          'lib/assets/images/facebook_logo.png',
-                          width: 72,
-                          height: 72,
-                        ),
-                      ),
-                    ),
+                  SocialIconButton(
+                    isPressed: _isFacebookPressed,
+                    imagePath: 'lib/assets/images/facebook_logo.png',
+                    authFunction: _authService.signInWithFacebook,
                   ),
                 ],
               ),
@@ -323,36 +243,10 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: Colors.white70,
-                      ),
-
-                      // Tạo text span hộp để chứa các text chung
-                      children: <TextSpan>[
-                        TextSpan(text: "Don't have an account?"),
-                        TextSpan(
-                          text: ' Sign up',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Khi nhấn vào sign up sẽ chuyển sang trang Register
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const RegisterScreen(),
-                                ),
-                              );
-                              log("SIGN UP");
-                            },
-                        ),
-                      ],
-                    ),
+                  BottomSwitchPageButton(
+                    formerText: "Don't have an account? ",
+                    latterText: "Sign up",
+                    destinationScreen: RegisterScreen(),
                   ),
                 ],
               ),

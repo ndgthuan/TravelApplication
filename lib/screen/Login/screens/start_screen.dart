@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:animations/animations.dart';
 import 'login_screen.dart';
 
 // Hàm khởi tạo để truyền tham số nhanh hơn
@@ -18,12 +19,9 @@ class _StartScreenState extends State<StartScreen>
   bool _isPressed = false;
 
   // Animation controllers
-  late AnimationController _orionController;
   late AnimationController _buttonController;
 
   // Animations
-  late Animation<Offset> _orionSlideAnimation;
-  late Animation<double> _orionFadeAnimation;
   late Animation<Offset> _buttonSlideAnimation;
   late Animation<double> _buttonFadeAnimation;
 
@@ -31,54 +29,32 @@ class _StartScreenState extends State<StartScreen>
   void initState() {
     super.initState();
 
-    // Controller cho ORION text - float từ dưới lên
-    _orionController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
-
-    // Controller cho nút - slide từ phải sang trái
+    // Controller cho animation slide từ dưới lên
     _buttonController = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
 
-    // ORION slide từ dưới lên (offset y: 1 -> 0)
-    _orionSlideAnimation =
-        Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero).animate(
-          CurvedAnimation(parent: _orionController, curve: Curves.easeOutCubic),
-        );
-
-    // ORION fade in
-    _orionFadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _orionController, curve: Curves.easeOut));
-
-    // Button slide từ phải sang trái (offset x: 1 -> 0)
+    // Slide từ dưới lên (offset y: 1 -> 0)
     _buttonSlideAnimation =
-        Tween<Offset>(begin: const Offset(1, 0), end: Offset.zero).animate(
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
           CurvedAnimation(
             parent: _buttonController,
             curve: Curves.easeOutCubic,
           ),
         );
 
-    // Button fade in
-    _buttonFadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    // Fade in
+    _buttonFadeAnimation = Tween<double>(begin: 0.0, end: 1).animate(
       CurvedAnimation(parent: _buttonController, curve: Curves.easeOut),
     );
 
-    // Bắt đầu animations với delay
-    _orionController.forward();
-    Future.delayed(const Duration(seconds: 1), () {
-      _buttonController.forward();
-    });
+    // Bắt đầu animation
+    _buttonController.forward();
   }
 
   @override
   void dispose() {
-    _orionController.dispose();
     _buttonController.dispose();
     super.dispose();
   }
@@ -86,14 +62,17 @@ class _StartScreenState extends State<StartScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Images
       body: Container(
         height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('lib/assets/images/start_screen.png'),
-            fit: BoxFit.cover,
+          gradient: LinearGradient(
+            colors: [
+              Colors.white70, // Màu xám bạc (#bdc3c7)
+              Colors.black, // Màu xanh đen (#2c3e50)
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
         // Get start button
@@ -101,25 +80,68 @@ class _StartScreenState extends State<StartScreen>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ORION word với animation float từ dưới lên
+            // Content với animation float từ dưới lên
             SlideTransition(
-              position: _orionSlideAnimation,
+              position: _buttonSlideAnimation,
               child: FadeTransition(
-                opacity: _orionFadeAnimation,
+                opacity: _buttonFadeAnimation,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 120),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Icon la bàn
-                      const Icon(Icons.explore, color: Colors.white, size: 90),
-                      // Chữ orion
-                      Text(
-                        "RION",
-                        style: GoogleFonts.abrilFatface(
-                          fontSize: 80,
-                          color: Colors.white,
-                          fontStyle: FontStyle.italic,
+                      Container(
+                        decoration: BoxDecoration(
+                          // Shadow để tạo chiều sâu
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white.withValues(alpha: 0.4),
+                              blurRadius: 30,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          "Plan Your Day",
+                          style: GoogleFonts.pacifico(
+                            color: Colors.white,
+                            fontSize: 44,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 448,
+                        height: 448,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              'lib/assets/images/schedule_icon.png',
+                            ),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(
+                                179,
+                                148,
+                                144,
+                                144,
+                              ).withValues(alpha: 0.4),
+                              blurRadius: 60,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Transform.translate(
+                        offset: Offset(0, -35),
+                        child: Text(
+                          "Simple tools to manage your daily schedule effectively.",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.nunito(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -128,7 +150,7 @@ class _StartScreenState extends State<StartScreen>
               ),
             ),
 
-            // Nút bấm tròn với animation slide từ phải sang trái
+            // Nút Get started
             SlideTransition(
               position: _buttonSlideAnimation,
               child: FadeTransition(
@@ -136,55 +158,78 @@ class _StartScreenState extends State<StartScreen>
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 50, right: 30),
+                    padding: const EdgeInsets.only(bottom: 70),
                     // Phương thức chuyển qua trang đăng nhập
                     child: GestureDetector(
                       onTapDown: (_) => setState(() => _isPressed = true),
                       onTapUp: (_) => setState(() => _isPressed = false),
                       onTapCancel: () => setState(() => _isPressed = false),
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
+                        Navigator.of(context).pushReplacement(
+                          PageRouteBuilder(
+                            // Thời gian animation
+                            transitionDuration: const Duration(seconds: 1),
+                            reverseTransitionDuration: const Duration(
+                              milliseconds: 800,
+                            ),
+
+                            // Xây dựng transition
+                            pageBuilder:
+                                // Callback transition
+                                (context, animation, secondaryAnimation) {
+                                  return const LoginScreen();
+                                },
+                            transitionsBuilder:
+                                (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                ) {
+                                  return SharedAxisTransition(
+                                    fillColor: Colors.grey,
+                                    animation: animation,
+                                    secondaryAnimation: secondaryAnimation,
+                                    transitionType:
+                                        SharedAxisTransitionType.horizontal,
+                                    child: child,
+                                  );
+                                },
                           ),
                         );
                       },
                       // Animation scale khi nhấn
-                      child: AnimatedScale(
-                        scale: _isPressed ? 0.9 : 1.0,
-                        duration: const Duration(milliseconds: 150),
-                        curve: Curves.easeInOut,
-                        child: Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            // Gradient xanh than sang xanh lam
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color.fromRGBO(22, 42, 60, 1), // Màu xanh than
-                                Color.fromRGBO(60, 110, 130, 1), // Màu xanh lam
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
+                      child: Center(
+                        child: AnimatedScale(
+                          scale: _isPressed ? 0.9 : 1.0,
+                          duration: const Duration(milliseconds: 150),
+                          curve: Curves.easeInOut,
+                          child: Container(
+                            width: 350,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Colors.white,
 
-                            // Vẽ hình tròn
-                            shape: BoxShape.circle,
-                            // Shadow để tạo chiều sâu
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.cyanAccent.withValues(alpha: 0.2),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
+                              // Shadow để tạo chiều sâu
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white.withValues(alpha: 0.4),
+                                  blurRadius: 30,
+                                  offset: const Offset(0, 10),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Get started",
+                                style: GoogleFonts.nunito(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ],
-                          ),
-                          // Icon mũi tên
-                          child: const Icon(
-                            Icons.arrow_forward_rounded,
-                            color: Colors.white,
-                            size: 30,
+                            ),
                           ),
                         ),
                       ),

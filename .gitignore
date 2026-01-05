@@ -16,6 +16,9 @@ migrate_working_dir/
 google-services.json
 android/app/google-services.json
 
+# Secrets - API keys
+android/secrets.properties
+
 # IntelliJ related
 *.iml
 *.ipr
