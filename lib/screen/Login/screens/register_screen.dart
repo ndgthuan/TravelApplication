@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:developer';
-import 'package:flutter/gestures.dart';
+import 'package:travel_app/screen/Login/services/password_service.dart';
+import 'package:travel_app/screen/Login/widgets/button_widget.dart';
+import 'package:travel_app/screen/Login/widgets/password_widget.dart';
 import 'login_screen.dart';
 import '../services/auth_service.dart';
+import '../widgets/textfield_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,9 +15,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  bool _isShowingPassword = true;
-  bool _isShowingReenterPassword = true;
-  bool _isRegisterPressed = false;
+  bool _isLoading = false;
+  final bool _isShowingPassword = true;
+  final bool _isShowingReenterPassword = true;
+  final bool _isRegisterPressed = false;
 
   // Tạo các phương thức đăng ký
   String email = "", password = "";
@@ -27,10 +30,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // Tạo form key để bọc xung quanh các hộp đăng ký
   final _formkey = GlobalKey<FormState>();
 
+  // Tạo biến ẩn hiện kiểm tra
+  final FocusNode _passwordFocusNode = FocusNode();
+  bool _isPasswordFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordFocusNode.addListener(() {
+      setState(() {
+        _isPasswordFocused = _passwordFocusNode.hasFocus;
+      });
+    });
+  }
+
+  // Giải phóng bộ nhớ để khi không dùng để tránh memory leak
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    reenterpasswordController.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
   // Tạo instance của AuthService
   final AuthService _authService = AuthService();
 
   String? _emailError; // Lưu lỗi email từ Firebase
+  String? _passwordError;
+  int _passwordStrength = 0; // Biến theo dõi độ mạnh password
+
+  // Tạo các biến để lấy giá trị mật khẩu
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +71,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('lib/assets/images/register_screen.png'),
-            fit: BoxFit.cover,
+          gradient: const LinearGradient(
+            colors: [
+              Colors.white, // Màu xám bạc (#bdc3c7)
+              Colors.black, // Màu xanh đen (#2c3e50)
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
         child: Form(
@@ -54,165 +90,127 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   "Welcome!",
-                  style: GoogleFonts.abrilFatface(
-                    fontSize: 40,
+                  style: GoogleFonts.pacifico(
+                    fontSize: 50,
                     color: Colors.white,
                   ),
                 ),
               ),
               const SizedBox(height: 20),
 
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextFormField(
-                  // Tạo phương thức đăng ký
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Username is empty";
-                    }
-                    return null;
-                  },
-                  controller: nameController,
-                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Username",
-                    labelStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.black.withValues(alpha: 0.3),
-                    filled: true,
-
-                    // Tạo icon nằm ở trước hộp nhập
-                    prefixIcon: Icon(Icons.email_outlined, color: Colors.white),
-                  ),
-                ),
+              // Hộp nhập Username
+              UserTextField(
+                labelText: "Username",
+                prefixIcon: Icons.person,
+                controller: nameController,
+                textReturn: "Username is empty",
               ),
               const SizedBox(height: 10),
 
               // Hộp nhập email
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextFormField(
-                  // Tạo phương thức đăng ký
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Email is empty";
-                    }
-                    if (_emailError != null) {
-                      return _emailError; // Hiện lỗi từ Firebase
-                    }
-                    return null;
-                  },
-                  controller: emailController,
-                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Email",
-                    labelStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.black.withValues(alpha: 0.3),
-                    filled: true,
-
-                    // Tạo icon nằm ở trước hộp nhập
-                    prefixIcon: Icon(Icons.email_outlined, color: Colors.white),
-                  ),
-                ),
+              EmailTextField(
+                labelText: "Email",
+                prefixIcon: Icons.email_outlined,
+                controller: emailController,
+                textReturn: "Email is empty",
+                stringError: _emailError,
               ),
               const SizedBox(height: 10),
 
               // Hộp nhập password
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextFormField(
-                  // Tạo phương thức đăng ký
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Password is empty";
-                    }
-                    return null;
-                  },
-                  controller: passwordController,
-                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
-                  obscureText: _isShowingPassword,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Password",
-                    labelStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.black.withValues(alpha: 0.3),
-                    filled: true,
-
-                    // Tạo icon nằm ở trước hộp nhập
-                    prefixIcon: Icon(Icons.lock_outline, color: Colors.white),
-
-                    // Tạo icon con mắt ở sau hộp nhập
-                    suffixIcon: IconButton(
-                      // Nếu ấn vào thì chuyển sang icon còn lại
-                      onPressed: () => setState(() {
-                        _isShowingPassword = !_isShowingPassword;
-                      }),
-                      icon: Icon(
-                        _isShowingPassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
+              PasswordTextField(
+                focusNode: _passwordFocusNode,
+                isShowing: _isShowingPassword,
+                labelText: "Password",
+                prefixIcon: Icons.lock_outline,
+                controller: passwordController,
+                onChanged: (value) {
+                  setState(() {
+                    _passwordStrength = checkPasswordStrength(value);
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Password is empty";
+                  }
+                  if (_passwordError != null) return _passwordError;
+                  return null;
+                },
               ),
               const SizedBox(height: 10),
 
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextFormField(
-                  // Tạo phương thức đăng ký
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Password is empty";
-                    }
-                    if (value != passwordController.text) {
-                      return "Password is not correct";
-                    }
-                    return null;
-                  },
-                  controller: reenterpasswordController,
-                  obscureText: _isShowingReenterPassword,
-                  style: GoogleFonts.poppins(color: Colors.white, fontSize: 14),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Reenter password",
-                    labelStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.black.withValues(alpha: 0.3),
-                    filled: true,
-
-                    // Tạo icon nằm ở trước hộp nhập
-                    prefixIcon: Icon(Icons.lock_outline, color: Colors.white),
-
-                    // Tạo icon con mắt ở sau hộp nhập
-                    suffixIcon: IconButton(
-                      // Nếu ấn vào thì chuyển sang icon còn lại
-                      onPressed: () => setState(() {
-                        _isShowingReenterPassword = !_isShowingReenterPassword;
-                      }),
-                      icon: Icon(
-                        _isShowingReenterPassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
-                        color: Colors.white,
+              // Thanh hiển thị độ mạnh password
+              if (_isPasswordFocused)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Progress bar
+                      Container(
+                        height: 8,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[800],
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: FractionallySizedBox(
+                          alignment: Alignment.centerLeft,
+                          widthFactor:
+                              _passwordStrength / 9, // Max strength = 9
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: getPasswordStrength(_passwordStrength),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 5),
+                      // Text hiển thị độ mạnh
+                      Text(
+                        getStrengthText(_passwordStrength),
+                        style: TextStyle(
+                          color: getPasswordStrength(_passwordStrength),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
+              // Hộp reenter password
+              PasswordTextField(
+                isShowing: _isShowingReenterPassword,
+                labelText: "Reenter password",
+                prefixIcon: Icons.lock_outline,
+                controller: reenterpasswordController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Password is empty";
+                  }
+                  if (value != passwordController.text) {
+                    return "Password is not correct";
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 30),
 
-              // Thanh đăng nhập
-              GestureDetector(
-                onTapDown: (_) => setState(() => _isRegisterPressed = true),
-                onTapUp: (_) => setState(() => _isRegisterPressed = false),
-                onTapCancel: () => setState(() => _isRegisterPressed = false),
+              // Thanh đăng ký
+              ActionButton(
+                isPress: _isRegisterPressed,
+                buttonText: "Register",
                 onTap: () async {
+                  if (_isLoading) return;
                   // Reset lỗi cũ
                   setState(() {
                     _emailError = null;
+                    _passwordError = null;
+                    _isLoading = true;
                   });
                   // Tạo form đăng ký
                   if (_formkey.currentState!.validate()) {
@@ -224,10 +222,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     // Kiểm tra nếu đăng ký thành công
                     if (result == null) {
                       Navigator.pushReplacement(
+                        // ignore: use_build_context_synchronously
                         context,
                         MaterialPageRoute(builder: (context) => LoginScreen()),
                       );
-                    } else {
+                    } else if (result.contains('email') ||
+                        result.contains('Email')) {
                       // Lưu lỗi vào state
                       setState(() {
                         _emailError =
@@ -236,87 +236,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       _formkey.currentState!.validate();
                       // Validate lại để hiện lỗi trong TextFormField
+                    } else if (result.contains('password')) {
+                      setState(() {
+                        _passwordError = result;
+                      });
+                      _formkey.currentState!.validate();
                     }
                   }
-                  log('ENAIL REGISTER');
-                },
-                child: AnimatedScale(
-                  scale: _isRegisterPressed ? 0.9 : 1.0,
-                  duration: const Duration(milliseconds: 150),
-                  curve: Curves.easeInOut,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                      top: 15,
-                      left: 170,
-                      right: 170,
-                      bottom: 15,
-                    ),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          Colors.white,
-                          Color(
-                            0xFFE0E0E0,
-                          ), // Xám cực nhạt Hơi tím nhẹ (để hợp với dải ngân hà)
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
 
-                      // Thêm hiệu ứng box shadow làm nổi bật nút login
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white.withValues(alpha: 0.4),
-                          blurRadius: 15,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      "Register",
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ),
+                  setState(() {
+                    _isLoading = false;
+                  });
+                },
               ),
               const SizedBox(height: 20),
 
-              // Dòng signup
+              // Dòng login
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: Colors.white70,
-                      ),
-
-                      // Tạo text span hộp để chứa các text chung
-                      children: <TextSpan>[
-                        TextSpan(text: "Already have an account?"),
-                        TextSpan(
-                          text: ' Log in',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(),
-                                ),
-                              );
-                            },
-                        ),
-                      ],
-                    ),
+                  BottomSwitchPageButton(
+                    formerText: "Already have an account? ",
+                    latterText: "Log in",
+                    destinationScreen: LoginScreen(),
                   ),
                 ],
               ),
