@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   // Các bién
   bool _isLoading = false;
   final bool _isShowing = true;
-  final bool _isLoginPressed = false;
+
   final bool _isGooglePressed = false;
   final bool _isFacebookPressed = false;
   final _resetEmail = TextEditingController();
@@ -66,16 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              Colors.white, // Màu xám bạc (#bdc3c7)
-              Colors.black, // Màu xanh đen (#2c3e50)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+        decoration: BoxDecoration(color: Color(0xFF121212)),
         child: Form(
           key: _formkey,
           child: Column(
@@ -86,13 +77,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   "Welcome back!",
-                  style: GoogleFonts.pacifico(
+                  style: GoogleFonts.plusJakartaSans(
                     fontSize: 50,
+                    fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
 
               // Hộp nhập email
               EmailTextField(
@@ -102,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 textReturn: "Email is empty",
                 stringError: _emailError,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               PasswordTextField(
                 isShowing: _isShowing,
@@ -119,6 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   return null;
                 },
               ),
+              const SizedBox(height: 10),
 
               // Nút quên mật khẩu
               Padding(
@@ -127,22 +120,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
+                      Color(0xFFFFAD33);
                       createForgotPassForm();
                     },
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(
+                        0xFFFFAD33,
+                      ), // Màu hiệu ứng khi bấm vào
+                    ),
                     child: Text(
                       "Forgot password",
-                      style: GoogleFonts.nunito(
-                        color: Colors.white,
-                        fontSize: 18,
+                      style: GoogleFonts.beVietnamPro(
+                        color: Color(0xFFCCCCCC),
+                        fontSize: 16,
                       ),
                     ),
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
 
               // Thanh đăng nhập
               ActionButton(
-                isPress: _isLoginPressed,
                 buttonText: "Login",
                 onTap: () async {
                   // Nếu đang loading thì trả về
@@ -204,10 +203,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         "Or login with",
-                        style: GoogleFonts.nunito(
-                          color: Colors.white,
+                        style: GoogleFonts.beVietnamPro(
+                          color: Color(0xFF888888),
                           fontSize: 13,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),

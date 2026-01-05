@@ -81,14 +81,14 @@ class BottomSwitchPageButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        style: GoogleFonts.nunito(fontSize: 18, color: Colors.white70),
+        style: GoogleFonts.beVietnamPro(fontSize: 18, color: Colors.white70),
 
         // Tạo text span hộp để chứa các text chung
         children: <TextSpan>[
           TextSpan(text: formerText),
           TextSpan(
             text: latterText,
-            style: GoogleFonts.nunito(
+            style: GoogleFonts.beVietnamPro(
               color: Colors.white,
               fontWeight: FontWeight.w500,
             ),
@@ -112,7 +112,7 @@ class BottomSwitchPageButton extends StatelessWidget {
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
                           return SharedAxisTransition(
-                            fillColor: Colors.grey,
+                            fillColor: Colors.grey.shade900,
                             animation: animation,
                             secondaryAnimation: secondaryAnimation,
                             transitionType: SharedAxisTransitionType.horizontal,
@@ -129,13 +129,12 @@ class BottomSwitchPageButton extends StatelessWidget {
   }
 }
 
+// Hàm gọi các button như login, register
 class ActionButton extends StatefulWidget {
-  final bool isPress;
   final String buttonText;
   final VoidCallback onTap;
   const ActionButton({
     super.key,
-    required this.isPress,
     required this.buttonText,
     required this.onTap,
   });
@@ -145,47 +144,39 @@ class ActionButton extends StatefulWidget {
 }
 
 class _ActionButtonState extends State<ActionButton> {
-  late bool isPress;
-
-  @override
-  void initState() {
-    super.initState();
-    isPress = widget.isPress;
-  }
+  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) => setState(() => isPress = true),
-      onTapUp: (_) => setState(() => isPress = false),
-      onTapCancel: () => setState(() => isPress = false),
-      onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: isPress ? 0.9 : 1.0,
-        duration: const Duration(milliseconds: 150),
-        curve: Curves.easeInOut,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Container(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) => setState(() => _isPressed = false),
+        onTapCancel: () => setState(() => _isPressed = false),
+        child: AnimatedScale(
+          scale: _isPressed ? 0.95 : 1.0,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeInOut,
+          child: SizedBox(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 25),
-            decoration: BoxDecoration(
-              color: Colors.white,
-
-              // Thêm hiệu ứng box shadow làm nổi bật nút register
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white.withValues(alpha: 0.4),
-                  blurRadius: 15,
-                  offset: const Offset(0, 4),
+            child: ElevatedButton(
+              onPressed: widget.onTap,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFFAD35),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-              ],
-            ),
-            child: Center(
+                elevation: 0,
+              ),
               child: Text(
                 widget.buttonText,
-                style: GoogleFonts.nunito(color: Colors.black, fontSize: 18),
+                style: GoogleFonts.beVietnamPro(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),

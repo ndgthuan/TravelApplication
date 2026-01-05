@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:travel_app/firebase_options.dart';
 import 'screen/Onboarding/screens/start_screen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(
+    // For web
+    DevicePreview(
+      enabled: !kReleaseMode,
+      defaultDevice: Devices.ios.iPhone16ProMax,
+      backgroundColor: Colors.black,
+      builder: (context) => const MyApp(),
+    ),
+
+    // For android
+    // MyApp()
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -14,13 +28,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "TravelApplication",
+      // For web
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        useMaterial3: true,
-      ),
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       home: const StartScreen(),
+
+      // For android
+      // title: "TravelApplication",
+      // debugShowCheckedModeBanner: false,
+      // theme: ThemeData(
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+      //   useMaterial3: true,
+      // ),
+      // home: const StartScreen(),
     );
   }
 }

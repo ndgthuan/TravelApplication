@@ -65,16 +65,7 @@ class _StartScreenState extends State<StartScreen>
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Colors.white70, // Màu xám bạc (#bdc3c7)
-              Colors.black, // Màu xanh đen (#2c3e50)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+        decoration: const BoxDecoration(color: Color(0xFF101010)),
         // Get start button
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,16 +83,6 @@ class _StartScreenState extends State<StartScreen>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          // Shadow để tạo chiều sâu
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.white.withValues(alpha: 0.4),
-                              blurRadius: 30,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
                         child: Text(
                           "Plan Your Day",
                           style: GoogleFonts.pacifico(
@@ -110,37 +91,31 @@ class _StartScreenState extends State<StartScreen>
                           ),
                         ),
                       ),
-                      Container(
-                        width: 448,
-                        height: 448,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'lib/assets/images/schedule_icon.png',
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          width: double.infinity,
+                          height: 448,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'lib/assets/images/schedule_icon.png',
+                              ),
                             ),
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color.fromARGB(
-                                179,
-                                148,
-                                144,
-                                144,
-                              ).withValues(alpha: 0.4),
-                              blurRadius: 60,
-                            ),
-                          ],
                         ),
                       ),
                       Transform.translate(
-                        offset: Offset(0, -35),
-                        child: Text(
-                          "Simple tools to manage your daily schedule effectively.",
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.nunito(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
+                        offset: Offset(0, 10),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            "Simple tools to manage your daily schedule effectively.",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.beVietnamPro(
+                              color: Colors.white,
+                              fontSize: 19,
+                            ),
                           ),
                         ),
                       ),
@@ -164,69 +139,66 @@ class _StartScreenState extends State<StartScreen>
                       onTapDown: (_) => setState(() => _isPressed = true),
                       onTapUp: (_) => setState(() => _isPressed = false),
                       onTapCancel: () => setState(() => _isPressed = false),
-                      onTap: () {
-                        Navigator.of(context).pushReplacement(
-                          PageRouteBuilder(
-                            // Thời gian animation
-                            transitionDuration: const Duration(seconds: 1),
-                            reverseTransitionDuration: const Duration(
-                              milliseconds: 800,
-                            ),
-
-                            // Xây dựng transition
-                            pageBuilder:
-                                // Callback transition
-                                (context, animation, secondaryAnimation) {
-                                  return const LoginScreen();
-                                },
-                            transitionsBuilder:
-                                (
-                                  context,
-                                  animation,
-                                  secondaryAnimation,
-                                  child,
-                                ) {
-                                  return SharedAxisTransition(
-                                    fillColor: Colors.grey,
-                                    animation: animation,
-                                    secondaryAnimation: secondaryAnimation,
-                                    transitionType:
-                                        SharedAxisTransitionType.horizontal,
-                                    child: child,
-                                  );
-                                },
-                          ),
-                        );
-                      },
-                      // Animation scale khi nhấn
                       child: Center(
                         child: AnimatedScale(
-                          scale: _isPressed ? 0.9 : 1.0,
-                          duration: const Duration(milliseconds: 150),
+                          scale: _isPressed ? 0.95 : 1.0,
+                          duration: const Duration(milliseconds: 100),
                           curve: Curves.easeInOut,
-                          child: Container(
+                          child: SizedBox(
                             width: 350,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(40),
-                              color: Colors.white,
-
-                              // Shadow để tạo chiều sâu
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white.withValues(alpha: 0.4),
-                                  blurRadius: 30,
-                                  offset: const Offset(0, 10),
+                            height: 80,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  PageRouteBuilder(
+                                    transitionDuration: const Duration(
+                                      seconds: 1,
+                                    ),
+                                    reverseTransitionDuration: const Duration(
+                                      milliseconds: 800,
+                                    ),
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) {
+                                          return const LoginScreen();
+                                        },
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return SharedAxisTransition(
+                                            fillColor: Colors.grey.shade900,
+                                            animation: animation,
+                                            secondaryAnimation:
+                                                secondaryAnimation,
+                                            transitionType:
+                                                SharedAxisTransitionType
+                                                    .horizontal,
+                                            child: child,
+                                          );
+                                        },
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFFAD33),
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40),
                                 ),
-                              ],
-                            ),
-                            child: Center(
+                                elevation: 0,
+                              ),
                               child: Text(
                                 "Get started",
-                                style: GoogleFonts.nunito(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                                style: GoogleFonts.beVietnamPro(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),

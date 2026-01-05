@@ -18,7 +18,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _isLoading = false;
   final bool _isShowingPassword = true;
   final bool _isShowingReenterPassword = true;
-  final bool _isRegisterPressed = false;
 
   // Tạo các phương thức đăng ký
   String email = "", password = "";
@@ -70,16 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              Colors.white, // Màu xám bạc (#bdc3c7)
-              Colors.black, // Màu xanh đen (#2c3e50)
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
+        decoration: BoxDecoration(color: Color(0xFF121212)),
         child: Form(
           key: _formkey,
           child: Column(
@@ -90,13 +80,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   "Welcome!",
-                  style: GoogleFonts.pacifico(
+                  style: GoogleFonts.plusJakartaSans(
+                    fontWeight: FontWeight.bold,
                     fontSize: 50,
                     color: Colors.white,
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
 
               // Hộp nhập Username
               UserTextField(
@@ -105,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: nameController,
                 textReturn: "Username is empty",
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               // Hộp nhập email
               EmailTextField(
@@ -115,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textReturn: "Email is empty",
                 stringError: _emailError,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               // Hộp nhập password
               PasswordTextField(
@@ -137,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
               // Thanh hiển thị độ mạnh password
               if (_isPasswordFocused)
@@ -202,7 +193,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
               // Thanh đăng ký
               ActionButton(
-                isPress: _isRegisterPressed,
                 buttonText: "Register",
                 onTap: () async {
                   if (_isLoading) return;

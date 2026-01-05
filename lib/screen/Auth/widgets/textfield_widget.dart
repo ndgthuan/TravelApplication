@@ -32,14 +32,24 @@ class EmailTextField extends StatelessWidget {
           }
           return null;
         },
-        style: GoogleFonts.nunito(color: Colors.white),
+        style: GoogleFonts.beVietnamPro(color: Colors.white),
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Color(0xFF333333)),
+          ),
           labelText: labelText,
-          labelStyle: GoogleFonts.nunito(color: Colors.white, fontSize: 18),
-          fillColor: Colors.black.withValues(alpha: 0.4),
+          labelStyle: GoogleFonts.beVietnamPro(
+            color: Colors.grey[600],
+            fontSize: 18,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
+          ),
+          fillColor: Color(0xFF1E1E1E),
           filled: true,
-          prefixIcon: Icon(prefixIcon, color: Colors.white),
+          prefixIcon: Icon(prefixIcon, color: Colors.grey[600]),
         ),
       ),
     );
@@ -72,14 +82,24 @@ class UserTextField extends StatelessWidget {
           }
           return null;
         },
-        style: GoogleFonts.nunito(color: Colors.white),
+        style: GoogleFonts.beVietnamPro(color: Colors.white),
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Color(0xFF333333)),
+          ),
           labelText: labelText,
-          labelStyle: GoogleFonts.nunito(color: Colors.white, fontSize: 18),
-          fillColor: Colors.black.withValues(alpha: 0.4),
+          labelStyle: GoogleFonts.beVietnamPro(
+            color: Colors.grey[600],
+            fontSize: 18,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
+          ),
+          fillColor: Color(0xFF1E1E1E),
           filled: true,
-          prefixIcon: Icon(prefixIcon, color: Colors.white),
+          prefixIcon: Icon(prefixIcon, color: Colors.grey[600]),
         ),
       ),
     );
@@ -129,17 +149,27 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         // Ẩn hiện thanh độ password strength
         focusNode: widget.focusNode,
         onChanged: widget.onChanged, // Thêm dòng này
-        style: GoogleFonts.poppins(color: Colors.white),
+        style: GoogleFonts.beVietnamPro(color: Colors.white),
         obscureText: isShowing,
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
+          ),
           labelText: widget.labelText,
-          labelStyle: GoogleFonts.nunito(color: Colors.white, fontSize: 18),
-          fillColor: Colors.black.withValues(alpha: 0.4),
+          labelStyle: GoogleFonts.beVietnamPro(
+            color: Colors.grey[600],
+            fontSize: 18,
+          ),
+          fillColor: Color(0xFF1E1E1E),
           filled: true,
 
           // Tạo icon nằm ở trước hộp nhập
-          prefixIcon: Icon(widget.prefixIcon, color: Colors.white),
+          prefixIcon: Icon(widget.prefixIcon, color: Colors.grey[600]),
 
           // Tạo icon con mắt ở sau hộp nhập
           suffixIcon: IconButton(
@@ -149,7 +179,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             }),
             icon: Icon(
               isShowing ? Icons.visibility_off : Icons.visibility,
-              color: Colors.white,
+              color: Colors.grey[600],
             ),
           ),
         ),
