@@ -33,7 +33,7 @@ class BottomNavigation extends StatelessWidget {
           item: _buildItem(icon: Icons.favorite, title: 'Favourite'),
         ),
         PersistentTabConfig(
-          screen: const HomeScreens(),
+          screen: const HomeScreen(),
           item: _buildItem(icon: Icons.house, title: 'Home'),
         ),
         PersistentTabConfig(

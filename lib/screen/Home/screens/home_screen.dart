@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HomeScreens extends StatefulWidget {
-  const HomeScreens({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomeScreens> createState() => _HomeScreensState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreensState extends State<HomeScreens> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Container(color: Color(0xFF000000)));
