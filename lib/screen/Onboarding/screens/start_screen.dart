@@ -61,144 +61,140 @@ class _StartScreenState extends State<StartScreen>
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(color: Color(0xFF000000)),
-        // Get start button
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Content với animation float từ dưới lên
-            SlideTransition(
-              position: _buttonSlideAnimation,
-              child: FadeTransition(
-                opacity: _buttonFadeAnimation,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 120),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        child: Text(
-                          "Plan Your Day",
-                          style: GoogleFonts.pacifico(
-                            color: Colors.white,
-                            fontSize: 44,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          width: double.infinity,
-                          height: 448,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(
-                                'lib/assets/images/schedule_icon.png',
+      body: SafeArea(
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: const BoxDecoration(color: Color(0xFF000000)),
+          // Get start button
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: screenHeight * 0.05,
+              horizontal: 20,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Content với animation float từ dưới lên
+                Container(
+                  child: SlideTransition(
+                    position: _buttonSlideAnimation,
+                    child: FadeTransition(
+                      opacity: _buttonFadeAnimation,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            child: Text(
+                              "Plan Your Day",
+                              style: GoogleFonts.pacifico(
+                                color: Colors.white,
+                                fontSize: 44,
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      Transform.translate(
-                        offset: Offset(0, 10),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
+                          Container(
+                            width: double.infinity,
+                            height: screenHeight * 0.45,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'lib/assets/images/schedule_icon.png',
+                                ),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          Text(
                             "Simple tools to manage your daily schedule effectively.",
                             textAlign: TextAlign.center,
                             style: GoogleFonts.beVietnamPro(
                               color: Colors.white,
-                              fontSize: 19,
+                              fontSize: screenWidth * 0.045,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
 
-            // Nút Get started
-            SlideTransition(
-              position: _buttonSlideAnimation,
-              child: FadeTransition(
-                opacity: _buttonFadeAnimation,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 70),
-                    // Phương thức chuyển qua trang đăng nhập
-                    child: GestureDetector(
-                      onTapDown: (_) => setState(() => _isPressed = true),
-                      onTapUp: (_) => setState(() => _isPressed = false),
-                      onTapCancel: () => setState(() => _isPressed = false),
-                      child: Center(
-                        child: AnimatedScale(
-                          scale: _isPressed ? 0.95 : 1.0,
-                          duration: const Duration(milliseconds: 100),
-                          curve: Curves.easeInOut,
-                          child: SizedBox(
-                            width: 350,
-                            height: 80,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pushReplacement(
-                                  PageRouteBuilder(
-                                    transitionDuration: const Duration(
-                                      seconds: 1,
+                // Nút Get started
+                SlideTransition(
+                  position: _buttonSlideAnimation,
+                  child: FadeTransition(
+                    opacity: _buttonFadeAnimation,
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      // Phương thức chuyển qua trang đăng nhập
+                      child: GestureDetector(
+                        onTapDown: (_) => setState(() => _isPressed = true),
+                        onTapUp: (_) => setState(() => _isPressed = false),
+                        onTapCancel: () => setState(() => _isPressed = false),
+                        child: Center(
+                          child: AnimatedScale(
+                            scale: _isPressed ? 0.95 : 1.0,
+                            duration: const Duration(milliseconds: 100),
+                            curve: Curves.easeInOut,
+                            child: SizedBox(
+                              width: 350,
+                              height: 80,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                    PageRouteBuilder(
+                                      transitionDuration: const Duration(
+                                        milliseconds: 800,
+                                      ),
+                                      pageBuilder:
+                                          (
+                                            context,
+                                            animation,
+                                            secondaryAnimation,
+                                          ) {
+                                            return const LoginScreen();
+                                          },
+                                      transitionsBuilder:
+                                          (
+                                            context,
+                                            animation,
+                                            secondaryAnimation,
+                                            child,
+                                          ) {
+                                            return SharedAxisTransition(
+                                              fillColor: Colors.grey.shade900,
+                                              animation: animation,
+                                              secondaryAnimation:
+                                                  secondaryAnimation,
+                                              transitionType:
+                                                  SharedAxisTransitionType
+                                                      .horizontal,
+                                              child: child,
+                                            );
+                                          },
                                     ),
-                                    reverseTransitionDuration: const Duration(
-                                      milliseconds: 800,
-                                    ),
-                                    pageBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                        ) {
-                                          return const LoginScreen();
-                                        },
-                                    transitionsBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                          child,
-                                        ) {
-                                          return SharedAxisTransition(
-                                            fillColor: Colors.grey.shade900,
-                                            animation: animation,
-                                            secondaryAnimation:
-                                                secondaryAnimation,
-                                            transitionType:
-                                                SharedAxisTransitionType
-                                                    .horizontal,
-                                            child: child,
-                                          );
-                                        },
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFFAD33),
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(40),
                                   ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFFFAD33),
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40),
+                                  elevation: 0,
                                 ),
-                                elevation: 0,
-                              ),
-                              child: Text(
-                                "Get started",
-                                style: GoogleFonts.beVietnamPro(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
+                                child: Text(
+                                  "Get started",
+                                  style: GoogleFonts.beVietnamPro(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
@@ -208,9 +204,9 @@ class _StartScreenState extends State<StartScreen>
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
