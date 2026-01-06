@@ -69,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(color: Color(0xFF121212)),
+        decoration: BoxDecoration(color: Color(0xFF000000)),
         child: Form(
           key: _formkey,
           child: Column(

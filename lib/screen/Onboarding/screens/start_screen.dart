@@ -65,7 +65,7 @@ class _StartScreenState extends State<StartScreen>
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: const BoxDecoration(color: Color(0xFF101010)),
+        decoration: const BoxDecoration(color: Color(0xFF000000)),
         // Get start button
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,11 +1,10 @@
 import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
-
+import 'package:travel_app/screen/Shared/widgets/navigation_widget.dart';
 import '../widgets/dialog_widget.dart';
 import '../services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
-import '../../Plan/screens/plan_screen.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/textfield_widget.dart';
 import 'package:animations/animations.dart';
@@ -68,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(color: Color(0xFF121212)),
+        decoration: BoxDecoration(color: Color(0xFF000000)),
         child: Form(
           key: _formkey,
           child: Column(
@@ -163,7 +162,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushReplacement(
                         // ignore: use_build_context_synchronously
                         context,
-                        MaterialPageRoute(builder: (context) => PlanScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => BottomNavigation(),
+                        ),
                       );
                     } else {
                       // Truyền đầu ra error vào các biến
