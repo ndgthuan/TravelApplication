@@ -1,3 +1,5 @@
+import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
+
 import '../widgets/dialog_widget.dart';
 import '../services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -72,19 +74,16 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Chữ Welcome Back!
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Welcome back!",
-                  style: GoogleFonts.plusJakartaSans(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
+              // Logo app
+              AppLogo(),
+              const SizedBox(height: 20),
+
+              // Chữ Welcome!
+              TitleLogo(),
+              const SizedBox(height: 10),
+
+              SubtitleLogo(subtitleText: "Log in to continue your journey"),
+              const SizedBox(height: 50),
 
               // Hộp nhập email
               EmailTextField(
