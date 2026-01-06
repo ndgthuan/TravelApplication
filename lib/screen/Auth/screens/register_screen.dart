@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/screen/Auth/services/password_service.dart';
 import 'package:travel_app/screen/Auth/widgets/button_widget.dart';
+import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/password_widget.dart';
 import 'login_screen.dart';
 import '../services/auth_service.dart';
@@ -75,19 +75,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Logo app
+              AppLogo(),
+              const SizedBox(height: 20),
+
               // Chữ Welcome
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Welcome!",
-                  style: GoogleFonts.plusJakartaSans(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 50,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
+              TitleLogo(),
+              const SizedBox(height: 10),
+
+              // Subtitle
+              SubtitleLogo(subtitleText: "Sign up to continue your journey"),
+              const SizedBox(height: 50),
 
               // Hộp nhập Username
               UserTextField(

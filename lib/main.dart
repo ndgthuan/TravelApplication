@@ -18,7 +18,7 @@ void main() async {
     ),
 
     // For android
-    // MyApp()
+    // MyApp(),
   );
 }
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // For web
+      // // For web
       debugShowCheckedModeBanner: false,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
