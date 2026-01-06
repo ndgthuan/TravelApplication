@@ -64,191 +64,201 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(color: Color(0xFF000000)),
-        child: Form(
-          key: _formkey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo app
-              AppLogo(),
-              const SizedBox(height: 20),
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(color: Color(0xFF000000)),
+            child: Form(
+              key: _formkey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo app
+                  AppLogo(),
+                  const SizedBox(height: 20),
 
-              // Chữ Welcome!
-              TitleLogo(),
-              const SizedBox(height: 10),
+                  // Chữ Welcome!
+                  TitleLogo(),
+                  const SizedBox(height: 10),
 
-              SubtitleLogo(subtitleText: "Log in to continue your journey"),
-              const SizedBox(height: 50),
+                  SubtitleLogo(subtitleText: "Log in to continue your journey"),
+                  const SizedBox(height: 50),
 
-              // Hộp nhập email
-              EmailTextField(
-                labelText: "Email",
-                prefixIcon: Icons.email_outlined,
-                controller: emailController,
-                textReturn: "Email is empty",
-                stringError: _emailError,
-              ),
-              const SizedBox(height: 15),
+                  // Hộp nhập email
+                  EmailTextField(
+                    labelText: "Email",
+                    prefixIcon: Icons.email_outlined,
+                    controller: emailController,
+                    textReturn: "Email is empty",
+                    stringError: _emailError,
+                  ),
+                  const SizedBox(height: 15),
 
-              PasswordTextField(
-                isShowing: _isShowing,
-                labelText: "Password",
-                prefixIcon: Icons.lock_outline,
-                controller: passwordController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Password is empty";
-                  }
-                  if (_passwordError != null) {
-                    return _passwordError;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10),
-
-              // Nút quên mật khẩu
-              Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Color(0xFFFFAD33);
-                      createForgotPassForm();
+                  PasswordTextField(
+                    isShowing: _isShowing,
+                    labelText: "Password",
+                    prefixIcon: Icons.lock_outline,
+                    controller: passwordController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Password is empty";
+                      }
+                      if (_passwordError != null) {
+                        return _passwordError;
+                      }
+                      return null;
                     },
-                    style: TextButton.styleFrom(
-                      foregroundColor: const Color(
-                        0xFFFFAD33,
-                      ), // Màu hiệu ứng khi bấm vào
-                    ),
-                    child: Text(
-                      "Forgot password",
-                      style: GoogleFonts.beVietnamPro(
-                        color: Color(0xFFCCCCCC),
-                        fontSize: 16,
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Nút quên mật khẩu
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Color(0xFFFFAD33);
+                          createForgotPassForm();
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: const Color(
+                            0xFFFFAD33,
+                          ), // Màu hiệu ứng khi bấm vào
+                        ),
+                        child: Text(
+                          "Forgot password",
+                          style: GoogleFonts.beVietnamPro(
+                            color: Color(0xFFCCCCCC),
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-              // Thanh đăng nhập
-              ActionButton(
-                buttonText: "Login",
-                onTap: () async {
-                  // Nếu đang loading thì trả về
-                  if (_isLoading) return;
+                  // Thanh đăng nhập
+                  ActionButton(
+                    buttonText: "Login",
+                    onTap: () async {
+                      // Nếu đang loading thì trả về
+                      if (_isLoading) return;
 
-                  // Xoá các lỗi sau khi có ấn lại
-                  setState(() {
-                    _isLoading = true;
-                    _emailError = null;
-                    _passwordError = null;
-                  });
-
-                  // Kiểm tra đầu ra result
-                  if (_formkey.currentState!.validate()) {
-                    String? result = await _authService.signIn(
-                      email: emailController.text,
-                      password: passwordController.text,
-                    );
-                    if (result == null) {
-                      Navigator.pushReplacement(
-                        // ignore: use_build_context_synchronously
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNavigation(),
-                        ),
-                      );
-                    } else {
-                      // Truyền đầu ra error vào các biến
+                      // Xoá các lỗi sau khi có ấn lại
                       setState(() {
-                        if (result.contains(' or ')) {
-                          // Lỗi cả email và password
-                          _emailError = result;
-                          _passwordError = result;
-                        } else if (result.toLowerCase().contains('email') ||
-                            result.contains('Account')) {
-                          _emailError = result;
-                        } else {
-                          _passwordError = result;
-                        }
+                        _isLoading = true;
+                        _emailError = null;
+                        _passwordError = null;
                       });
-                      _formkey.currentState!.validate();
-                    }
-                  }
 
-                  // Validate nếu thành công hay thất bại để khi nhấn thì vẫn sẽ chạy lại
-                  setState(() {
-                    _isLoading = false;
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
+                      // Kiểm tra đầu ra result
+                      if (_formkey.currentState!.validate()) {
+                        String? result = await _authService.signIn(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        );
+                        if (result == null) {
+                          Navigator.pushReplacement(
+                            // ignore: use_build_context_synchronously
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BottomNavigation(),
+                            ),
+                          );
+                        } else {
+                          // Truyền đầu ra error vào các biến
+                          setState(() {
+                            if (result.contains(' or ')) {
+                              // Lỗi cả email và password
+                              _emailError = result;
+                              _passwordError = result;
+                            } else if (result.toLowerCase().contains('email') ||
+                                result.contains('Account')) {
+                              _emailError = result;
+                            } else {
+                              _passwordError = result;
+                            }
+                          });
+                          _formkey.currentState!.validate();
+                        }
+                      }
 
-              // Dòng Or
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  children: [
-                    // Vẽ thanh gạch ngang
-                    Expanded(child: Divider(color: Colors.white, thickness: 1)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "Or login with",
-                        style: GoogleFonts.beVietnamPro(
-                          color: Color(0xFF888888),
-                          fontSize: 13,
+                      // Validate nếu thành công hay thất bại để khi nhấn thì vẫn sẽ chạy lại
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Dòng Or
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        // Vẽ thanh gạch ngang
+                        Expanded(
+                          child: Divider(color: Colors.white, thickness: 1),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "Or login with",
+                            style: GoogleFonts.beVietnamPro(
+                              color: Color(0xFF888888),
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+
+                        Expanded(
+                          child: Divider(color: Colors.white, thickness: 1),
+                        ),
+                      ],
                     ),
-
-                    Expanded(child: Divider(color: Colors.white, thickness: 1)),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-
-              // Dòng logo
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Google Logo
-                  SocialIconButton(
-                    isPressed: _isGooglePressed,
-                    imagePath: "lib/assets/images/google_logo.png",
-                    authFunction: _authService.signInWithGoogle,
                   ),
+                  SizedBox(height: 20),
 
-                  // Facebook Logo
-                  SocialIconButton(
-                    isPressed: _isFacebookPressed,
-                    imagePath: 'lib/assets/images/facebook_logo.png',
-                    authFunction: _authService.signInWithFacebook,
+                  // Dòng logo
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Google Logo
+                      SocialIconButton(
+                        isPressed: _isGooglePressed,
+                        imagePath: "lib/assets/images/google_logo.png",
+                        authFunction: _authService.signInWithGoogle,
+                      ),
+
+                      // Facebook Logo
+                      SocialIconButton(
+                        isPressed: _isFacebookPressed,
+                        imagePath: 'lib/assets/images/facebook_logo.png',
+                        authFunction: _authService.signInWithFacebook,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              SizedBox(height: 20),
+                  SizedBox(height: 20),
 
-              // Dòng signup
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  BottomSwitchPageButton(
-                    formerText: "Don't have an account? ",
-                    latterText: "Sign up",
-                    destinationScreen: RegisterScreen(),
+                  // Dòng signup
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      BottomSwitchPageButton(
+                        formerText: "Don't have an account? ",
+                        latterText: "Sign up",
+                        destinationScreen: RegisterScreen(),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
