@@ -45,6 +45,10 @@ class _ForgotPasDialogState extends State<ForgotPasDialog> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
+              ),
               labelText: "Enter your email",
               labelStyle: GoogleFonts.beVietnamPro(
                 color: Colors.grey[600],
@@ -79,7 +83,7 @@ class _ForgotPasDialogState extends State<ForgotPasDialog> {
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xFFFFAD35),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(

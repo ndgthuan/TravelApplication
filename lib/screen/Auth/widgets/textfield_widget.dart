@@ -47,7 +47,7 @@ class EmailTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
           ),
-          fillColor: Color(0xFF1E1E1E),
+          fillColor: Color(0xFF1C1C1D),
           filled: true,
           prefixIcon: Icon(prefixIcon, color: Colors.grey[600]),
         ),
@@ -97,7 +97,7 @@ class UserTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
           ),
-          fillColor: Color(0xFF1E1E1E),
+          fillColor: Color(0xFF1C1C1D),
           filled: true,
           prefixIcon: Icon(prefixIcon, color: Colors.grey[600]),
         ),
@@ -165,7 +165,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             color: Colors.grey[600],
             fontSize: 18,
           ),
-          fillColor: Color(0xFF1E1E1E),
+          fillColor: Color(0xFF1C1C1D),
           filled: true,
 
           // Tạo icon nằm ở trước hộp nhập
