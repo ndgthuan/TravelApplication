@@ -11,7 +11,14 @@ import argparse
 import re
 import unicodedata
 import time
+import os
 from typing import List, Dict, Tuple
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load .env from project root (TravelApplication/.env)
+env_path = Path(__file__).resolve().parent.parent.parent / '.env'
+load_dotenv(env_path)
 
 class ApifyGoogleMapsScraper:
     def __init__(self, api_token: str):
@@ -193,7 +200,7 @@ async def main():
     parser.add_argument('-q', '--query', required=True, help='Search query')
     parser.add_argument('-n', '--num', type=int, default=10, help='Max results')
     parser.add_argument('-o', '--output', required=True, help='Output filename (auto .json)')
-    parser.add_argument('-t', '--token', default='apify_api_aToayaFvYSOoNWcIq9gYPUxdfEv1X32Zfrp2', help='Apify Token')
+    parser.add_argument('-t', '--token', default=os.getenv('APIFY_TOKEN', ''), help='Apify Token')
     
     args = parser.parse_args()
     
