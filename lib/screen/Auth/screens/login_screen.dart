@@ -1,5 +1,5 @@
 import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
-import 'package:travel_app/screen/Shared/widgets/navigation_widget.dart';
+import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import '../widgets/dialog_widget.dart';
 import '../services/auth_service.dart';
 import 'package:flutter/material.dart';
