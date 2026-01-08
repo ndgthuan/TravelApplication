@@ -13,9 +13,17 @@ import os
 from typing import List, Dict
 
 # --- CONFIGURATION ---
-APIFY_TOKEN = 'apify_api_aToayaFvYSOoNWcIq9gYPUxdfEv1X32Zfrp2' 
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load .env from project root (TravelApplication/.env)
+env_path = Path(__file__).resolve().parent.parent.parent / '.env'
+load_dotenv(env_path)
+
+APIFY_TOKEN = os.getenv('APIFY_TOKEN', '')  # Load from .env
 ACTOR_ID = "nwua9Gu5YrADL7ZDj" # Google Maps Scraper Actor ID
 OUTPUT_FILE = "daily_recommendations.json"
+
 
 class ApifyScraper:
     def __init__(self, api_token: str):
