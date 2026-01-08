@@ -10,6 +10,6 @@ class PlanScreen extends StatefulWidget {
 class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container(color: Color(0xFF000000)));
+    return Scaffold(backgroundColor: Color(0xFF000000));
   }
 }

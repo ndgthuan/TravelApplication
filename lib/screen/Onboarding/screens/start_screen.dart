@@ -61,9 +61,6 @@ class _StartScreenState extends State<StartScreen>
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -71,10 +68,7 @@ class _StartScreenState extends State<StartScreen>
         color: Color(0xFF000000),
         // Get start button
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: screenHeight * 0.1,
-            horizontal: 20,
-          ),
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,38 +78,41 @@ class _StartScreenState extends State<StartScreen>
                 position: _buttonSlideAnimation,
                 child: FadeTransition(
                   opacity: _buttonFadeAnimation,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Plan Your Day",
-                        style: GoogleFonts.pacifico(
-                          color: Colors.white,
-                          fontSize: 44,
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: screenHeight * 0.45,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              'lib/assets/images/schedule_icon.png',
-                            ),
-                            fit: BoxFit.contain,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Plan Your Day",
+                          style: GoogleFonts.pacifico(
+                            color: Colors.white,
+                            fontSize: 44,
                           ),
                         ),
-                      ),
-                      Text(
-                        "Simple tools to manage your daily schedule effectively.",
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.beVietnamPro(
-                          color: Colors.white,
-                          fontSize: screenWidth * 0.045,
+                        Container(
+                          width: double.infinity,
+                          height: 450,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(
+                                'lib/assets/images/schedule_icon.png',
+                              ),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                        Text(
+                          "Simple tools to manage your daily schedule effectively.",
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.beVietnamPro(
+                            color: Colors.white,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
