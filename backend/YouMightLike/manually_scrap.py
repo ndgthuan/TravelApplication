@@ -6,6 +6,7 @@ Scraps Top 10 places based on manual Keyword + Location input using Apify.
 
 import asyncio
 import aiohttp
+import aiofiles
 import json
 import re
 import unicodedata
@@ -16,13 +17,46 @@ from typing import List, Dict
 from dotenv import load_dotenv
 from pathlib import Path
 
+async def download_image(session: aiohttp.ClientSession, url: str, save_path: str):
+    """Download một ảnh từ URL và lưu vào save_path"""
+    try:
+        async with session.get(url) as response:
+            if response.status == 200:
+                # Dùng aiofiles để ghi file async
+                async with aiofiles.open(save_path, 'wb') as f:
+                    await f.write(await response.read())
+                print(f"DOWNLOADED: {save_path}")
+            else:
+                print(f"DOWNLOAD FAIL: {response.status}")
+    except Exception as e:
+        print(f"ERROR: {e}")
+
+async def download_all_images(places: List[Dict], output_folder: str):
+    """Download tất cả ảnh từ list places, đặt tên theo index"""
+    # Tạo thư mục nếu chưa có
+    os.makedirs(output_folder, exist_ok=True)
+    
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for index, place in enumerate(places):
+            image_url = place.get('imageUrl', '')
+            if image_url:
+                # Tên file: 0.jpg, 1.jpg, 2.jpg...
+                filename = f"{index}.jpg"
+                save_path = os.path.join(output_folder, filename)
+                tasks.append(download_image(session, image_url, save_path))
+        
+        # Download song song tất cả ảnh
+        await asyncio.gather(*tasks)
+
 # Load .env from project root (TravelApplication/.env)
 env_path = Path(__file__).resolve().parent.parent.parent / '.env'
 load_dotenv(env_path)
 
 APIFY_TOKEN = os.getenv('APIFY_TOKEN', '')  # Load from .env
 ACTOR_ID = "nwua9Gu5YrADL7ZDj" # Google Maps Scraper Actor ID
-OUTPUT_FILE = "daily_recommendations.json"
+# Đường dẫn tương đối đến thư mục data
+OUTPUT_FILE = Path(__file__).resolve().parent.parent.parent / 'lib' / 'assets' / 'data' / 'daily_recommendations.json'
 
 
 class ApifyScraper:
@@ -104,7 +138,7 @@ class ApifyScraper:
         image_url = ''
         if item.get('imageUrls'):
             # Resize image url
-            image_url = item['imageUrls'][0].split('=')[0] + '=w800-h600-k-no'
+            image_url = item['imageUrls'][0].split('=')[0] + '=w400-h400-k-no'
 
         # 4. Category
         category = item.get('categoryName', '')
@@ -178,6 +212,10 @@ async def main():
             
         print(f"\nDone! Saved {len(results)} places to '{OUTPUT_FILE}'.")
         print("You can open this file to check the JSON structure.")
+        script_dir = Path(__file__).resolve().parent
+        images_folder = script_dir.parent.parent / 'lib' / 'assets' / 'images' / 'destination' / 'recommend'
+
+        await download_all_images(results, str(images_folder))
     else:
         print("\nNo results found. Try another keyword.")
 

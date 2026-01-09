@@ -59,7 +59,7 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       image: DecorationImage(
-                        image: NetworkImage(
+                        image: AssetImage(
                           widget.recommendDestination[widget.index].imagePath,
                         ),
                         fit: BoxFit.cover,
@@ -137,21 +137,25 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                             ),
                             const SizedBox(width: 5),
                             // Loại điểm đến
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 2,
-                                horizontal: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade800,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: Text(
-                                widget
-                                    .recommendDestination[widget.index]
-                                    .category,
-                                style: GoogleFonts.beVietnamPro(
-                                  color: Colors.white,
+                            Flexible(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 2,
+                                  horizontal: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade800,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Text(
+                                  widget
+                                      .recommendDestination[widget.index]
+                                      .category,
+                                  style: GoogleFonts.beVietnamPro(
+                                    color: Colors.white,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
                                 ),
                               ),
                             ),

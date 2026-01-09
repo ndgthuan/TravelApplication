@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:travel_app/screen/Home/models/destination_model.dart';
 import 'button_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +20,30 @@ class SlideCardWidget extends StatefulWidget {
 }
 
 class _SlideCardWidgetState extends State<SlideCardWidget> {
+  Timer? _autoSlideTimer;
   int _currentPage = 0;
+
+  void _startAutoSlide() {
+    _autoSlideTimer = Timer.periodic(Duration(milliseconds: 4000), (timer) {
+      widget.controller.nextPage(
+        duration: Duration(milliseconds: 1000),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startAutoSlide();
+  }
+
+  @override
+  void dispose() {
+    _autoSlideTimer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,7 +69,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                     // 1. Ảnh nền
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
+                      child: Image.asset(
                         widget.destinations[index].imagePath,
                         height: 350,
                         width: double.infinity,
