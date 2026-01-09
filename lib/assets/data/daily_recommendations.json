@@ -2,20 +2,11 @@
   "metadata": {
     "user_context": {
       "search_keyword": "Coffee",
-      "search_location": "Ho Chi Minh, District 1"
+      "search_location": "Ho Chi Minh, Distric 1"
     },
     "generated_at": "Batch Job (Simulated)"
   },
   "recommendations": [
-    {
-      "name": "XLIII Specialty Coffee",
-      "address": "178a Pasteur, Ben Nghe, District 1, City Ho Chi Minh, Vietnam",
-      "latitude": 10.7781855,
-      "longitude": 106.6985703,
-      "rating": 4.9,
-      "category": "Coffee shop",
-      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipMBt555hSn88MTMmLJDNJa016gLrtvTiZr1Bdfy=w800-h600-k-no"
-    },
     {
       "name": "Whisfee Cafe",
       "address": "14 Ton That Dam, Ward Nguyen Thai Binh, District 1, City Ho Chi Minh, Vietnam",
@@ -23,7 +14,16 @@
       "longitude": 106.7040756,
       "rating": 4.8,
       "category": "Coffee shop",
-      "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwH6p9Qnn_DC6l6HltKApXBTgHt1UnIz03_HTLeqNK9KzOlpqJSa0AcWFrd5a-eK6tEgxX2w4exSoPsTzp3B5N3t0Svvdix56n5de8_YBwpCrMKLh14jcXXE1ZJELUObFTIxhD3=w800-h600-k-no"
+      "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxtUJdxNXY2EuhdztZS-8he7i2phHdCqKJGb30_yiVtg6nJsyoWg6Mv6VM-rqTQT3iZ3u65P99TS4ij2Gwl8c4QBWjGM70v6ZCJj7DPTl5LqotSpFsZfOKwFcjSkcYPxNNI4lrN=w400-h400-k-no"
+    },
+    {
+      "name": "Lacaph Coffee Bar 🇻🇳☕️",
+      "address": "151 Dong Khoi, Ben Nghe, District 1, City Ho Chi Minh, Vietnam",
+      "latitude": 10.7757628,
+      "longitude": 106.7031707,
+      "rating": 4.9,
+      "category": "Coffee shop",
+      "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSx9pxxk9ltT5bJQBwTrAHAwkq_RSNuF0E432CuwCd7oo7HbzYvMcFdcfIzClDHlGL5w3T3S799nIcM4N2-vkv5nsi1vHANb8ujIT3WbnNlreDfX05htAvEr_R2F1L-x_laes9pNrvYt_jAf=w400-h400-k-no"
     },
     {
       "name": "Local Saigon Cafe - Ben Thanh",
@@ -32,7 +32,7 @@
       "longitude": 106.6975476,
       "rating": 4.7,
       "category": "Coffee shop",
-      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipPG-oGk8Zu4AUECl6s1Yn5CaCd8T47ssPctQj5H=w800-h600-k-no"
+      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipPG-oGk8Zu4AUECl6s1Yn5CaCd8T47ssPctQj5H=w400-h400-k-no"
     },
     {
       "name": "AMAZING SPECIALTY COFFEE",
@@ -41,16 +41,7 @@
       "longitude": 106.6991027,
       "rating": 4.7,
       "category": "Cafe",
-      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipO7z3-pi7SLscpltm4g5r-ffPAkw4YNRrDoBkuC=w800-h600-k-no"
-    },
-    {
-      "name": "CHOICE - Fresh Coffee and Tea",
-      "address": "9 Cong truong Lam Son, Ben Nghe, District 1, City Ho Chi Minh, Vietnam",
-      "latitude": 10.7770079,
-      "longitude": 106.7038185,
-      "rating": 4.9,
-      "category": "Coffee shop",
-      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipM76WpAbTLe8H3PEYQyYZajudiv4hvajCsiNfN1=w800-h600-k-no"
+      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipNQDX9K3aVKDeK_f68xdPHUzz9fZWR_C6J_8weV=w400-h400-k-no"
     },
     {
       "name": "Soo Kafe",
@@ -59,25 +50,7 @@
       "longitude": 106.6972096,
       "rating": 4.7,
       "category": "Cafe",
-      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipNyheR0WYUT6p-AbhavCPUrZT726em52JCd16G1=w800-h600-k-no"
-    },
-    {
-      "name": "Little HaNoi Egg Coffee (Yersin)",
-      "address": "119/5 Yersin, Ward Pham Ngu Lao, District 1, City Ho Chi Minh, Vietnam",
-      "latitude": 10.7694043,
-      "longitude": 106.6960112,
-      "rating": 4.8,
-      "category": "Coffee shop",
-      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipPWoVMXe971Dgr_UzVwqPdZdrv0mVKrorooYj5t=w800-h600-k-no"
-    },
-    {
-      "name": "Tonkin Specialty Coffee",
-      "address": "91 Ly Tu Trong, Ward Ben Thanh, District 1, City Ho Chi Minh, Vietnam",
-      "latitude": 10.7743893,
-      "longitude": 106.6978901,
-      "rating": 4.8,
-      "category": "Coffee shop",
-      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipMd9VkK9x9nZb_t8ac-vKvvpzg2cIzia_iBLnB8=w800-h600-k-no"
+      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipNyheR0WYUT6p-AbhavCPUrZT726em52JCd16G1=w400-h400-k-no"
     },
     {
       "name": "Tonkin Garden Egg Coffee & Eatery [Cafe & Croissant]",
@@ -86,7 +59,7 @@
       "longitude": 106.695479,
       "rating": 4.9,
       "category": "Coffee shop",
-      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipPImxKFlGnRgo30Vf1kg9CiMVg9ytewCsrfuT8y=w800-h600-k-no"
+      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipPImxKFlGnRgo30Vf1kg9CiMVg9ytewCsrfuT8y=w400-h400-k-no"
     },
     {
       "name": "Hoff Coffee Brewers",
@@ -95,7 +68,34 @@
       "longitude": 106.7001548,
       "rating": 4.8,
       "category": "Coffee shop",
-      "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSydIG_noYsMCnJ7icXeJf0cimF1oell0bkovGsD38NmOPSj_gXodjYIzuelF3BCvpB1GxaX0Cz8I-b-L1luRY78c-nV-res52XkbEkgTYtPFm9Q_0zlg-ESUi85lHUoJECalw430xowCnvI=w800-h600-k-no"
+      "imageUrl": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSz68B3M0kvC-yLdvNdByrZ0r9zC2kF5iwJfaQt2TJJalAxQr2JtYTewS4NLZGvP2hu6VTQonPEIaIbAPOZvaNVIv1Zt-9-t07Y0qxrhi2knJyEdWD51X_stL00dhy1jEyTbpTzteyoV1mSZ=w400-h400-k-no"
+    },
+    {
+      "name": "Little HaNoi Egg Coffee (Yersin)",
+      "address": "119/5 Yersin, Ward Pham Ngu Lao, District 1, City Ho Chi Minh, Vietnam",
+      "latitude": 10.7694043,
+      "longitude": 106.6960112,
+      "rating": 4.8,
+      "category": "Coffee shop",
+      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipPWoVMXe971Dgr_UzVwqPdZdrv0mVKrorooYj5t=w400-h400-k-no"
+    },
+    {
+      "name": "Tonkin Specialty Coffee",
+      "address": "91 Ly Tu Trong, Ward Ben Thanh, District 1, City Ho Chi Minh, Vietnam",
+      "latitude": 10.7743893,
+      "longitude": 106.6978901,
+      "rating": 4.8,
+      "category": "Coffee shop",
+      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipMd9VkK9x9nZb_t8ac-vKvvpzg2cIzia_iBLnB8=w400-h400-k-no"
+    },
+    {
+      "name": "XLIII Specialty Coffee",
+      "address": "178a Pasteur, Ben Nghe, District 1, City Ho Chi Minh, Vietnam",
+      "latitude": 10.7781855,
+      "longitude": 106.6985703,
+      "rating": 4.9,
+      "category": "Coffee shop",
+      "imageUrl": "https://lh3.googleusercontent.com/p/AF1QipMBt555hSn88MTMmLJDNJa016gLrtvTiZr1Bdfy=w400-h400-k-no"
     }
   ]
 }

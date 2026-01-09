@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:travel_app/firebase_options.dart';
+import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import 'screen/Onboarding/screens/start_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:device_preview/device_preview.dart';
@@ -34,7 +36,9 @@ class MyApp extends StatelessWidget {
       builder: DevicePreview.appBuilder,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home: const StartScreen(),
+      home: FirebaseAuth.instance.currentUser != null
+          ? const BottomNavigation()
+          : const StartScreen(),
 
       // For android
       // title: "TravelApplication",
@@ -43,7 +47,9 @@ class MyApp extends StatelessWidget {
       //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       //   useMaterial3: true,
       // ),
-      // home: const StartScreen(),
+      // home: FirebaseAuth.instance.currentUser != null
+      //     ? const BottomNavigation()
+      //     : const StartScreen(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'dart:developer';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -102,5 +103,14 @@ class AuthService {
   // Reset password
   Future verifyEmail({required String email}) async {
     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
+
+  // Sign out
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    if (!kIsWeb) {
+      await GoogleSignIn().signOut();
+      await FacebookAuth.instance.logOut();
+    }
   }
 }

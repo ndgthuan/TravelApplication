@@ -44,6 +44,8 @@ dependencies:
   animations: ^2.1.1
   device_preview: ^1.3.1
   persistent_bottom_nav_bar_v2: ^6.2.0
+  cached_network_image: ^3.4.1
+  flutter_secure_storage: ^9.0.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +72,8 @@ flutter:
   assets:
     - lib/assets/images/
     - lib/assets/data/
+    - lib/assets/images/destination/popular/
+    - lib/assets/images/destination/recommend/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -8,6 +8,7 @@ import 'register_screen.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/textfield_widget.dart';
 import 'package:animations/animations.dart';
+import '../services/storage_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,6 +19,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   // Các bién
+  bool _isCheck = false;
   bool _isLoading = false;
   final bool _isShowing = true;
 
@@ -59,6 +61,45 @@ class _LoginScreenState extends State<LoginScreen> {
         return ForgotPasDialog(controller: _resetEmail);
       },
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadSaveCredentails();
+  }
+
+  Future<void> _loadSaveCredentails() async {
+    final credentials = await StorageService.getCredentials();
+    if (credentials['email'] != null && credentials['password'] != null) {
+      if (!mounted) return;
+      setState(() {
+        emailController.text = credentials['email']!;
+        passwordController.text = credentials['password']!;
+        _isCheck = true;
+        _isLoading = true;
+      });
+
+      // Tự động gọi đăng nhập
+      String? result = await _authService.signIn(
+        email: credentials['email']!,
+        password: credentials['password']!,
+      );
+
+      if (result == null) {
+        // Thành công thì vào thẳng home
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNavigation()),
+        );
+      } else {
+        setState(() {
+          _isLoading = false; // Thất bại thì tự bấm
+        });
+      }
+    }
   }
 
   @override
@@ -117,27 +158,60 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Nút quên mật khẩu
                   Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          Color(0xFFFFAD33);
-                          createForgotPassForm();
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: const Color(
-                            0xFFFFAD33,
-                          ), // Màu hiệu ứng khi bấm vào
-                        ),
-                        child: Text(
-                          "Forgot password",
-                          style: GoogleFonts.beVietnamPro(
-                            color: Color(0xFFCCCCCC),
-                            fontSize: 16,
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            children: [
+                              // Hộp checkbox
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _isCheck = !_isCheck;
+                                  });
+                                },
+                                child: Icon(
+                                  _isCheck
+                                      ? Icons.check_box
+                                      : Icons.check_box_outline_blank,
+                                  color: Color(0xFFFFAD35),
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+
+                              // Chữ remember me
+                              Text(
+                                'Remember me',
+                                style: GoogleFonts.beVietnamPro(
+                                  color: Color(0xFFCCCCCC),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
+                        TextButton(
+                          onPressed: () {
+                            Color(0xFFFFAD33);
+                            createForgotPassForm();
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(
+                              0xFFFFAD33,
+                            ), // Màu hiệu ứng khi bấm vào
+                          ),
+                          child: Text(
+                            "Forgot password",
+                            style: GoogleFonts.beVietnamPro(
+                              color: Color(0xFFCCCCCC),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -163,6 +237,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           password: passwordController.text,
                         );
                         if (result == null) {
+                          if (_isCheck) {
+                            await StorageService.saveCredentials(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+                          } else {
+                            await StorageService.clearCredentials();
+                          }
+
                           Navigator.pushReplacement(
                             // ignore: use_build_context_synchronously
                             context,
