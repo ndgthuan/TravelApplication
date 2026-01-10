@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/screen/Auth/widgets/action_button_widget.dart';
+import 'package:travel_app/shared/widgets/action_button_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/email_field_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/password_field_widget.dart';
 import 'password_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'user_field_widget.dart';
 
 class RegisterFormWidget extends StatelessWidget {
@@ -105,12 +106,25 @@ class RegisterFormWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 // Text hiển thị độ mạnh
-                Text(
-                  getStrengthText(passwordStrength),
-                  style: TextStyle(
-                    color: getPasswordStrength(passwordStrength),
-                    fontSize: 12,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      getStrengthText(passwordStrength),
+                      style: TextStyle(
+                        color: getPasswordStrength(passwordStrength),
+                        fontSize: 12,
+                      ),
+                    ),
+
+                    Text(
+                      'Min. 8 chars, include number & symbol',
+                      style: GoogleFonts.beVietnamPro(
+                        color: Colors.grey[600],
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

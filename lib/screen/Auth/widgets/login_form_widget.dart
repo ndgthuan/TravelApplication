@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/screen/Auth/widgets/action_button_widget.dart';
+import 'package:travel_app/shared/widgets/action_button_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/email_field_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/password_field_widget.dart';
 
