@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travel_app/screen/Account/screens/change_password_screen.dart';
+import 'package:travel_app/screen/Account/screens/information_screen.dart';
 import 'option_widget.dart';
 import 'divider_widget.dart';
 import 'dark_mode_widget.dart';
@@ -30,6 +32,13 @@ class SettingCardWidget extends StatelessWidget {
               OptionWidget(
                 optionText: 'Personal Information',
                 optionIcon: Icons.person_outline,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                      builder: (context) => InformationScreen(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
               // Thannh ngang
@@ -38,6 +47,13 @@ class SettingCardWidget extends StatelessWidget {
               OptionWidget(
                 optionText: 'Change Password',
                 optionIcon: Icons.lock_outline,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                      builder: (context) => ChangePasswordScreen(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
               // Thannh ngang

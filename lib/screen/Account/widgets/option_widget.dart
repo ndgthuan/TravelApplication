@@ -4,10 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 class OptionWidget extends StatefulWidget {
   final IconData optionIcon;
   final String optionText;
+  final VoidCallback? onTap;
   const OptionWidget({
     super.key,
     required this.optionText,
     required this.optionIcon,
+    this.onTap,
   });
 
   @override
@@ -22,6 +24,7 @@ class _OptionWidgetState extends State<OptionWidget> {
       onTapDown: (_) => setState(() => _isClick = true),
       onTapUp: (_) => setState(() => _isClick = false),
       onTapCancel: () => setState(() => _isClick = false),
+      onTap: widget.onTap,
       child: AnimatedScale(
         scale: _isClick ? 0.95 : 1.0,
         duration: const Duration(milliseconds: 100),

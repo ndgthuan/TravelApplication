@@ -43,7 +43,7 @@ class _PasswordFieldWidgetState extends State<PasswordFieldWidget> {
 
         // Ẩn hiện thanh độ password strength
         focusNode: widget.focusNode,
-        onChanged: widget.onChanged, // Thêm dòng này
+        onChanged: widget.onChanged,
         style: GoogleFonts.beVietnamPro(color: Colors.white),
         obscureText: isShowing,
         decoration: InputDecoration(
