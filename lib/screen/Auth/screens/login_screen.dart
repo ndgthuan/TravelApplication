@@ -1,14 +1,14 @@
 import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
+import 'package:travel_app/screen/Auth/widgets/social_login_widget.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import '../widgets/dialog_widget.dart';
 import '../services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'register_screen.dart';
-import '../widgets/button_widget.dart';
-import '../widgets/textfield_widget.dart';
+import '../widgets/switch_page_button_widget.dart';
 import 'package:animations/animations.dart';
 import '../services/storage_service.dart';
+import '../widgets/login_form_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -129,97 +129,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   SubtitleLogo(subtitleText: "Log in to continue your journey"),
                   const SizedBox(height: 50),
 
-                  // Hộp nhập email
-                  EmailTextField(
-                    labelText: "Email",
-                    prefixIcon: Icons.email_outlined,
-                    controller: emailController,
-                    textReturn: "Email is empty",
-                    stringError: _emailError,
-                  ),
-                  const SizedBox(height: 15),
-
-                  PasswordTextField(
+                  LoginFormWidget(
+                    emailController: emailController,
+                    passwordController: passwordController,
+                    formKey: _formkey,
+                    emailError: _emailError,
+                    passwordError: _passwordError,
+                    isCheck: _isCheck,
                     isShowing: _isShowing,
-                    labelText: "Password",
-                    prefixIcon: Icons.lock_outline,
-                    controller: passwordController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Password is empty";
-                      }
-                      if (_passwordError != null) {
-                        return _passwordError;
-                      }
-                      return null;
+                    onRememberMeChanged: () {
+                      setState(() {
+                        _isCheck = !_isCheck;
+                      });
                     },
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Nút quên mật khẩu
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            children: [
-                              // Hộp checkbox
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _isCheck = !_isCheck;
-                                  });
-                                },
-                                child: Icon(
-                                  _isCheck
-                                      ? Icons.check_box
-                                      : Icons.check_box_outline_blank,
-                                  color: Color(0xFFFFAD35),
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-
-                              // Chữ remember me
-                              Text(
-                                'Remember me',
-                                style: GoogleFonts.beVietnamPro(
-                                  color: Color(0xFFCCCCCC),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Color(0xFFFFAD33);
-                            createForgotPassForm();
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: const Color(
-                              0xFFFFAD33,
-                            ), // Màu hiệu ứng khi bấm vào
-                          ),
-                          child: Text(
-                            "Forgot password",
-                            style: GoogleFonts.beVietnamPro(
-                              color: Color(0xFFCCCCCC),
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-
-                  // Thanh đăng nhập
-                  ActionButton(
-                    buttonText: "Login",
-                    onTap: () async {
+                    onForgotPassword: () {
+                      Color(0xFFFFAD33);
+                      createForgotPassForm();
+                    },
+                    onLogin: () async {
                       // Nếu đang loading thì trả về
                       if (_isLoading) return;
 
@@ -279,52 +206,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Dòng Or
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Row(
-                      children: [
-                        // Vẽ thanh gạch ngang
-                        Expanded(
-                          child: Divider(color: Colors.white, thickness: 1),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            "Or login with",
-                            style: GoogleFonts.beVietnamPro(
-                              color: Color(0xFF888888),
-                              fontSize: 13,
-                            ),
-                          ),
-                        ),
-
-                        Expanded(
-                          child: Divider(color: Colors.white, thickness: 1),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 20),
-
-                  // Dòng logo
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Google Logo
-                      SocialIconButton(
-                        isPressed: _isGooglePressed,
-                        imagePath: "lib/assets/images/google_logo.png",
-                        authFunction: _authService.signInWithGoogle,
-                      ),
-
-                      // Facebook Logo
-                      SocialIconButton(
-                        isPressed: _isFacebookPressed,
-                        imagePath: 'lib/assets/images/facebook_logo.png',
-                        authFunction: _authService.signInWithFacebook,
-                      ),
-                    ],
+                  SocialLoginWidget(
+                    isGooglePressed: _isGooglePressed,
+                    isFacebookPressed: _isFacebookPressed,
                   ),
                   SizedBox(height: 20),
 
@@ -332,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      BottomSwitchPageButton(
+                      SwitchPageButtonWidget(
                         formerText: "Don't have an account? ",
                         latterText: "Sign up",
                         destinationScreen: RegisterScreen(),
