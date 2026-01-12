@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/screen/Auth/services/password_service.dart';
 import 'package:travel_app/screen/Auth/widgets/switch_page_button_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
@@ -64,6 +65,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Rebuild mỗi khi đổi ngôn ngữ
+    var _ = context.locale;
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
@@ -87,9 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 10),
 
                   // Subtitle
-                  SubtitleLogo(
-                    subtitleText: "Sign up to continue your journey",
-                  ),
+                  SubtitleLogo(subtitleText: "auth.signup_subtitle".tr()),
                   const SizedBox(height: 50),
 
                   // Register Form Widget
@@ -120,13 +121,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       });
                       // Tạo form đăng ký
                       if (_formkey.currentState!.validate()) {
-                        String? result = await _authService.signUp(
+                        AuthResult? result = await _authService.signUp(
                           email: emailController.text,
                           password: passwordController.text,
+                          name: nameController.text,
                         );
 
                         // Kiểm tra nếu đăng ký thành công
-                        if (result == null) {
+                        if (result != null && result.isSuccess) {
                           Navigator.pushReplacement(
                             // ignore: use_build_context_synchronously
                             context,
@@ -134,17 +136,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               builder: (context) => LoginScreen(),
                             ),
                           );
-                        } else if (result.contains('email') ||
-                            result.contains('Email')) {
-                          setState(() {
-                            _emailError = result;
-                          });
-                          _formkey.currentState!.validate();
-                        } else if (result.contains('password')) {
-                          setState(() {
-                            _passwordError = result;
-                          });
-                          _formkey.currentState!.validate();
+                        } else if (result != null && result.error != null) {
+                          if (result.error!.contains('email') ||
+                              result.error!.contains('Email')) {
+                            setState(() {
+                              _emailError = result.error;
+                            });
+                            _formkey.currentState!.validate();
+                          } else if (result.error!.contains('password')) {
+                            setState(() {
+                              _passwordError = result.error;
+                            });
+                            _formkey.currentState!.validate();
+                          }
                         }
                       }
 
@@ -160,8 +164,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SwitchPageButtonWidget(
-                        formerText: "Already have an account? ",
-                        latterText: "Log in",
+                        formerText: "auth.already_have_account".tr(),
+                        latterText: "auth.log_in".tr(),
                         destinationScreen: LoginScreen(),
                       ),
                     ],

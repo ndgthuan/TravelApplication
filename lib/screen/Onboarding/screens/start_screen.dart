@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animations/animations.dart';
 import '../../Auth/screens/login_screen.dart';
@@ -61,6 +62,8 @@ class _StartScreenState extends State<StartScreen>
 
   @override
   Widget build(BuildContext context) {
+    // Rebuild mỗi khi đổi ngôn ngữ
+    var _ = context.locale;
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -85,7 +88,7 @@ class _StartScreenState extends State<StartScreen>
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          "Plan Your Day",
+                          "onboarding.plan_your_day".tr(),
                           style: GoogleFonts.pacifico(
                             color: Colors.white,
                             fontSize: 44,
@@ -104,7 +107,7 @@ class _StartScreenState extends State<StartScreen>
                           ),
                         ),
                         Text(
-                          "Simple tools to manage your daily schedule effectively.",
+                          "onboarding.slogan".tr(),
                           textAlign: TextAlign.center,
                           style: GoogleFonts.beVietnamPro(
                             color: Colors.white,
@@ -182,7 +185,7 @@ class _StartScreenState extends State<StartScreen>
                                 elevation: 0,
                               ),
                               child: Text(
-                                "Get started",
+                                "onboarding.get_started".tr(),
                                 style: GoogleFonts.beVietnamPro(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w500,

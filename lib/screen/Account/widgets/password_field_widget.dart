@@ -57,6 +57,7 @@ class _PasswordFieldWidgetState extends State<PasswordFieldWidget> {
             onChanged: widget.onChanged,
             style: GoogleFonts.beVietnamPro(color: Colors.white),
             obscureText: isShowing,
+            cursorColor: Color(0xFFFFAD35),
             decoration: InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),

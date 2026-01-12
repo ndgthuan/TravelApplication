@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 
@@ -26,7 +27,7 @@ class _ForgotPasDialogState extends State<ForgotPasDialog> {
       ),
 
       title: Text(
-        "Reset Email",
+        "auth.reset_email_title".tr(),
         style: GoogleFonts.beVietnamPro(
           color: Colors.white,
           fontWeight: FontWeight.w700,
@@ -49,7 +50,7 @@ class _ForgotPasDialogState extends State<ForgotPasDialog> {
                 borderRadius: BorderRadius.circular(20),
                 borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
               ),
-              labelText: "Enter your email",
+              labelText: "auth.reset_email_instruction".tr(),
               labelStyle: GoogleFonts.beVietnamPro(
                 color: Colors.grey[600],
                 fontSize: 15,
@@ -88,7 +89,7 @@ class _ForgotPasDialogState extends State<ForgotPasDialog> {
                   ),
                   child: Center(
                     child: Text(
-                      "Resend email",
+                      "auth.resend_email".tr(),
                       style: GoogleFonts.beVietnamPro(
                         color: Colors.black,
                         fontSize: 15,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/screen/Account/widgets/button_widget.dart';
 import 'package:travel_app/screen/Account/widgets/setting_card_widget.dart';
@@ -7,6 +8,7 @@ import 'package:travel_app/screen/Account/widgets/utilities_grid_widget.dart';
 import 'package:travel_app/screen/Auth/screens/login_screen.dart';
 import 'package:travel_app/screen/Auth/services/auth_service.dart';
 import 'package:travel_app/screen/Auth/services/storage_service.dart';
+import 'package:travel_app/screen/Auth/services/user_service.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -17,8 +19,35 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   bool isDarkMode = true;
+  String? _userName;
+  String? _userEmail;
+  String? _avatarUrl;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // Load các dữ liệu từ firestore
+  Future<void> _loadUserData() async {
+    final data = await UserService.getCurrentUserData();
+    if (!mounted) return;
+    setState(() {
+      _userName = data?['name'];
+      _userEmail = data?['email'];
+      _avatarUrl = data?['avatarUrl'];
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Rebuild mỗi khi đổi ngôn ngữ
+    var _ = context.locale;
+
+    // Build
     return Scaffold(
       backgroundColor: Color(0xFF000000),
       body: SingleChildScrollView(
@@ -43,15 +72,30 @@ class _AccountScreenState extends State<AccountScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(color: Color(0xFFFFAD35)),
                         shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF1E1E1E), // Màu sáng hơn
-                            Color(0xFF1A1A1A), // Màu tối
-                          ],
-                        ),
+                        // Thay gradient bằng image
+                        image: _avatarUrl != null
+                            ? DecorationImage(
+                                image: NetworkImage(_avatarUrl!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                        // Giữ gradient làm fallback nếu không có avatar
+                        gradient: _avatarUrl == null
+                            ? LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFF1E1E1E), Color(0xFF1A1A1A)],
+                              )
+                            : null,
                       ),
+                      // Hiển thị icon mặc định nếu không có avatar
+                      child: _avatarUrl == null
+                          ? Icon(
+                              Icons.person,
+                              color: Colors.grey[600],
+                              size: 60,
+                            )
+                          : null,
                     ),
                   ),
                 ),
@@ -61,7 +105,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
             // Tên người dùng
             Text(
-              'Nguyễn Dương Gia Thuận',
+              _isLoading ? 'Loading...' : (_userName ?? 'NoName'),
               style: GoogleFonts.beVietnamPro(
                 color: Colors.white,
                 fontSize: 24,
@@ -71,7 +115,7 @@ class _AccountScreenState extends State<AccountScreen> {
             const SizedBox(height: 10),
             // Email của người dùng
             Text(
-              'giathuannguyenduong5000@gmail.com',
+              _isLoading ? '' : (_userEmail ?? 'No Email'),
               style: GoogleFonts.beVietnamPro(
                 color: Colors.grey,
                 fontSize: 16,
@@ -88,7 +132,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Expanded(
                     child: StatWidget(
-                      title: 'My Plans',
+                      title: 'navigation.plan'.tr(),
                       number: 8,
                       icon: Icons.insert_drive_file_sharp,
                     ),
@@ -97,7 +141,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
                   Expanded(
                     child: StatWidget(
-                      title: 'Favourites',
+                      title: 'navigation.favourite'.tr(),
                       number: 8,
                       icon: Icons.favorite,
                     ),
@@ -106,7 +150,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
                   Expanded(
                     child: StatWidget(
-                      title: 'Past Trips',
+                      title: 'account.past_trips'.tr(),
                       number: 8,
                       icon: Icons.check,
                     ),
@@ -121,7 +165,7 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Utilities',
+                  'account.utilities'.tr(),
                   style: GoogleFonts.beVietnamPro(
                     color: Colors.white,
                     fontSize: 20,
@@ -147,6 +191,9 @@ class _AccountScreenState extends State<AccountScreen> {
                     isDarkMode = value;
                   });
                 },
+                onDataUpdated: () {
+                  _loadUserData();
+                },
               ),
             ),
             const SizedBox(height: 20),
@@ -156,7 +203,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Expanded(
                     child: ActionButton(
-                      buttonName: 'Logout',
+                      buttonName: 'account.log_out'.tr(),
                       color: Colors.redAccent,
                       onTap: () async {
                         // Xoá hoàn toàn Credentials
@@ -180,7 +227,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
                   Expanded(
                     child: ActionButton(
-                      buttonName: 'Switch Account',
+                      buttonName: 'account.switch_account'.tr(),
                       color: Color(0xFFFFAD35),
                     ),
                   ),

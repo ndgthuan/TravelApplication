@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/screen/Account/screens/change_password_screen.dart';
+import 'package:travel_app/screen/Account/screens/help_support_screen.dart';
 import 'package:travel_app/screen/Account/screens/information_screen.dart';
+import 'package:travel_app/screen/Account/screens/language_screen.dart';
 import 'option_widget.dart';
 import 'divider_widget.dart';
 import 'dark_mode_widget.dart';
@@ -8,10 +11,12 @@ import 'dark_mode_widget.dart';
 class SettingCardWidget extends StatelessWidget {
   final bool isDarkMode;
   final Function(bool)? onDarkModeChanged;
+  final VoidCallback? onDataUpdated;
   const SettingCardWidget({
     super.key,
     required this.isDarkMode,
     required this.onDarkModeChanged,
+    this.onDataUpdated,
   });
 
   @override
@@ -30,14 +35,20 @@ class SettingCardWidget extends StatelessWidget {
             children: [
               // Thông tin cá nhân
               OptionWidget(
-                optionText: 'Personal Information',
+                optionText: 'account.personal_information'.tr(),
                 optionIcon: Icons.person_outline,
-                onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(
-                    MaterialPageRoute(
-                      builder: (context) => InformationScreen(),
-                    ),
-                  );
+                onTap: () async {
+                  final result =
+                      await Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (context) => InformationScreen(),
+                        ),
+                      );
+
+                  // Gọi callback
+                  if (result == true && onDataUpdated != null) {
+                    onDataUpdated!();
+                  }
                 },
               ),
               const SizedBox(height: 20),
@@ -45,7 +56,7 @@ class SettingCardWidget extends StatelessWidget {
               DividerWidget(),
               const SizedBox(height: 20),
               OptionWidget(
-                optionText: 'Change Password',
+                optionText: 'account.change_password'.tr(),
                 optionIcon: Icons.lock_outline,
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push(
@@ -60,8 +71,13 @@ class SettingCardWidget extends StatelessWidget {
               DividerWidget(),
               const SizedBox(height: 20),
               OptionWidget(
-                optionText: 'Language',
+                optionText: 'account.language'.tr(),
                 optionIcon: Icons.language_outlined,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(builder: (context) => LanguageScreen()),
+                  );
+                },
               ),
               const SizedBox(height: 20),
               // Thannh ngang
@@ -77,8 +93,15 @@ class SettingCardWidget extends StatelessWidget {
               DividerWidget(),
               const SizedBox(height: 20),
               OptionWidget(
-                optionText: 'Help & Support',
+                optionText: 'account.help_support'.tr(),
                 optionIcon: Icons.help_outline,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                      builder: (context) => HelpSupportScreen(),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 5),
             ],

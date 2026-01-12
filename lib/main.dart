@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,18 +10,51 @@ import 'package:device_preview/device_preview.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Firebase init
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Language init
+  await EasyLocalization.ensureInitialized();
   runApp(
     // For web
-    DevicePreview(
-      enabled: !kReleaseMode,
-      defaultDevice: Devices.ios.iPhone16ProMax,
-      backgroundColor: Colors.black,
-      builder: (context) => const MyApp(),
+    EasyLocalization(
+      supportedLocales: [
+        Locale('en'),
+        Locale('vi'),
+        Locale('zh'),
+        Locale('ja'),
+        Locale('ko'),
+        Locale('fr'),
+        Locale('de'),
+        Locale('ru'),
+      ],
+      path: 'lib/assets/translations',
+      fallbackLocale: Locale('en'),
+      child: DevicePreview(
+        enabled: !kReleaseMode,
+        defaultDevice: Devices.ios.iPhone16ProMax,
+        backgroundColor: Colors.black,
+        builder: (context) => const MyApp(),
+      ),
     ),
 
     // For android
-    // MyApp(),
+    // EasyLocalization(
+    //   supportedLocales: [
+    //     Locale('en'),
+    //     Locale('vi'),
+    //     Locale('zh'),
+    //     Locale('ja'),
+    //     Locale('ko'),
+    //     Locale('fr'),
+    //     Locale('de'),
+    //     Locale('ru'),
+    //   ],
+    //   path: 'lib/assets/translations',
+    //   fallbackLocale: Locale('en'),
+    //   child: MyApp(),
+    // ),
   );
 }
 
@@ -31,8 +65,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // // For web
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
       debugShowCheckedModeBanner: false,
-      locale: DevicePreview.locale(context),
+      locale: context.locale,
       builder: DevicePreview.appBuilder,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
@@ -41,6 +77,9 @@ class MyApp extends StatelessWidget {
           : const StartScreen(),
 
       // For android
+      // localizationsDelegates: context.localizationDelegates,
+      // supportedLocales: context.supportedLocales,
+      // locale: context.locale,
       // title: "TravelApplication",
       // debugShowCheckedModeBanner: false,
       // theme: ThemeData(
@@ -48,8 +87,8 @@ class MyApp extends StatelessWidget {
       //   useMaterial3: true,
       // ),
       // home: FirebaseAuth.instance.currentUser != null
-      //     ? const BottomNavigation()
-      //     : const StartScreen(),
+      //     ? BottomNavigation()
+      //     : StartScreen(),
     );
   }
 }
