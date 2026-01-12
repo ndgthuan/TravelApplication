@@ -4,6 +4,7 @@ import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import '../widgets/dialog_widget.dart';
 import '../services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'register_screen.dart';
 import '../widgets/switch_page_button_widget.dart';
 import 'package:animations/animations.dart';
@@ -104,6 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Rebuild mỗi khi đổi ngôn ngữ
+    var _ = context.locale;
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
@@ -126,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TitleLogo(),
                   const SizedBox(height: 10),
 
-                  SubtitleLogo(subtitleText: "Log in to continue your journey"),
+                  SubtitleLogo(subtitleText: "auth.login_subtitle".tr()),
                   const SizedBox(height: 50),
 
                   LoginFormWidget(
@@ -217,8 +220,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SwitchPageButtonWidget(
-                        formerText: "Don't have an account? ",
-                        latterText: "Sign up",
+                        formerText: "auth.dont_have_account".tr(),
+                        latterText: "auth.sign_up".tr(),
                         destinationScreen: RegisterScreen(),
                       ),
                     ],

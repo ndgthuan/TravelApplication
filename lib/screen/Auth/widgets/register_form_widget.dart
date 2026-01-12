@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/shared/widgets/action_button_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/email_field_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/password_field_widget.dart';
@@ -43,19 +44,19 @@ class RegisterFormWidget extends StatelessWidget {
       children: [
         // Hộp nhập Username
         UserFieldWidget(
-          labelText: "Username",
+          labelText: "auth.username".tr(),
           prefixIcon: Icons.person,
           controller: nameController,
-          textReturn: "Username is empty",
+          textReturn: "auth.username_empty".tr(),
         ),
         const SizedBox(height: 15),
 
         // Hộp nhập email
         EmailFieldWidget(
-          labelText: "Email",
+          labelText: "auth.email".tr(),
           prefixIcon: Icons.email_outlined,
           controller: emailController,
-          textReturn: "Email is empty",
+          textReturn: "auth.email_empty".tr(),
           stringError: emailError,
         ),
         const SizedBox(height: 15),
@@ -64,13 +65,13 @@ class RegisterFormWidget extends StatelessWidget {
         PasswordFieldWidget(
           focusNode: passwordFocusNode,
           isShowing: isShowingPassword,
-          labelText: "Password",
+          labelText: "auth.password".tr(),
           prefixIcon: Icons.lock_outline,
           controller: passwordController,
           onChanged: onChange,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Password is empty";
+              return "auth.password_empty".tr();
             }
             if (passwordError != null) return passwordError;
             return null;
@@ -118,7 +119,7 @@ class RegisterFormWidget extends StatelessWidget {
                     ),
 
                     Text(
-                      'Min. 8 chars, include number & symbol',
+                      'auth.min_chars'.tr(),
                       style: GoogleFonts.beVietnamPro(
                         color: Colors.grey[600],
                         fontSize: 11,
@@ -133,15 +134,15 @@ class RegisterFormWidget extends StatelessWidget {
         // Hộp reenter password
         PasswordFieldWidget(
           isShowing: isShowingReenterPassword,
-          labelText: "Reenter password",
+          labelText: "auth.reenter_password".tr(),
           prefixIcon: Icons.lock_outline,
           controller: reenterpasswordController,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Password is empty";
+              return "auth.password_empty".tr();
             }
             if (value != passwordController.text) {
-              return "Password is not correct";
+              return "auth.password_not_match".tr();
             }
             return null;
           },
@@ -149,7 +150,7 @@ class RegisterFormWidget extends StatelessWidget {
         const SizedBox(height: 30),
 
         // Thanh đăng ký
-        ActionButtonWidget(buttonText: "Register", onTap: onTap),
+        ActionButtonWidget(buttonText: "auth.register".tr(), onTap: onTap),
       ],
     );
   }

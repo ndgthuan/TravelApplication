@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/screen/Home/models/destination_model.dart';
 import 'package:travel_app/screen/Home/services/destination_service.dart';
 import 'package:travel_app/screen/Home/widgets/slide_card_widget.dart';
@@ -45,6 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Rebuild mỗi khi đổi ngôn ngữ
+    var _ = context.locale;
+
+    // Build trang home
     return Scaffold(
       backgroundColor: Color(0xFF000000),
       body: SingleChildScrollView(
@@ -57,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Chào mừng
-                  TitleWidget(titleText: "Welcome", fontSize: 32),
+                  TitleWidget(titleText: "general.welcome".tr(), fontSize: 32),
                   // Vẽ logo
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -94,7 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
               DividerWidget(),
 
               // Địa điểm nội bật
-              TitleWidget(titleText: 'Popular Destination', fontSize: 20),
+              TitleWidget(
+                titleText: 'home.popular_destination'.tr(),
+                fontSize: 20,
+              ),
 
               // PageView Carousel với dots indicator
               _popularDestinations.isEmpty
@@ -116,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
               DividerWidget(),
 
               // Có thể bạn sẽ thích
-              TitleWidget(titleText: 'You might like', fontSize: 20),
+              TitleWidget(titleText: 'home.you_might_like'.tr(), fontSize: 20),
 
               ListView.builder(
                 shrinkWrap: true, // Quan trọng!

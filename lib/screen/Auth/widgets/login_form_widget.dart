@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/shared/widgets/action_button_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/email_field_widget.dart';
@@ -35,22 +36,22 @@ class LoginFormWidget extends StatelessWidget {
       children: [
         // Hộp nhập email
         EmailFieldWidget(
-          labelText: "Email",
+          labelText: "auth.email".tr(),
           prefixIcon: Icons.email_outlined,
           controller: emailController,
-          textReturn: "Email is empty",
+          textReturn: "auth.email_empty".tr(),
           stringError: emailError,
         ),
         const SizedBox(height: 15),
 
         PasswordFieldWidget(
           isShowing: isShowing,
-          labelText: "Password",
+          labelText: "auth.password".tr(),
           prefixIcon: Icons.lock_outline,
           controller: passwordController,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Password is empty";
+              return "auth.password_empty".tr();
             }
             if (passwordError != null) {
               return passwordError;
@@ -84,7 +85,7 @@ class LoginFormWidget extends StatelessWidget {
 
                     // Chữ remember me
                     Text(
-                      'Remember me',
+                      'auth.remember_me'.tr(),
                       style: GoogleFonts.beVietnamPro(
                         color: Color(0xFFCCCCCC),
                         fontSize: 16,
@@ -101,7 +102,7 @@ class LoginFormWidget extends StatelessWidget {
                   ), // Màu hiệu ứng khi bấm vào
                 ),
                 child: Text(
-                  "Forgot password",
+                  "auth.forgot_password".tr(),
                   style: GoogleFonts.beVietnamPro(
                     color: Color(0xFFCCCCCC),
                     fontSize: 16,
@@ -114,7 +115,7 @@ class LoginFormWidget extends StatelessWidget {
         const SizedBox(height: 10),
 
         // Thanh đăng nhập
-        ActionButtonWidget(buttonText: "Login", onTap: onLogin),
+        ActionButtonWidget(buttonText: "auth.login".tr(), onTap: onLogin),
       ],
     );
   }

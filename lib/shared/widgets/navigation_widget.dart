@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:travel_app/screen/Account/screens/account_screen.dart';
@@ -25,26 +26,32 @@ class BottomNavigation extends StatelessWidget {
       controller: PersistentTabController(initialIndex: 2),
       tabs: [
         PersistentTabConfig(
-          screen: const PlanScreen(),
-          item: _buildItem(icon: Icons.map, title: 'Plan'),
+          screen: PlanScreen(),
+          item: _buildItem(icon: Icons.map, title: 'navigation.plan'.tr()),
         ),
         PersistentTabConfig(
-          screen: const FavouriteScreen(),
-          item: _buildItem(icon: Icons.favorite, title: 'Favourite'),
+          screen: FavouriteScreen(),
+          item: _buildItem(
+            icon: Icons.favorite,
+            title: 'navigation.favourite'.tr(),
+          ),
         ),
         PersistentTabConfig(
-          screen: const HomeScreen(),
-          item: _buildItem(icon: Icons.house, title: 'Home'),
+          screen: HomeScreen(),
+          item: _buildItem(icon: Icons.house, title: 'home.home'.tr()),
         ),
         PersistentTabConfig(
-          screen: const NotificationScreen(),
-          item: _buildItem(icon: Icons.notifications, title: 'Notification'),
+          screen: NotificationScreen(),
+          item: _buildItem(
+            icon: Icons.notifications,
+            title: 'navigation.notification'.tr(),
+          ),
         ),
         PersistentTabConfig(
-          screen: const AccountScreen(),
+          screen: AccountScreen(),
           item: _buildItem(
             icon: Icons.account_circle_rounded,
-            title: 'Account',
+            title: 'account.account'.tr(),
           ),
         ),
       ],

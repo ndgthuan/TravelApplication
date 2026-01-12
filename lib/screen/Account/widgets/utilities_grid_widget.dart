@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'extension_widget.dart';
 
 class UtilitiesGridWidget extends StatelessWidget {
@@ -13,7 +14,7 @@ class UtilitiesGridWidget extends StatelessWidget {
             Expanded(
               child: ExtensionWidget(
                 icon: Icons.monetization_on,
-                title: 'Currency Exchange',
+                title: 'home.currency_exchange'.tr(),
               ),
             ),
             const SizedBox(width: 5),
@@ -21,7 +22,7 @@ class UtilitiesGridWidget extends StatelessWidget {
             Expanded(
               child: ExtensionWidget(
                 icon: Icons.g_translate,
-                title: 'Text translation',
+                title: 'home.text_translation'.tr(),
               ),
             ),
           ],
@@ -33,13 +34,16 @@ class UtilitiesGridWidget extends StatelessWidget {
             Expanded(
               child: ExtensionWidget(
                 icon: Icons.cloud,
-                title: 'Weather Forecast',
+                title: 'home.weather_forecast'.tr(),
               ),
             ),
             const SizedBox(width: 5),
 
             Expanded(
-              child: ExtensionWidget(icon: Icons.public, title: 'World Clock'),
+              child: ExtensionWidget(
+                icon: Icons.public,
+                title: 'home.world_clock'.tr(),
+              ),
             ),
           ],
         ),

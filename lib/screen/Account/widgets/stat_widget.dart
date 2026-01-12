@@ -40,9 +40,13 @@ class StatWidget extends StatelessWidget {
             ],
           ),
           // Tên của hoạt động
-          Text(
-            title,
-            style: GoogleFonts.beVietnamPro(color: Colors.grey, fontSize: 15),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.beVietnamPro(color: Colors.grey, fontSize: 13),
+            ),
           ),
         ],
       ),

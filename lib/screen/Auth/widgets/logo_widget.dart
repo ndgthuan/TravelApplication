@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppLogo extends StatelessWidget {
@@ -44,7 +45,7 @@ class TitleLogo extends StatelessWidget {
     Align(
       alignment: Alignment.center,
       child: Text(
-        "Welcome!",
+        "general.welcome".tr(),
         style: GoogleFonts.beVietnamPro(
           fontSize: 40,
           fontWeight: FontWeight.bold,

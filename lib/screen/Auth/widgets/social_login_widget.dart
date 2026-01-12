@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/screen/Auth/widgets/social_button_widget.dart';
 import '../services/auth_service.dart';
@@ -29,7 +30,7 @@ class SocialLoginWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  "Or login with",
+                  "auth.or_login_with".tr(),
                   style: GoogleFonts.beVietnamPro(
                     color: Color(0xFF888888),
                     fontSize: 13,

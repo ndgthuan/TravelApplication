@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 Color getPasswordStrength(int strength) {
   if (strength <= 3) return Colors.redAccent;
@@ -8,8 +9,8 @@ Color getPasswordStrength(int strength) {
 }
 
 String getStrengthText(int strength) {
-  if (strength <= 3) return "Weak";
-  if (strength <= 5) return "Medium";
-  if (strength <= 6) return "Good";
-  return "Excellent";
+  if (strength <= 3) return "auth.weak".tr();
+  if (strength <= 5) return "auth.medium".tr();
+  if (strength <= 6) return "auth.good".tr();
+  return "auth.excellent".tr();
 }

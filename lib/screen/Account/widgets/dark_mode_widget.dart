@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DarkModeWidget extends StatelessWidget {
@@ -23,7 +24,7 @@ class DarkModeWidget extends StatelessWidget {
               const SizedBox(width: 5),
               // Tên danh mục
               Text(
-                'Dark Mode',
+                'account.dark_mode'.tr(),
                 style: GoogleFonts.beVietnamPro(
                   color: Colors.white,
                   fontSize: 18,
