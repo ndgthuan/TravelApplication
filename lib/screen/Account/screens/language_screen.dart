@@ -17,7 +17,6 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     // Lấy ngôn ngữ hiện tại của app
     _selectedLanguage = context.locale.languageCode;
@@ -27,6 +26,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: const Color(0xFF1C1C1D),
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(

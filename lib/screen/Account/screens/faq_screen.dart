@@ -10,6 +10,7 @@ class FaqScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: const Color(0xFF1C1C1D),
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
@@ -36,6 +37,23 @@ class FaqScreen extends StatelessWidget {
               titleText: 'account.faq_report_problem_title'.tr(),
               paragraphText: 'account.faq_report_problem_body'.tr(),
             ),
+            FaqStatWidget(
+              titleText: 'account.faq_edit_profile_title'.tr(),
+              paragraphText: 'account.faq_edit_profile_body'.tr(),
+            ),
+            FaqStatWidget(
+              titleText: 'account.faq_notifications_title'.tr(),
+              paragraphText: 'account.faq_notifications_body'.tr(),
+            ),
+            FaqStatWidget(
+              titleText: 'account.faq_offline_mode_title'.tr(),
+              paragraphText: 'account.faq_offline_mode_body'.tr(),
+            ),
+            FaqStatWidget(
+              titleText: 'account.faq_sync_data_title'.tr(),
+              paragraphText: 'account.faq_sync_data_body'.tr(),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),

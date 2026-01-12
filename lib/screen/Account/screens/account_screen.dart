@@ -1,12 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/screen/Account/widgets/button_widget.dart';
 import 'package:travel_app/screen/Account/widgets/setting_card_widget.dart';
 import 'package:travel_app/screen/Account/widgets/stat_widget.dart';
 import 'package:travel_app/screen/Account/widgets/utilities_grid_widget.dart';
 import 'package:travel_app/screen/Auth/screens/login_screen.dart';
 import 'package:travel_app/screen/Auth/services/auth_service.dart';
+import 'package:travel_app/screen/Auth/services/cloudinary_service.dart';
 import 'package:travel_app/screen/Auth/services/storage_service.dart';
 import 'package:travel_app/screen/Auth/services/user_service.dart';
 
@@ -18,10 +23,12 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  bool _isClick = false;
   bool isDarkMode = true;
   String? _userName;
   String? _userEmail;
   String? _avatarUrl;
+  String? _backgroundImageUrl;
   bool _isLoading = true;
 
   @override
@@ -38,7 +45,42 @@ class _AccountScreenState extends State<AccountScreen> {
       _userName = data?['name'];
       _userEmail = data?['email'];
       _avatarUrl = data?['avatarUrl'];
+      _backgroundImageUrl = data?['backgroundUrl'];
       _isLoading = false;
+    });
+  }
+
+  // Tạo method thay đổi nền
+  Future<void> _changeBackgroundImage() async {
+    // Mở thư viện gallery
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    // Kiểm tra nếu user không chọn ảnh
+    if (pickedFile == null) return;
+
+    // Chuyển XFile thành File và upload lên Cloudinary
+    final File imageFile = File(pickedFile.path);
+    final String? cloudinaryUrl = await CloudinaryService.uploadImage(
+      imageFile,
+    );
+
+    // Kiểm tra nếu upload thất bại
+    if (cloudinaryUrl == null) return;
+
+    // Lưu URL vào Firestore
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
+        {'backgroundUrl': cloudinaryUrl},
+      );
+    }
+
+    // Cập nhật UI
+    setState(() {
+      _backgroundImageUrl = cloudinaryUrl;
     });
   }
 
@@ -58,12 +100,38 @@ class _AccountScreenState extends State<AccountScreen> {
                 // Background đằng sau hình tròn
                 Container(
                   width: double.infinity,
-                  height: 150,
-                  decoration: BoxDecoration(color: Color(0xFFFFAD35)),
+                  height: 200,
+                  decoration: BoxDecoration(
+                    // Màu nền khi chưa có ảnh
+                    color: Color(0xFF1C1C1D),
+                    image: _backgroundImageUrl != null
+                        ? DecorationImage(
+                            image: NetworkImage(_backgroundImageUrl!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                ),
+                // Nút đổi hình nền
+                Positioned(
+                  right: 5,
+                  top: 165,
+                  child: GestureDetector(
+                    onTapDown: (_) => setState(() => _isClick = true),
+                    onTapUp: (_) => setState(() => _isClick = false),
+                    onTapCancel: () => setState(() => _isClick = false),
+                    onTap: _changeBackgroundImage,
+                    child: AnimatedScale(
+                      scale: _isClick ? 0.95 : 1.0,
+                      duration: const Duration(milliseconds: 100),
+                      curve: Curves.easeInOut,
+                      child: Icon(Icons.edit, color: Color(0xFFFFAD35)),
+                    ),
+                  ),
                 ),
                 // Icon hình tròn
                 Padding(
-                  padding: const EdgeInsets.only(top: 70),
+                  padding: const EdgeInsets.only(top: 115),
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: Container(

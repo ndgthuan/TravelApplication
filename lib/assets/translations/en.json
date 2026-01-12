@@ -79,6 +79,7 @@
     "error_type": "Error Type",
     "utilities": "Utilities",
     "switch_account": "Switch Account",
+
     "past_trips": "Past Trips",
     "subject_hint": "e.g. Account Issue",
     "message": "Message",
@@ -91,6 +92,14 @@
     "faq_change_currency_body": "Go to \"Account\" -> \"Currency Exchange\" and select your desired currency",
     "faq_report_problem_title": "How to report a problem?",
     "faq_report_problem_body": "Navigate to \"Help and Support\" ----> \"Report a Problem\" and fill out the form",
+    "faq_edit_profile_title": "How to edit my profile?",
+    "faq_edit_profile_body": "Go to \"Account\" -> \"Personal Information\". You can update your name, phone number, date of birth, and address",
+    "faq_notifications_title": "How to manage notifications?",
+    "faq_notifications_body": "Navigate to \"Account\" -> \"Notifications\" to enable or disable push notifications and email alerts",
+    "faq_offline_mode_title": "Can I use the app offline?",
+    "faq_offline_mode_body": "Yes! Your saved plans and favorites are available offline. However, some features like currency exchange require internet connection",
+    "faq_sync_data_title": "How to sync my data across devices?",
+    "faq_sync_data_body": "Your data is automatically synced when you sign in with the same account on different devices. Make sure you have an internet connection",
     "choose_error_type": "Choose type error",
     "describe_problem": "Describe a Problem",
     "attach_screenshot": "Attach Screenshot",
@@ -100,9 +109,13 @@
     "privacy_policy_title": "Privacy Policy",
     "privacy_policy_body": "Privacy Policy is mantaining rules in order to use and endrepretation of your Privacy Policy",
     "guide_getting_started": "Getting Started",
+    "guide_getting_started_body": "Welcome to our travel app! To get started, create an account or sign in with your existing credentials. Once logged in, you can explore destinations, create travel plans, and save your favorite places. The bottom navigation bar gives you quick access to Home, Plan, Favorites, Notifications, and Account sections.",
     "guide_planning_trip": "Planning a Trip",
+    "guide_planning_trip_body": "To plan a trip, tap the 'Plan' icon in the bottom navigation. Select 'Create New Plan' and follow the steps: choose your destination, set travel dates, add activities and attractions. You can also set budget estimates and share your plan with travel companions.",
     "guide_managing_account": "Managing Your Account",
-    "guide_using_utilities": "Using Utilities"
+    "guide_managing_account_body": "Access your account settings by tapping 'Account' in the bottom navigation. Here you can update your profile information, change your password, adjust language preferences, toggle dark mode, and manage notification settings. You can also view your past trips and switch between accounts.",
+    "guide_using_utilities": "Using Utilities",
+    "guide_using_utilities_body": "Our app provides helpful utilities for travelers: Currency Exchange for real-time conversion rates, Text Translation for communicating in foreign languages, Weather Forecast to plan your activities, and World Clock to keep track of time zones. Access these from the Home screen or Account utilities section."
   },
   "home": {
     "home": "Home",
