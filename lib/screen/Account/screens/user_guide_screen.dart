@@ -10,6 +10,7 @@ class UserGuideScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: const Color(0xFF1C1C1D),
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
@@ -23,10 +24,23 @@ class UserGuideScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 15),
-            UserGuideWidget(titleText: 'account.guide_getting_started'.tr()),
-            UserGuideWidget(titleText: 'account.guide_planning_trip'.tr()),
-            UserGuideWidget(titleText: 'account.guide_managing_account'.tr()),
-            UserGuideWidget(titleText: 'account.guide_using_utilities'.tr()),
+            UserGuideWidget(
+              titleText: 'account.guide_getting_started'.tr(),
+              contentText: 'account.guide_getting_started_body'.tr(),
+            ),
+            UserGuideWidget(
+              titleText: 'account.guide_planning_trip'.tr(),
+              contentText: 'account.guide_planning_trip_body'.tr(),
+            ),
+            UserGuideWidget(
+              titleText: 'account.guide_managing_account'.tr(),
+              contentText: 'account.guide_managing_account_body'.tr(),
+            ),
+            UserGuideWidget(
+              titleText: 'account.guide_using_utilities'.tr(),
+              contentText: 'account.guide_using_utilities_body'.tr(),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
