@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/shared/widgets/action_button_widget.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ContactSupportScreen extends StatefulWidget {
   const ContactSupportScreen({super.key});
@@ -11,7 +15,92 @@ class ContactSupportScreen extends StatefulWidget {
 }
 
 class _ContactSupportScreenState extends State<ContactSupportScreen> {
-  bool _isClick = false;
+  // Controllers
+  final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+
+  // State
+  bool _isSending = false;
+  String? _errorMessage;
+
+  @override
+  void dispose() {
+    _subjectController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  // Hàm gửi email qua EmailJS
+  Future<void> _sendEmail() async {
+    if (_subjectController.text.trim().isEmpty ||
+        _messageController.text.trim().isEmpty) {
+      setState(() => _errorMessage = 'account.fill_all_fields'.tr());
+      return;
+    }
+
+    setState(() {
+      _errorMessage = null;
+      _isSending = true;
+    });
+
+    // Lấy thông tin user hiện tại
+    final user = FirebaseAuth.instance.currentUser;
+    final userName = user?.displayName ?? 'App User';
+    final userEmail = user?.email ?? 'no-reply@app.com';
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${dotenv.env['PRIVATE_KEY']}',
+        },
+        body: json.encode({
+          'service_id': dotenv.env['SERVICE_ID'],
+          'template_id': dotenv.env['TEMPLATE_ID'],
+          'user_id': dotenv.env['PUBLIC_KEY'],
+          'accessToken': dotenv.env['PRIVATE_KEY'],
+          'template_params': {
+            'title': _subjectController.text,
+            'message': _messageController.text,
+            'name': userName,
+            'email': userEmail,
+          },
+        }),
+      );
+
+      if (!mounted) return;
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('account.send_success'.tr()),
+            backgroundColor: Color(0xFFFFAD35),
+            duration: Duration(seconds: 1),
+          ),
+        );
+        Navigator.pop(context);
+      } else {
+        throw Exception('Failed: ${response.body}');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      print('EmailJS Error: $e'); // Debug
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('account.send_error'.tr()),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSending = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +136,7 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10),
 
                     child: TextFormField(
+                      controller: _subjectController,
                       cursorColor: Color(0xFFFFAD35),
                       style: GoogleFonts.beVietnamPro(color: Colors.white),
                       decoration: InputDecoration(
@@ -85,6 +175,7 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     child: TextFormField(
+                      controller: _messageController,
                       maxLines: 10,
                       cursorColor: Color(0xFFFFAD35),
                       style: GoogleFonts.beVietnamPro(color: Colors.white),
@@ -111,50 +202,37 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'account.attachments'.tr(),
-                    style: GoogleFonts.beVietnamPro(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Nút kèm hình ảnh
-                  GestureDetector(
-                    onTapDown: (_) => setState(() => _isClick = true),
-                    onTapUp: (_) => setState(() => _isClick = false),
-                    onTapCancel: () => setState(() => _isClick = false),
-                    child: AnimatedScale(
-                      scale: _isClick ? 0.95 : 1.0,
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.easeInOut,
-                      child: Container(
-                        height: 80,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF1C1C1D),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Icon(
-                          Icons.picture_as_pdf_outlined,
-                          size: 40,
-                          color: Color(0xFFFFAD35),
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.only(bottom: 42.0),
-              child: ActionButtonWidget(
-                buttonText: 'account.send_report'.tr(),
-                onTap: () {},
-              ),
+              padding: const EdgeInsets.only(bottom: 12.0),
+              child: _isSending
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFFFAD35),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        if (_errorMessage != null)
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: Text(
+                              _errorMessage!,
+                              style: GoogleFonts.beVietnamPro(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ActionButtonWidget(
+                          buttonText: 'account.send_report'.tr(),
+                          onTap: _sendEmail,
+                        ),
+                      ],
+                    ),
             ),
           ],
         ),

@@ -7,9 +7,13 @@ import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import 'screen/Onboarding/screens/start_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load .env file
+  await dotenv.load(fileName: ".env");
 
   // Firebase init
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

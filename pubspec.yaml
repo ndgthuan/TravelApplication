@@ -67,6 +67,17 @@ dependencies:
   # Dịch thuật
   easy_localization: ^3.0.3
 
+  # Mở đường dẫn URL ngoài
+  url_launcher: ^6.2.5
+
+  # Bản dịch
+  translator: ^1.0.4+1
+  speech_to_text: ^7.3.0
+  flutter_tts: ^3.8.5
+
+  # Đọc file env
+  flutter_dotenv: ^6.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -90,6 +101,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - lib/assets/images/
     - lib/assets/data/
     - lib/assets/translations/
