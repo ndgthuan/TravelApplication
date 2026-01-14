@@ -87,6 +87,7 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
       }
     } catch (e) {
       if (!mounted) return;
+      // ignore: avoid_print
       print('EmailJS Error: $e'); // Debug
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -139,6 +140,7 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
                       controller: _subjectController,
                       cursorColor: Color(0xFFFFAD35),
                       style: GoogleFonts.beVietnamPro(color: Colors.white),
+                      maxLines: 8,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),

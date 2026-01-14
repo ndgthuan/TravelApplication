@@ -144,6 +144,21 @@
     "select_from": "Chọn tiền tệ nguồn",
     "select_to": "Chọn tiền tệ đích",
     "rate": "Tỷ giá",
-    "description": "Đổi tiền sang các loại tiền tệ khác nhau"
+    "rate_history": "Lịch sử tỷ giá",
+    "lowest": "Thấp nhất",
+    "average": "Trung bình",
+    "highest": "Cao nhất",
+    "unsupported_currency": "Không hỗ trợ đơn vị tiền tệ này"
+  },
+  "weather": {
+    "title": "Dự báo thời tiết",
+    "search_hint": "Tìm kiếm địa điểm...",
+    "humidity": "Độ ẩm",
+    "wind": "Gió",
+    "uv_index": "Chỉ số UV",
+    "hourly_forecast": "Dự báo theo giờ",
+    "daily_forecast": "Dự báo theo ngày",
+    "today": "Hôm nay",
+    "now": "Hiện tại"
   }
 }

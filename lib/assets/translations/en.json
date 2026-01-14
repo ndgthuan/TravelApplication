@@ -144,6 +144,21 @@
     "select_from": "Select source currency",
     "select_to": "Select target currency",
     "rate": "Exchange Rate",
-    "description": "Exchange money to different currencies"
+    "rate_history": "Rate History",
+    "lowest": "Lowest",
+    "average": "Average",
+    "highest": "Highest",
+    "unsupported_currency": "This currency is not supported"
+  },
+  "weather": {
+    "title": "Weather Forecast",
+    "search_hint": "Search location...",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "uv_index": "UV Index",
+    "hourly_forecast": "Hourly Forecast",
+    "daily_forecast": "Daily Forecast",
+    "today": "Today",
+    "now": "Now"
   }
 }

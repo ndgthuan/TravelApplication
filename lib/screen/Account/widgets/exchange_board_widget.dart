@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class ExchangeBoardWidget extends StatelessWidget {
   final bool showIcon;
@@ -32,18 +31,6 @@ class ExchangeBoardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Icon đồng tiền
-        if (showIcon)
-          Icon(Icons.monetization_on, color: Color(0xFFFFAD35), size: 200),
-        if (showText)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: Text(
-              'currency.description'.tr(),
-              textAlign: TextAlign.center,
-              style: GoogleFonts.beVietnamPro(color: Colors.grey, fontSize: 18),
-            ),
-          ),
         Container(
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -55,53 +42,17 @@ class ExchangeBoardWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Label (From/To)
-              Text(
-                label,
-                style: GoogleFonts.beVietnamPro(
-                  color: Colors.grey[400],
-                  fontSize: 14,
-                ),
-              ),
-              SizedBox(height: 10),
-
-              // Amount and Currency selector row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Amount
-                  Expanded(
-                    child: isEditable
-                        ? TextField(
-                            controller: controller,
-                            style: GoogleFonts.beVietnamPro(
-                              color: Color(0xFFFFAD35),
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            keyboardType: TextInputType.numberWithOptions(
-                              decimal: true,
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '0.00',
-                              hintStyle: GoogleFonts.beVietnamPro(
-                                color: Colors.grey[600],
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        : Text(
-                            amount,
-                            style: GoogleFonts.beVietnamPro(
-                              color: Color(0xFFFFAD35),
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                  Text(
+                    label,
+                    style: GoogleFonts.beVietnamPro(
+                      color: Colors.grey[400],
+                      fontSize: 14,
+                    ),
                   ),
 
-                  // Currency selector button
                   GestureDetector(
                     onTap: onCurrencyTap,
                     child: Container(
@@ -137,6 +88,39 @@ class ExchangeBoardWidget extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 10),
+
+              // Amount
+              isEditable
+                  ? TextField(
+                      controller: controller,
+                      style: GoogleFonts.beVietnamPro(
+                        color: Color(0xFFFFAD35),
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      keyboardType: TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '0.00',
+                        hintStyle: GoogleFonts.beVietnamPro(
+                          color: Colors.grey[600],
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : Text(
+                      amount,
+                      style: GoogleFonts.beVietnamPro(
+                        color: Color(0xFFFFAD35),
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+
               SizedBox(height: 8),
 
               // Currency name

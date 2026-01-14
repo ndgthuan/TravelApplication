@@ -129,7 +129,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ),
                 ),
-                // Icon hình tròn
+                // Avatar
                 Padding(
                   padding: const EdgeInsets.only(top: 115),
                   child: Align(
@@ -138,7 +138,6 @@ class _AccountScreenState extends State<AccountScreen> {
                       height: 150,
                       width: 150,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFFFAD35)),
                         shape: BoxShape.circle,
                         // Thay gradient bằng image
                         image: _avatarUrl != null

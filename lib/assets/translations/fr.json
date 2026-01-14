@@ -144,6 +144,21 @@
     "select_from": "Sélectionner la devise source",
     "select_to": "Sélectionner la devise cible",
     "rate": "Taux de change",
-    "description": "Échanger de l'argent dans différentes devises"
+    "rate_history": "Historique des taux",
+    "lowest": "Le plus bas",
+    "average": "Moyenne",
+    "highest": "Le plus haut",
+    "unsupported_currency": "Cette devise n'est pas prise en charge"
+  },
+  "weather": {
+    "title": "Prévisions météo",
+    "search_hint": "Rechercher un lieu...",
+    "humidity": "Humidité",
+    "wind": "Vent",
+    "uv_index": "Indice UV",
+    "hourly_forecast": "Prévisions horaires",
+    "daily_forecast": "Prévisions quotidiennes",
+    "today": "Aujourd'hui",
+    "now": "Maintenant"
   }
 }

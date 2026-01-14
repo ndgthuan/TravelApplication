@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:travel_app/screen/Account/widgets/exchange_board_widget.dart';
+import 'package:travel_app/screen/Account/widgets/exchange_rate_chart_widget.dart';
 
 class CurrencyExchangeScreen extends StatefulWidget {
   const CurrencyExchangeScreen({super.key});
@@ -50,7 +51,7 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
           orElse: () => _currencies.first,
         );
         _toCurrency = _currencies.firstWhere(
-          (c) => c['code'] == 'VND',
+          (c) => c['code'] == 'EUR',
           orElse: () => _currencies.last,
         );
       });
@@ -264,7 +265,14 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
                       onCurrencyTap: () => _showCurrencyPicker(false),
                     ),
 
-                    SizedBox(height: 30),
+                    SizedBox(height: 20),
+
+                    // 7-Day Chart
+                    ExchangeRateChartWidget(
+                      fromCurrency: _fromCurrency['code'] ?? 'USD',
+                      toCurrency: _toCurrency['code'] ?? 'VND',
+                    ),
+                    SizedBox(height: 15),
 
                     // Exchange rate info
                     Text(
