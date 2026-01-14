@@ -144,6 +144,21 @@
     "select_from": "원본 통화 선택",
     "select_to": "대상 통화 선택",
     "rate": "환율",
-    "description": "다양한 통화로 돈을 환전하세요"
+    "rate_history": "환율 기록",
+    "lowest": "최저",
+    "average": "평균",
+    "highest": "최고",
+    "unsupported_currency": "이 통화는 지원되지 않습니다"
+  },
+  "weather": {
+    "title": "일기 예보",
+    "search_hint": "위치 검색...",
+    "humidity": "습도",
+    "wind": "바람",
+    "uv_index": "UV 지수",
+    "hourly_forecast": "시간별 예보",
+    "daily_forecast": "일일 예보",
+    "today": "오늘",
+    "now": "현재"
   }
 }

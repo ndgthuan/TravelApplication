@@ -144,6 +144,21 @@
     "select_from": "选择源货币",
     "select_to": "选择目标货币",
     "rate": "汇率",
-    "description": "将钱兑换成不同货币"
+    "rate_history": "汇率历史",
+    "lowest": "最低",
+    "average": "平均",
+    "highest": "最高",
+    "unsupported_currency": "不支持此货币"
+  },
+  "weather": {
+    "title": "天气预报",
+    "search_hint": "搜索位置...",
+    "humidity": "湿度",
+    "wind": "风",
+    "uv_index": "紫外线指数",
+    "hourly_forecast": "每小时预报",
+    "daily_forecast": "每日预报",
+    "today": "今天",
+    "now": "现在"
   }
 }

@@ -144,6 +144,21 @@
     "select_from": "Quellwährung wählen",
     "select_to": "Zielwährung wählen",
     "rate": "Wechselkurs",
-    "description": "Geld in verschiedene Währungen umtauschen"
+    "rate_history": "Kursverlauf",
+    "lowest": "Niedrigster",
+    "average": "Durchschnitt",
+    "highest": "Höchster",
+    "unsupported_currency": "Diese Währung wird nicht unterstützt"
+  },
+  "weather": {
+    "title": "Wettervorhersage",
+    "search_hint": "Standort suchen...",
+    "humidity": "Luftfeuchtigkeit",
+    "wind": "Wind",
+    "uv_index": "UV-Index",
+    "hourly_forecast": "Stundenvorhersage",
+    "daily_forecast": "Tagesvorhersage",
+    "today": "Heute",
+    "now": "Jetzt"
   }
 }
