@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:travel_app/screen/Account/screens/currency_exchange_screen.dart';
+import 'package:travel_app/screen/Account/screens/text_translation_screen.dart';
 import 'extension_widget.dart';
 
 class UtilitiesGridWidget extends StatelessWidget {
@@ -15,6 +17,13 @@ class UtilitiesGridWidget extends StatelessWidget {
               child: ExtensionWidget(
                 icon: Icons.monetization_on,
                 title: 'home.currency_exchange'.tr(),
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                      builder: (context) => CurrencyExchangeScreen(),
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(width: 5),
@@ -23,6 +32,13 @@ class UtilitiesGridWidget extends StatelessWidget {
               child: ExtensionWidget(
                 icon: Icons.g_translate,
                 title: 'home.text_translation'.tr(),
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).push(
+                    MaterialPageRoute(
+                      builder: (context) => TextTranslationScreen(),
+                    ),
+                  );
+                },
               ),
             ),
           ],

@@ -21,6 +21,7 @@ class _InformationScreenState extends State<InformationScreen> {
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
   bool isClick = false;
+  bool _isUploading = false;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -49,6 +50,7 @@ class _InformationScreenState extends State<InformationScreen> {
     if (image != null) {
       setState(() {
         _selectedImage = File(image.path);
+        _isUploading = true;
       });
 
       // Check mounted sau khi async hoàn thành
@@ -56,12 +58,15 @@ class _InformationScreenState extends State<InformationScreen> {
 
       // Upload ảnh lên firestore
       final url = await CloudinaryService.uploadImage(File(image.path));
-      if (url != null) {
-        setState(() {
-          avatarUrl = url;
-        });
 
-        // Lưu URL vào Firestore
+      if (!mounted) return;
+      setState(() {
+        _isUploading = false; // Tắt loading
+        if (url != null) {
+          avatarUrl = url;
+        }
+      });
+      if (url != null) {
         await UserService.updateUserData({'avatarUrl': url});
       }
     }
@@ -176,6 +181,22 @@ class _InformationScreenState extends State<InformationScreen> {
                         ),
                       ),
                     ),
+
+                    // Loading indicator để đảm bảo sẽ lưu avatar
+                    if (_isUploading)
+                      Positioned.fill(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xFFFFAD35),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),

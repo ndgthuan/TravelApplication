@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/screen/Account/screens/contact_support_screen.dart';
 import 'package:travel_app/screen/Account/screens/faq_screen.dart';
-import 'package:travel_app/screen/Account/screens/report_problem_screen.dart';
 import 'package:travel_app/screen/Account/screens/terms_privacy_screen.dart';
 import 'package:travel_app/screen/Account/screens/user_guide_screen.dart';
 import 'package:travel_app/screen/Account/widgets/help_support_widget.dart';
@@ -54,18 +53,6 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ContactSupportScreen(),
-                  ),
-                );
-              },
-            ),
-            HelpSupportWidget(
-              icon: Icons.bug_report,
-              taskName: 'account.report_problem'.tr(),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ReportProblemScreen(),
                   ),
                 );
               },

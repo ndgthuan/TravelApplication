@@ -67,7 +67,6 @@
     "date_of_birth": "Ngày sinh",
     "address": "Địa chỉ",
     "contact_support": "Liên hệ hỗ trợ",
-    "report_problem": "Báo cáo sự cố",
     "terms_privacy": "Điều khoản & Quyền riêng tư",
     "user_guide": "Hướng dẫn sử dụng",
     "faqs": "Câu hỏi thường gặp",
@@ -80,14 +79,14 @@
     "subject_hint": "ví dụ: Vấn đề tài khoản",
     "message": "Tin nhắn",
     "message_hint": "Nhập tin nhắn của bạn...",
-    "attachments": "Đính kèm",
     "send_report": "Gửi báo cáo",
+    "fill_all_fields": "Vui lòng điền đầy đủ thông tin",
+    "send_success": "Gửi thành công! Chúng tôi sẽ phản hồi sớm.",
+    "send_error": "Lỗi khi gửi email",
     "faq_create_plan_title": "Làm thế nào để tạo kế hoạch?",
     "faq_create_plan_body": "Nhấn vào biểu tượng \"Lập kế hoạch\" ở thanh điều hướng dưới cùng, sau đó nhấn \"Tạo kế hoạch mới\". Làm theo các bước để thêm điểm đến, ngày tháng và hoạt động",
     "faq_change_currency_title": "Làm thế nào để đổi tiền tệ?",
     "faq_change_currency_body": "Vào \"Tài khoản\" -> \"Chuyển đổi tiền tệ\" và chọn loại tiền mong muốn",
-    "faq_report_problem_title": "Làm thế nào để báo cáo sự cố?",
-    "faq_report_problem_body": "Điều hướng đến \"Trợ giúp & Hỗ trợ\" ----> \"Báo cáo sự cố\" và điền vào mẫu",
     "faq_edit_profile_title": "Làm thế nào để chỉnh sửa hồ sơ?",
     "faq_edit_profile_body": "Vào \"Tài khoản\" -> \"Thông tin cá nhân\". Bạn có thể cập nhật tên, số điện thoại, ngày sinh và địa chỉ",
     "faq_notifications_title": "Làm thế nào để quản lý thông báo?",
@@ -96,10 +95,6 @@
     "faq_offline_mode_body": "Có! Các kế hoạch và mục yêu thích đã lưu có thể truy cập ngoại tuyến. Tuy nhiên, một số tính năng như chuyển đổi tiền tệ cần kết nối internet",
     "faq_sync_data_title": "Làm thế nào để đồng bộ dữ liệu giữa các thiết bị?",
     "faq_sync_data_body": "Dữ liệu của bạn được tự động đồng bộ khi bạn đăng nhập cùng một tài khoản trên các thiết bị khác nhau. Hãy đảm bảo bạn có kết nối internet",
-    "choose_error_type": "Chọn loại lỗi",
-    "describe_problem": "Mô tả vấn đề",
-    "attach_screenshot": "Đính kèm ảnh chụp màn hình",
-    "submit_report": "Gửi báo cáo",
     "terms_of_service_title": "Điều khoản dịch vụ",
     "terms_of_service_body": "Điều khoản dịch vụ được lập ra để liên hệ các Điều khoản của bạn và Tổ chức thông tin của bạn",
     "privacy_policy_title": "Chính sách quyền riêng tư",
@@ -112,8 +107,6 @@
     "guide_managing_account_body": "Truy cập cài đặt tài khoản bằng cách nhấn 'Tài khoản' trên thanh điều hướng. Tại đây bạn có thể cập nhật thông tin cá nhân, đổi mật khẩu, điều chỉnh ngôn ngữ, bật/tắt chế độ tối và quản lý thông báo. Bạn cũng có thể xem các chuyến đi trước đây và chuyển đổi tài khoản.",
     "guide_using_utilities": "Sử dụng tiện ích",
     "guide_using_utilities_body": "Ứng dụng cung cấp các tiện ích hữu ích cho du khách: Chuyển đổi tiền tệ với tỷ giá thời gian thực, Dịch văn bản để giao tiếp bằng ngôn ngữ nước ngoài, Dự báo thời tiết để lên kế hoạch hoạt động, và Đồng hồ thế giới để theo dõi múi giờ. Truy cập từ Trang chủ hoặc phần Tiện ích trong Tài khoản.",
-    "attachment_optional": "Đính kèm (tùy chọn)",
-    "error_type": "Loại lỗi",
     "utilities": "Tiện ích"
   },
   "home": {
@@ -134,5 +127,23 @@
     "plan_your_day": "Lập kế hoạch ngày",
     "slogan": "Công cụ đơn giản để quản lý lịch trình hàng ngày của bạn hiệu quả.",
     "get_started": "Bắt đầu"
+  },
+  "translation": {
+    "title": "Dịch văn bản",
+    "input_hint": "Nhập văn bản cần dịch...",
+    "output_hint": "Kết quả dịch sẽ hiển thị ở đây...",
+    "choose_source": "Chọn ngôn ngữ nguồn",
+    "choose_target": "Chọn ngôn ngữ đích",
+    "translate_now": "Dịch ngay",
+    "error": "Lỗi dịch"
+  },
+  "currency": {
+    "title": "Chuyển đổi tiền tệ",
+    "from": "Từ",
+    "to": "Đến",
+    "select_from": "Chọn tiền tệ nguồn",
+    "select_to": "Chọn tiền tệ đích",
+    "rate": "Tỷ giá",
+    "description": "Đổi tiền sang các loại tiền tệ khác nhau"
   }
 }

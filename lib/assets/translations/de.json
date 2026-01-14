@@ -59,14 +59,14 @@
     "subject_hint": "z. B. Kontoproblem",
     "message": "Nachricht",
     "message_hint": "Geben Sie Ihre Nachricht ein...",
-    "attachments": "Anhänge",
     "send_report": "Bericht senden",
+    "fill_all_fields": "Bitte füllen Sie alle Felder aus",
+    "send_success": "Erfolgreich gesendet! Wir werden bald antworten.",
+    "send_error": "Fehler beim Senden der E-Mail",
     "faq_create_plan_title": "Wie erstelle ich einen Plan?",
     "faq_create_plan_body": "Tippen Sie in der unteren Navigation auf das Symbol \"Planen\" und dann auf \"Neuen Plan erstellen\". Befolgen Sie die Schritte, um Ziele, Daten und Aktivitäten hinzuzufügen",
     "faq_change_currency_title": "Wie ändere ich die Währung?",
-    "faq_change_currency_body": "Gehen Sie zu \"Konto\" -> \"Währungsumtausch\" und wählen Sie Ihre gewünschte Währung",
-    "faq_report_problem_title": "Wie melde ich ein Problem?",
-    "faq_report_problem_body": "Navigieren Sie zu \"Hilfe und Support\" ----> \"Problem melden\" und füllen Sie das Formular aus",
+    "faq_change_currency_body": "Gehen Sie zu \"Konto\" -> \"W\u00e4hrungsumtausch\" und w\u00e4hlen Sie Ihre gew\u00fcnschte W\u00e4hrung",
     "faq_edit_profile_title": "Wie bearbeite ich mein Profil?",
     "faq_edit_profile_body": "Gehen Sie zu \"Konto\" -> \"Persönliche Informationen\". Sie können Ihren Namen, Ihre Telefonnummer, Ihr Geburtsdatum und Ihre Adresse aktualisieren",
     "faq_notifications_title": "Wie verwalte ich Benachrichtigungen?",
@@ -74,11 +74,7 @@
     "faq_offline_mode_title": "Kann ich die App offline nutzen?",
     "faq_offline_mode_body": "Ja! Ihre gespeicherten Pläne und Favoriten sind offline verfügbar. Einige Funktionen wie der Währungsumtausch erfordern jedoch eine Internetverbindung",
     "faq_sync_data_title": "Wie synchronisiere ich Daten zwischen Geräten?",
-    "faq_sync_data_body": "Ihre Daten werden automatisch synchronisiert, wenn Sie sich auf verschiedenen Geräten mit demselben Konto anmelden. Stellen Sie sicher, dass Sie eine Internetverbindung haben",
-    "choose_error_type": "Fehlertyp wählen",
-    "describe_problem": "Problem beschreiben",
-    "attach_screenshot": "Screenshot anhängen",
-    "submit_report": "Bericht absenden",
+    "faq_sync_data_body": "Ihre Daten werden automatisch synchronisiert, wenn Sie sich auf verschiedenen Ger\u00e4ten mit demselben Konto anmelden. Stellen Sie sicher, dass Sie eine Internetverbindung haben",
     "terms_of_service_title": "Nutzungsbedingungen",
     "terms_of_service_body": "Die Nutzungsbedingungen wurden erstellt, um Ihre Bedingungen und die Organisation Ihrer Informationen zu kontaktieren",
     "privacy_policy_title": "Datenschutzrichtlinie",
@@ -105,16 +101,13 @@
     "date_of_birth": "Geburtsdatum",
     "address": "Adresse",
     "contact_support": "Support kontaktieren",
-    "report_problem": "Problem melden",
     "terms_privacy": "Nutzungsbedingungen & Datenschutz",
     "user_guide": "Benutzerhandbuch",
     "faqs": "FAQs",
     "save_changes": "Änderungen speichern",
     "read_full_document": "Vollständiges Dokument lesen",
     "subject": "Betreff",
-    "description": "Beschreibung",
-    "attachment_optional": "Anhang (optional)",
-    "error_type": "Fehlertyp"
+    "description": "Beschreibung"
   },
   "home": {
     "home": "Startseite",
@@ -134,5 +127,23 @@
     "plan_your_day": "Planen Sie Ihren Tag",
     "slogan": "Einfache Tools zur effektiven Verwaltung Ihres Tagesplans.",
     "get_started": "Loslegen"
+  },
+  "translation": {
+    "title": "Textübersetzung",
+    "input_hint": "Text zum Übersetzen eingeben...",
+    "output_hint": "Übersetzungsergebnis erscheint hier...",
+    "choose_source": "Quellsprache wählen",
+    "choose_target": "Zielsprache wählen",
+    "translate_now": "Jetzt übersetzen",
+    "error": "Übersetzungsfehler"
+  },
+  "currency": {
+    "title": "Währungsumrechnung",
+    "from": "Von",
+    "to": "Nach",
+    "select_from": "Quellwährung wählen",
+    "select_to": "Zielwährung wählen",
+    "rate": "Wechselkurs",
+    "description": "Geld in verschiedene Währungen umtauschen"
   }
 }

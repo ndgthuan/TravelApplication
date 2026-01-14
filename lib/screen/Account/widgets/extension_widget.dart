@@ -4,7 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 class ExtensionWidget extends StatefulWidget {
   final IconData icon;
   final String title;
-  const ExtensionWidget({super.key, required this.icon, required this.title});
+  final VoidCallback? onTap;
+  const ExtensionWidget({
+    super.key,
+    required this.icon,
+    required this.title,
+    this.onTap,
+  });
 
   @override
   State<ExtensionWidget> createState() => _ExtensionWidgetState();
@@ -18,6 +24,7 @@ class _ExtensionWidgetState extends State<ExtensionWidget> {
       onTapDown: (_) => setState(() => _isClick = true),
       onTapUp: (_) => setState(() => _isClick = false),
       onTapCancel: () => setState(() => _isClick = false),
+      onTap: widget.onTap,
       child: AnimatedScale(
         scale: _isClick ? 0.95 : 1.0,
         duration: const Duration(milliseconds: 100),
