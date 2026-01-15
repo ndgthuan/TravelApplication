@@ -54,7 +54,6 @@
   },
   "account": {
     "utilities": "Utilitaires",
-    "switch_account": "Changer de compte",
     "past_trips": "Voyages passés",
     "subject_hint": "ex : Problème de compte",
     "message": "Message",
@@ -160,5 +159,12 @@
     "daily_forecast": "Prévisions quotidiennes",
     "today": "Aujourd'hui",
     "now": "Maintenant"
+  },
+  "world_clock": {
+    "title": "Horloge mondiale",
+    "add_city": "Ajouter une ville",
+    "search_hint": "Rechercher une ville...",
+    "empty": "Aucune horloge ajoutée",
+    "popular": "Villes populaires"
   }
 }

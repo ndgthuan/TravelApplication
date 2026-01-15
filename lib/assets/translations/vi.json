@@ -74,7 +74,6 @@
     "read_full_document": "Đọc toàn bộ tài liệu",
     "subject": "Chủ đề",
     "description": "Mô tả",
-    "switch_account": "Đổi tài khoản",
     "past_trips": "Chuyến đi trước",
     "subject_hint": "ví dụ: Vấn đề tài khoản",
     "message": "Tin nhắn",
@@ -160,5 +159,12 @@
     "daily_forecast": "Dự báo theo ngày",
     "today": "Hôm nay",
     "now": "Hiện tại"
+  },
+  "world_clock": {
+    "title": "Đồng hồ thế giới",
+    "add_city": "Thêm thành phố",
+    "search_hint": "Tìm thành phố...",
+    "empty": "Chưa có đồng hồ nào",
+    "popular": "Thành phố phổ biến"
   }
 }

@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:travel_app/screen/Account/widgets/exchange_board_widget.dart';
 import 'package:travel_app/screen/Account/widgets/exchange_rate_chart_widget.dart';
 
@@ -51,7 +52,7 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
           orElse: () => _currencies.first,
         );
         _toCurrency = _currencies.firstWhere(
-          (c) => c['code'] == 'EUR',
+          (c) => c['code'] == 'VND',
           orElse: () => _currencies.last,
         );
       });
@@ -69,8 +70,11 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
 
   Future<void> _fetchExchangeRates() async {
     try {
+      final apiKey = dotenv.env['CURRENCY_TOKEN'] ?? '';
       final response = await http.get(
-        Uri.parse('https://open.er-api.com/v6/latest/${_fromCurrency['code']}'),
+        Uri.parse(
+          'https://api.fxratesapi.com/latest?base=${_fromCurrency['code']}&api_key=$apiKey',
+        ),
       );
 
       if (response.statusCode == 200) {

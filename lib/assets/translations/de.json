@@ -54,7 +54,6 @@
   },
   "account": {
     "utilities": "Dienstprogramme",
-    "switch_account": "Konto wechseln",
     "past_trips": "Vergangene Reisen",
     "subject_hint": "z. B. Kontoproblem",
     "message": "Nachricht",
@@ -160,5 +159,12 @@
     "daily_forecast": "Tagesvorhersage",
     "today": "Heute",
     "now": "Jetzt"
+  },
+  "world_clock": {
+    "title": "Weltzeituhr",
+    "add_city": "Stadt hinzufügen",
+    "search_hint": "Stadt suchen...",
+    "empty": "Noch keine Uhren hinzugefügt",
+    "popular": "Beliebte Städte"
   }
 }

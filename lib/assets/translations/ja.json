@@ -76,7 +76,6 @@
     "description": "説明",
     "attachment_optional": "\u6dfb\u4ed8\u30d5\u30a1\u30a4\u30eb\uff08\u4efb\u610f\uff09",
     "utilities": "\u30e6\u30fc\u30c6\u30a3\u30ea\u30c6\u30a3",
-    "switch_account": "アカウント切り替え",
     "past_trips": "過去の旅行",
     "subject_hint": "例：アカウントの問題",
     "message": "メッセージ",
@@ -161,5 +160,12 @@
     "daily_forecast": "日ごとの予報",
     "today": "今日",
     "now": "現在"
+  },
+  "world_clock": {
+    "title": "世界時計",
+    "add_city": "都市を追加",
+    "search_hint": "都市を検索...",
+    "empty": "時計がありません",
+    "popular": "人気の都市"
   }
 }

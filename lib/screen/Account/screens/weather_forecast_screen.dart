@@ -1,8 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
+import 'package:lottie/lottie.dart';
 import 'package:travel_app/screen/Account/services/weather_service.dart';
 import 'package:travel_app/screen/Account/widgets/hourly_forecast_widget.dart';
 
@@ -16,7 +18,11 @@ class WeatherForecastScreen extends StatefulWidget {
 class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   // Các biến
   String _location = 'Hanoi';
+  String _country = '';
+  double _latitude = 0;
+  double _longitude = 0;
   Map<String, dynamic>? _weatherData;
+  Map<String, dynamic>? _weatherConfigs;
   bool _isLoading = true;
 
   // Search
@@ -32,17 +38,47 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
     super.didChangeDependencies();
     if (!_initialized) {
       _initialized = true;
-      _fetchWeather();
+      _loadWeatherConfigs();
+      _initWeatherData();
     }
   }
 
-  Future<void> _fetchWeather() async {
+  Future<void> _loadWeatherConfigs() async {
+    final jsonString = await rootBundle.loadString(
+      'lib/assets/data/supported_weather.json',
+    );
+    _weatherConfigs = json.decode(jsonString);
+    setState(() {});
+  }
+
+  Future<void> _initWeatherData() async {
     setState(() => _isLoading = true);
 
-    // Lấy ngôn ngữ hiện tại của app
-    final lang = context.locale.languageCode;
-    final data = await WeatherService.getForecast(_location, lang: lang);
+    // 1. Lấy thông tin toạ độ & quốc gia của location mặc định (Hanoi)
+    final results = await WeatherService.searchLocations(_location);
+    if (results.isNotEmpty) {
+      final loc = results.first;
+      _location = loc['name'];
+      _country = loc['country'] ?? '';
+      _latitude = loc['latitude'] ?? 21.0285;
+      _longitude = loc['longitude'] ?? 105.8542;
+    } else {
+      // Fallback
+      _latitude = 21.0285;
+      _longitude = 105.8542;
+      _country = 'Vietnam';
+    }
 
+    // 2. Lấy thời tiết
+    await _fetchWeather();
+  }
+
+  Future<void> _fetchWeather() async {
+    // Không set isLoading = true vì đã set ở _initWeatherData
+    final data = await WeatherService.getForecast(
+      latitude: _latitude,
+      longitude: _longitude,
+    );
     setState(() {
       _weatherData = data;
       _isLoading = false;
@@ -71,6 +107,9 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   void _selectLocation(Map<String, dynamic> location) {
     setState(() {
       _location = location['name'];
+      _country = location['country'] ?? '';
+      _latitude = location['latitude'] ?? 0.0;
+      _longitude = location['longitude'] ?? 0.0;
       _searchResults = [];
       _searchController.clear();
     });
@@ -78,28 +117,30 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   }
 
   List<Map<String, dynamic>> _getHourlyData() {
-    final forecast = _weatherData?['forecast']?['forecastday'];
-    if (forecast == null || forecast.isEmpty) return [];
+    if (_weatherData == null || _weatherData!['hourly'] == null) return [];
+
+    final hourly = _weatherData!['hourly'];
+    final times = hourly['time'] as List;
+    final temps = hourly['temperature_2m'] as List;
+    final codes = hourly['weather_code'] as List;
 
     final List<Map<String, dynamic>> hourlyList = [];
     final now = DateTime.now();
 
-    // Lấy hourly từ hôm nay
-    for (final day in forecast) {
-      for (final hour in day['hour']) {
-        final hourTime = DateTime.parse(hour['time']);
-        if (hourTime.isAfter(now.subtract(Duration(hours: 1)))) {
-          hourlyList.add({
-            'time': _formatHour(hour['time']),
-            'temp': hour['temp_c'],
-            'icon': hour['condition']['icon'],
-          });
-        }
-        if (hourlyList.length >= 24) break;
+    for (int i = 0; i < times.length; i++) {
+      final timeStr = times[i];
+      final hourTime = DateTime.parse(timeStr);
+
+      if (hourTime.isAfter(now.subtract(Duration(hours: 1)))) {
+        final isDay = hourTime.hour >= 6 && hourTime.hour <= 18;
+        hourlyList.add({
+          'time': _formatHour(timeStr),
+          'temp': temps[i],
+          'icon': _getWeatherIconUrl(codes[i], isDay),
+        });
       }
       if (hourlyList.length >= 24) break;
     }
-
     return hourlyList;
   }
 
@@ -123,20 +164,28 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
 
   // Lấy daily data
   List<Map<String, dynamic>> _getDailyData() {
-    final forecast = _weatherData?['forecast']?['forecastday'];
-    if (forecast == null) return [];
+    if (_weatherData == null || _weatherData!['daily'] == null) return [];
 
-    return (forecast as List).map((day) {
-      final date = DateTime.parse(day['date']);
+    final daily = _weatherData!['daily'];
+    final times = daily['time'] as List;
+    final codes = daily['weather_code'] as List;
+    final maxTemps = daily['temperature_2m_max'] as List;
+    final minTemps = daily['temperature_2m_min'] as List;
+
+    final List<Map<String, dynamic>> dailyList = [];
+
+    for (int i = 0; i < times.length; i++) {
+      final date = DateTime.parse(times[i]);
       final isToday = date.day == DateTime.now().day;
 
-      return {
+      dailyList.add({
         'day': isToday ? 'weather.today'.tr() : _formatDay(date),
-        'icon': day['day']['condition']['icon'],
-        'low': '${day['day']['mintemp_c'].toInt()}°C',
-        'high': '${day['day']['maxtemp_c'].toInt()}°C',
-      };
-    }).toList();
+        'icon': _getWeatherIconUrl(codes[i], true),
+        'low': '${minTemps[i].toInt()}°C',
+        'high': '${maxTemps[i].toInt()}°C',
+      });
+    }
+    return dailyList;
   }
 
   String _formatDay(DateTime date) {
@@ -278,21 +327,20 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
   Widget _buildCurrentWeatherCard() {
     // Lấy data từ API
     final current = _weatherData?['current'];
-    final location = _weatherData?['location'];
 
-    // Nếu chưa có data
-    if (current == null || location == null) {
-      return Container();
-    }
+    if (current == null) return Container();
 
-    // Truyền dữ liệu
-    final cityName = location['name'] ?? '';
-    final country = location['country'] ?? '';
-    final tempC = current['temp_c']?.toInt() ?? 0;
-    final condition = current['condition']['text'] ?? '';
-    final humidity = current['humidity'] ?? 0;
-    final windKph = current['wind_kph']?.toInt() ?? 0;
-    final uv = current['uv']?.toInt() ?? 0;
+    final cityName = _location;
+    final tempC = current['temperature_2m']?.toInt() ?? 0;
+    final code = current['weather_code'];
+    final condition = _getWeatherText(code);
+    final humidity = current['relative_humidity_2m'] ?? 0;
+    final windKph = current['wind_speed_10m']?.toInt() ?? 0;
+    final uv = current['uv_index']?.toInt() ?? 0;
+
+    // Is Day? (6am - 6pm)
+    final hour = DateTime.now().hour;
+    final isDay = hour >= 6 && hour <= 18;
 
     return Container(
       width: double.infinity,
@@ -305,16 +353,14 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
         children: [
           // Weather Icon positioned at top right
           Positioned(
-            top: 30,
-            right: 30,
-            child: Image.network(
-              'https:${current['condition']['icon']}'.replaceFirst(
-                '64x64',
-                '128x128',
-              ),
+            top: 10,
+            right: 10,
+            child: Lottie.network(
+              _getWeatherIconUrl(code, isDay),
               width: 150,
               height: 150,
               fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => Container(),
             ),
           ),
 
@@ -332,11 +378,14 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                       color: Color(0xFFFFAD35),
                       size: 18,
                     ),
-                    Text(
-                      '$cityName, $country',
-                      style: GoogleFonts.beVietnamPro(
-                        color: Colors.white,
-                        fontSize: 14,
+                    Expanded(
+                      child: Text(
+                        '$_location, $_country',
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.beVietnamPro(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ],
@@ -378,7 +427,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                 // Condition
                 Center(
                   child: Text(
-                    '$condition',
+                    condition,
                     style: TextStyle(
                       fontFamily: 'ProductSans',
                       color: Colors.white,
@@ -485,7 +534,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
             itemBuilder: (context, index) {
               final dailyData = _getDailyData();
               final item = dailyData[index];
-              final isToday = item['day'] == 'Today';
+              final isToday = item['day'] == 'weather.today'.tr();
               return Padding(
                 padding: EdgeInsets.symmetric(vertical: 12),
                 child: Row(
@@ -506,10 +555,12 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
                       ),
                     ),
                     // Weather icon
-                    Image.network(
-                      'https:${item['icon']}',
-                      width: 32,
-                      height: 32,
+                    Lottie.network(
+                      item['icon'],
+                      width: 40,
+                      height: 40,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Icon(Icons.error, color: Colors.white, size: 20),
                     ),
                     // Temperature range
                     Row(
@@ -546,5 +597,31 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
         ],
       ),
     );
+  }
+
+  // Helpers
+  String _getWeatherIconUrl(int code, bool isDay) {
+    if (_weatherConfigs == null) return '';
+    final baseUrl = _weatherConfigs!['base_url'];
+    final codeData = _weatherConfigs!['weather_codes'][code.toString()];
+    if (codeData == null) return '';
+
+    String iconFile;
+    if (codeData.containsKey('icon_day')) {
+      iconFile = isDay ? codeData['icon_day'] : codeData['icon_night'];
+    } else {
+      iconFile = codeData['icon'];
+    }
+    return '$baseUrl/$iconFile';
+  }
+
+  String _getWeatherText(int code) {
+    if (_weatherConfigs == null) return '';
+    final lang = context.locale.languageCode;
+    final codeData = _weatherConfigs!['weather_codes'][code.toString()];
+    if (codeData != null) {
+      return codeData[lang] ?? codeData['en'] ?? '';
+    }
+    return '';
   }
 }

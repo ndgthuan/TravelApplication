@@ -30,6 +30,7 @@ class StorageService {
   // Lấy thông tin đã lưu
   static Future<Map<String, String?>> getCredentials() async {
     if (kIsWeb)
+      // ignore: curly_braces_in_flow_control_structures
       return {'email': null, 'password': null, 'token': null}; // Dành cho web
     String? email = await _storage.read(key: _keyEmail);
     String? password = await _storage.read(key: _keyPassword);

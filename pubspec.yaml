@@ -46,7 +46,6 @@ dependencies:
   google_sign_in: ^5.4.2
   flutter_facebook_auth: ^7.1.2
   http: ^1.0.0
-  fl_chart: ^0.69.0
 
   # Bảo mật
   flutter_secure_storage: ^9.0.0
@@ -78,7 +77,12 @@ dependencies:
 
   # Đọc file env
   flutter_dotenv: ^6.0.0
-  weather_icons: ^3.0.0
+
+  # Currencies chart
+  fl_chart: ^0.69.0
+
+  # Animation icon
+  lottie: ^3.3.2
 
 dev_dependencies:
   flutter_test:

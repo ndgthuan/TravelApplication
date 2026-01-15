@@ -138,6 +138,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       height: 150,
                       width: 150,
                       decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFFFFAD35)),
                         shape: BoxShape.circle,
                         // Thay gradient bằng image
                         image: _avatarUrl != null
@@ -288,14 +289,6 @@ class _AccountScreenState extends State<AccountScreen> {
                           (Route<dynamic> route) => false,
                         );
                       },
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-
-                  Expanded(
-                    child: ActionButton(
-                      buttonName: 'account.switch_account'.tr(),
-                      color: Color(0xFFFFAD35),
                     ),
                   ),
                 ],
