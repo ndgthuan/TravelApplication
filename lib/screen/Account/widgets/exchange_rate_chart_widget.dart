@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ExchangeRateChartWidget extends StatefulWidget {
   final String fromCurrency;
@@ -60,8 +61,9 @@ class _ExchangeRateChartWidgetState extends State<ExchangeRateChartWidget> {
       final startStr = DateFormat('yyyy-MM-dd').format(startDate);
       final endStr = DateFormat('yyyy-MM-dd').format(endDate);
 
+      final apiKey = dotenv.env['CURRENCY_TOKEN'] ?? '';
       final url =
-          'https://api.frankfurter.app/$startStr..$endStr?from=${widget.fromCurrency}&to=${widget.toCurrency}';
+          'https://api.fxratesapi.com/timeseries?start_date=$startStr&end_date=$endStr&base=${widget.fromCurrency}&currencies=${widget.toCurrency}&api_key=$apiKey';
 
       final response = await http.get(Uri.parse(url));
 
@@ -87,8 +89,7 @@ class _ExchangeRateChartWidgetState extends State<ExchangeRateChartWidget> {
 
           // Format day label
           final date = DateTime.parse(dateStr);
-          labels.add(DateFormat('E').format(date)); // Mon, Tue, etc.
-
+          labels.add(DateFormat('E').format(date));
           index++;
         }
 

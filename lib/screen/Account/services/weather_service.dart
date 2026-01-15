@@ -1,34 +1,44 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class WeatherService {
-  static final String _apiKey = dotenv.env['WEATHER_TOKEN'] ?? '';
-  static const String _baseUrl = 'https://api.weatherapi.com/v1';
+  static const String _geoBaseUrl = 'https://geocoding-api.open-meteo.com/v1';
+  static const String _weatherBaseUrl = 'https://api.open-meteo.com/v1';
 
-  // 1. Tìm địa điểm
+  // 1. Tìm địa điểm (Geocoding)
   static Future<List<Map<String, dynamic>>> searchLocations(
     String query,
   ) async {
     if (query.isEmpty) return [];
 
-    final url = '$_baseUrl/search.json?key=$_apiKey&q=$query';
+    final url =
+        '$_geoBaseUrl/search?name=$query&count=10&language=en&format=json';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      final List data = json.decode(response.body);
-      return data.cast<Map<String, dynamic>>();
+      final data = json.decode(response.body);
+      if (data['results'] != null) {
+        return (data['results'] as List).cast<Map<String, dynamic>>();
+      }
     }
     return [];
   }
 
-  // 2. Lấy kết quả thời tiết (current + hourly + daily)
-  static Future<Map<String, dynamic>?> getForecast(
-    String location, {
-    String lang = 'en',
+  // 2. Lấy dự báo thời tiết
+  static Future<Map<String, dynamic>?> getForecast({
+    required double latitude,
+    required double longitude,
   }) async {
     final url =
-        '$_baseUrl/forecast.json?key=$_apiKey&q=$location&days=10&aqi=no&lang=$lang';
+        '$_weatherBaseUrl/forecast'
+        '?latitude=$latitude'
+        '&longitude=$longitude'
+        '&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index'
+        '&hourly=temperature_2m,weather_code'
+        '&daily=weather_code,temperature_2m_max,temperature_2m_min'
+        '&timezone=auto'
+        '&forecast_days=14';
+
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {

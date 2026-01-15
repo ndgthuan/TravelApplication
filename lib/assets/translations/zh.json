@@ -54,7 +54,6 @@
   },
   "account": {
     "utilities": "实用程序",
-    "switch_account": "切换帐户",
     "past_trips": "过去的旅行",
     "subject_hint": "例如：账户问题",
     "message": "信息",
@@ -160,5 +159,14 @@
     "daily_forecast": "每日预报",
     "today": "今天",
     "now": "现在"
+  },
+  "world_clock": {
+    "title": "世界时钟",
+    "add_city": "添加城市",
+    "search_hint": "搜索城市...",
+    "empty": "暂无时钟",
+    "popular": "热门城市",
+    "same_time": "相同时间",
+    "today_offset": "今天，{offset}小时"
   }
 }

@@ -54,7 +54,6 @@
   },
   "account": {
     "utilities": "유용",
-    "switch_account": "계정 전환",
     "past_trips": "지난 여행",
     "subject_hint": "예: 계정 문제",
     "message": "메시지",
@@ -160,5 +159,14 @@
     "daily_forecast": "일일 예보",
     "today": "오늘",
     "now": "현재"
+  },
+  "world_clock": {
+    "title": "세계 시계",
+    "add_city": "도시 추가",
+    "search_hint": "도시 검색...",
+    "empty": "추가된 시계가 없습니다",
+    "popular": "인기 도시",
+    "same_time": "같은 시간",
+    "today_offset": "오늘, {offset}시간"
   }
 }

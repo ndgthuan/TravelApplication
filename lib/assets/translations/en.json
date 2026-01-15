@@ -75,7 +75,6 @@
     "subject": "Subject",
     "description": "Description",
     "utilities": "Utilities",
-    "switch_account": "Switch Account",
     "past_trips": "Past Trips",
     "subject_hint": "e.g. Account Issue",
     "message": "Message",
@@ -160,5 +159,14 @@
     "daily_forecast": "Daily Forecast",
     "today": "Today",
     "now": "Now"
+  },
+  "world_clock": {
+    "title": "World Clock",
+    "add_city": "Add City",
+    "search_hint": "Search city...",
+    "empty": "No clocks added yet",
+    "popular": "Popular Cities",
+    "same_time": "Same time",
+    "today_offset": "Today, {offset} HRS"
   }
 }

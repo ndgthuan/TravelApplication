@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:lottie/lottie.dart';
 
 class HourlyForecastWidget extends StatefulWidget {
   final List<Map<String, dynamic>> hourlyData; // Thêm dòng này
@@ -61,23 +62,12 @@ class _HourlyForecastWidgetState extends State<HourlyForecastWidget> {
                               : FontWeight.normal,
                         ),
                       ),
-                      Image.network(
-                        'https:${item['icon']}',
+                      Lottie.network(
+                        item['icon'],
                         width: 40,
                         height: 40,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return SizedBox(
-                            width: 40,
-                            height: 40,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Color(0xFFFFAD35),
-                                strokeWidth: 2,
-                              ),
-                            ),
-                          );
-                        },
+                        errorBuilder: (context, error, stackTrace) =>
+                            Icon(Icons.error, color: Colors.red),
                       ),
                       Text(
                         '${item['temp'].toInt()}°C',
