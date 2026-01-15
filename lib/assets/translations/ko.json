@@ -165,6 +165,8 @@
     "add_city": "도시 추가",
     "search_hint": "도시 검색...",
     "empty": "추가된 시계가 없습니다",
-    "popular": "인기 도시"
+    "popular": "인기 도시",
+    "same_time": "같은 시간",
+    "today_offset": "오늘, {offset}시간"
   }
 }

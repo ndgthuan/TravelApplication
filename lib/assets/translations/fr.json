@@ -165,6 +165,8 @@
     "add_city": "Ajouter une ville",
     "search_hint": "Rechercher une ville...",
     "empty": "Aucune horloge ajoutée",
-    "popular": "Villes populaires"
+    "popular": "Villes populaires",
+    "same_time": "Même heure",
+    "today_offset": "Aujourd'hui, {offset} h"
   }
 }

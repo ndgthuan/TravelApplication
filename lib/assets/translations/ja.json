@@ -166,6 +166,8 @@
     "add_city": "都市を追加",
     "search_hint": "都市を検索...",
     "empty": "時計がありません",
-    "popular": "人気の都市"
+    "popular": "人気の都市",
+    "same_time": "同じ時刻",
+    "today_offset": "今日、{offset}時間"
   }
 }

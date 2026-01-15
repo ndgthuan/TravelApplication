@@ -165,6 +165,8 @@
     "add_city": "添加城市",
     "search_hint": "搜索城市...",
     "empty": "暂无时钟",
-    "popular": "热门城市"
+    "popular": "热门城市",
+    "same_time": "相同时间",
+    "today_offset": "今天，{offset}小时"
   }
 }

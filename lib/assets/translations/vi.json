@@ -165,6 +165,8 @@
     "add_city": "Thêm thành phố",
     "search_hint": "Tìm thành phố...",
     "empty": "Chưa có đồng hồ nào",
-    "popular": "Thành phố phổ biến"
+    "popular": "Thành phố phổ biến",
+    "same_time": "Cùng giờ",
+    "today_offset": "Hôm nay, {offset} giờ"
   }
 }

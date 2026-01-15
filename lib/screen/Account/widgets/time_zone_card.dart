@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'premium_analog_clock.dart';
 
 class TimeZoneCard extends StatefulWidget {
@@ -59,10 +60,10 @@ class _TimeZoneCardState extends State<TimeZoneCard> {
     final localOffset = DateTime.now().timeZoneOffset.inHours;
     final diff = widget.timezoneOffset - localOffset;
 
-    if (diff == 0) return 'Same time';
+    if (diff == 0) return 'world_clock.same_time'.tr();
 
     final sign = diff > 0 ? '+' : '';
-    return 'Today, $sign$diff HRS';
+    return 'world_clock.today_offset'.tr(namedArgs: {'offset': '$sign$diff'});
   }
 
   @override

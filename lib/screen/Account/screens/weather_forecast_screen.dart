@@ -330,7 +330,6 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
 
     if (current == null) return Container();
 
-    final cityName = _location;
     final tempC = current['temperature_2m']?.toInt() ?? 0;
     final code = current['weather_code'];
     final condition = _getWeatherText(code);

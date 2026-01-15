@@ -165,6 +165,8 @@
     "add_city": "Add City",
     "search_hint": "Search city...",
     "empty": "No clocks added yet",
-    "popular": "Popular Cities"
+    "popular": "Popular Cities",
+    "same_time": "Same time",
+    "today_offset": "Today, {offset} HRS"
   }
 }
