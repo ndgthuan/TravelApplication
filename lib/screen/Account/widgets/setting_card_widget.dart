@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/screen/Account/screens/change_password_screen.dart';
-import 'package:travel_app/screen/Account/screens/help_support_screen.dart';
+import 'package:travel_app/screen/Support/screens/help_support_screen.dart';
 import 'package:travel_app/screen/Account/screens/information_screen.dart';
 import 'package:travel_app/screen/Account/screens/language_screen.dart';
-import 'option_widget.dart';
-import 'divider_widget.dart';
-import 'dark_mode_widget.dart';
+import 'setting_row_widget.dart';
+import 'simple_divider_widget.dart';
+import 'dark_mode_switch_widget.dart';
 
 class SettingCardWidget extends StatelessWidget {
   final bool isDarkMode;
@@ -34,7 +34,7 @@ class SettingCardWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Thông tin cá nhân
-              OptionWidget(
+              SettingRowWidget(
                 optionText: 'account.personal_information'.tr(),
                 optionIcon: Icons.person_outline,
                 onTap: () async {
@@ -53,9 +53,9 @@ class SettingCardWidget extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               // Thannh ngang
-              DividerWidget(),
+              SimpleDividerWidget(),
               const SizedBox(height: 20),
-              OptionWidget(
+              SettingRowWidget(
                 optionText: 'account.change_password'.tr(),
                 optionIcon: Icons.lock_outline,
                 onTap: () {
@@ -68,9 +68,9 @@ class SettingCardWidget extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               // Thannh ngang
-              DividerWidget(),
+              SimpleDividerWidget(),
               const SizedBox(height: 20),
-              OptionWidget(
+              SettingRowWidget(
                 optionText: 'account.language'.tr(),
                 optionIcon: Icons.language_outlined,
                 onTap: () {
@@ -81,7 +81,7 @@ class SettingCardWidget extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               // Thannh ngang
-              DividerWidget(),
+              SimpleDividerWidget(),
               const SizedBox(height: 15),
               DarkModeWidget(
                 isDarkMode: isDarkMode,
@@ -90,9 +90,9 @@ class SettingCardWidget extends StatelessWidget {
 
               const SizedBox(height: 15),
               // Thannh ngang
-              DividerWidget(),
+              SimpleDividerWidget(),
               const SizedBox(height: 20),
-              OptionWidget(
+              SettingRowWidget(
                 optionText: 'account.help_support'.tr(),
                 optionIcon: Icons.help_outline,
                 onTap: () {

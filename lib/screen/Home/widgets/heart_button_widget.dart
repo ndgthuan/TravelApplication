@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HeartButton extends StatefulWidget {
-  const HeartButton({super.key});
+class HeartButtonWidget extends StatefulWidget {
+  const HeartButtonWidget({super.key});
 
   @override
-  State<HeartButton> createState() => _HeartButtonState();
+  State<HeartButtonWidget> createState() => _HeartButtonWidgetState();
 }
 
-class _HeartButtonState extends State<HeartButton> {
+class _HeartButtonWidgetState extends State<HeartButtonWidget> {
   bool isPressed = false;
   bool isFavourite = false;
   @override

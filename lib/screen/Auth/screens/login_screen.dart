@@ -2,16 +2,16 @@
 // Không thêm các biến hay phương thức nào trong trang
 import 'package:provider/provider.dart';
 import 'package:travel_app/screen/Auth/viewmodels/login_view_model.dart';
-import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
+import 'package:travel_app/screen/Auth/widgets/auth_logo_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/social_login_widget.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
-import '../widgets/dialog_widget.dart';
+import '../widgets/forgot_password_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'register_screen.dart';
-import '../widgets/switch_page_button_widget.dart';
+import '../widgets/auth_switch_button_widget.dart';
 import 'package:animations/animations.dart';
-import '../services/storage_service.dart';
+import '../../../shared/services/storage_service.dart';
 import '../widgets/login_form_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierLabel: 'Dismiss',
       ),
       builder: (context) {
-        return ForgotPasDialog(
+        return ForgotPasswordDialogWidget(
           controller: _resetEmail,
           onSendResetEmail: (email) async {
             await viewModel.sendPasswordResetEmail(email);
@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Logo app
-                  AppLogo(),
+                  AuthLogoWidget(),
                   const SizedBox(height: 20),
 
                   // Chữ Welcome!
@@ -199,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SwitchPageButtonWidget(
+                      AuthSwitchButtonWidget(
                         formerText: "auth.dont_have_account".tr(),
                         latterText: "auth.sign_up".tr(),
                         destinationScreen: RegisterScreen(),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/screen/Account/screens/contact_support_screen.dart';
-import 'package:travel_app/screen/Account/screens/faq_screen.dart';
-import 'package:travel_app/screen/Account/screens/terms_privacy_screen.dart';
-import 'package:travel_app/screen/Account/screens/user_guide_screen.dart';
-import 'package:travel_app/screen/Account/widgets/help_support_widget.dart';
+import 'package:travel_app/screen/Support/screens/contact_support_screen.dart';
+import 'package:travel_app/screen/Support/screens/faq_screen.dart';
+import 'package:travel_app/screen/Support/screens/terms_privacy_screen.dart';
+import 'package:travel_app/screen/Support/screens/user_guide_screen.dart';
+import 'package:travel_app/screen/Support/widgets/help_support_widget.dart';
 
 class HelpSupportScreen extends StatefulWidget {
   const HelpSupportScreen({super.key});

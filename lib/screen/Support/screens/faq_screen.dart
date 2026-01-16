@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/screen/Account/widgets/faq_stat_widget.dart';
+import 'package:travel_app/screen/Support/widgets/faq_stat_widget.dart';
 
 class FaqScreen extends StatelessWidget {
   const FaqScreen({super.key});

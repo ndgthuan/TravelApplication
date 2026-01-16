@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:travel_app/screen/Account/services/timezone_service.dart';
-import 'package:travel_app/screen/Account/widgets/time_zone_card.dart';
-import 'package:travel_app/shared/widgets/action_button_widget.dart';
+import 'package:travel_app/screen/Utilities/services/timezone_service.dart';
+import 'package:travel_app/screen/Utilities/widgets/time_zone_card.dart';
+import 'package:travel_app/shared/widgets/app_button_widget.dart';
 
 class WorldClockScreen extends StatefulWidget {
   const WorldClockScreen({super.key});
@@ -349,7 +349,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                   left: 0,
                   right: 0,
                   bottom: 10,
-                  child: ActionButtonWidget(
+                  child: AppButtonWidget(
                     buttonText: 'world_clock.add_city'.tr(),
                     onTap: _showAddClockSheet,
                   ),

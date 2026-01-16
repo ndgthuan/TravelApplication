@@ -7,6 +7,9 @@ class UserModel {
   final String email;
   final String? avatarUrl;
   final String? backgroundUrl;
+  final String? phone;
+  final String? dob;
+  final String? address;
   final DateTime? createAt;
 
   const UserModel({
@@ -15,6 +18,9 @@ class UserModel {
     required this.email,
     this.avatarUrl,
     this.backgroundUrl,
+    this.phone,
+    this.dob,
+    this.address,
     this.createAt,
   });
 
@@ -28,6 +34,9 @@ class UserModel {
       avatarUrl: json['avatarUrl'], // Gán thông tin có value là avatarUrl
       backgroundUrl:
           json['backgroundUrl'], // Gán thông tin có value là backgroundUrl
+      phone: json['phone'], // Gán thông tin có value là phone
+      dob: json['dob'], // Gán thông tin có value là dob
+      address: json['address'], // Gán thông tin có value là address
     );
   }
 
@@ -38,6 +47,9 @@ class UserModel {
       'email': email, // Ghi vào value là email
       'avatarUrl': avatarUrl, // Ghi vào value là avatarUrl
       'backgroundUrl': backgroundUrl, // Ghi vào value là backgroundUrl
+      'phone': phone, // Ghi vào value là phone
+      'dob': dob, // Ghi vào value là dob
+      'address': address, // Ghi vào value là address
     };
   }
 }

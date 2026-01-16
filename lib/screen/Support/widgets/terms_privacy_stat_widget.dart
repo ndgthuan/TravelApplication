@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'divider_widget.dart';
+import '../../Account/widgets/simple_divider_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TermsPrivacyStatWidget extends StatefulWidget {
@@ -47,7 +47,7 @@ class _TermsPrivacyStatWidgetState extends State<TermsPrivacyStatWidget> {
 
               const SizedBox(height: 15),
 
-              DividerWidget(),
+              SimpleDividerWidget(),
 
               const SizedBox(height: 15),
 

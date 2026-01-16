@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/gestures.dart';
 import 'package:animations/animations.dart';
 
-class SwitchPageButtonWidget extends StatelessWidget {
+class AuthSwitchButtonWidget extends StatelessWidget {
   final String formerText;
   final String latterText;
   final Widget destinationScreen;
-  const SwitchPageButtonWidget({
+  const AuthSwitchButtonWidget({
     super.key,
     required this.formerText,
     required this.latterText,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UserFieldWidget extends StatelessWidget {
+class UsernameFieldWidget extends StatelessWidget {
   final String labelText;
   final IconData prefixIcon;
   final TextEditingController controller;
   final String textReturn;
 
-  const UserFieldWidget({
+  const UsernameFieldWidget({
     super.key,
     required this.labelText,
     required this.prefixIcon,

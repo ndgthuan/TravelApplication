@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 int checkPasswordStrength(String password) {
   int strength = 0;
   if (password.length >= 16) {
@@ -29,4 +32,20 @@ int checkPasswordStrength(String password) {
   }
 
   return strength;
+}
+
+// Trả về màu dưa trên độ mạnh của password
+Color getPasswordStrength(int strength) {
+  if (strength <= 3) return Colors.redAccent;
+  if (strength <= 5) return Colors.orange.shade800;
+  if (strength <= 6) return Colors.yellow;
+  return Color(0xFFFFAD33);
+}
+
+// Trả về text dựa trên độ mạnh của password
+String getPasswordStrengthText(int strength) {
+  if (strength <= 3) return "auth.weak".tr();
+  if (strength <= 5) return "auth.medium".tr();
+  if (strength <= 6) return "auth.good".tr();
+  return "auth.excellent".tr();
 }

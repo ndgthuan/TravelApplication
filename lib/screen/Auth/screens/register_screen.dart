@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/screen/Auth/services/password_service.dart';
+import 'package:travel_app/shared/utils/password_utils.dart';
 import 'package:travel_app/screen/Auth/viewmodels/register_view_model.dart';
-import 'package:travel_app/screen/Auth/widgets/switch_page_button_widget.dart';
-import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
+import 'package:travel_app/screen/Auth/widgets/auth_switch_button_widget.dart';
+import 'package:travel_app/screen/Auth/widgets/auth_logo_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/register_form_widget.dart';
 import 'login_screen.dart';
 
@@ -70,7 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Logo app
-                  AppLogo(),
+                  AuthLogoWidget(),
                   const SizedBox(height: 20),
 
                   // Chữ Welcome
@@ -130,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SwitchPageButtonWidget(
+                      AuthSwitchButtonWidget(
                         formerText: "auth.already_have_account".tr(),
                         latterText: "auth.log_in".tr(),
                         destinationScreen: LoginScreen(),

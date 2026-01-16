@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class StatWidget extends StatelessWidget {
+class AccountStatCardWidget extends StatelessWidget {
   final String title;
   final int number;
   final IconData icon;
-  const StatWidget({
+  const AccountStatCardWidget({
     super.key,
     required this.title,
     required this.number,

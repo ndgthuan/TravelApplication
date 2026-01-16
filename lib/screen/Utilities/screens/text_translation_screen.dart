@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:translator/translator.dart';
-import 'package:travel_app/screen/Account/widgets/translate_button_widget.dart';
-import 'package:travel_app/screen/Account/widgets/translate_board_widget.dart';
+import 'package:travel_app/screen/Utilities/widgets/translate_button_widget.dart';
+import 'package:travel_app/screen/Utilities/widgets/translate_board_widget.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart'
     show Clipboard, ClipboardData, rootBundle;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:travel_app/screen/Auth/services/auth_service.dart';
-import '../../../shared/widgets/action_button_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/screen/Account/viewmodels/change_password_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/shared/utils/password_utils.dart';
+import 'package:travel_app/shared/widgets/app_button_widget.dart';
 import '../widgets/password_field_widget.dart';
-import '../../Auth/widgets/password_widget.dart';
-import '../../Auth/services/password_service.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -15,22 +15,14 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  // Biến đổi mật khẩu
-  final AuthService _authService = AuthService();
-  bool _isLoading = false;
-  String? _errorMessage;
-
   // Các phương thức cho hộp nhập
-  final TextEditingController currentPasswordController =
-      TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController reenterPasswordController =
-      TextEditingController();
+  final currentPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final reenterPasswordController = TextEditingController();
 
   // FocusNode để hiển thị thanh password strength
   final FocusNode _newPasswordFocusNode = FocusNode();
   bool _isNewPasswordFocused = false;
-  int _passwordStrength = 0;
 
   @override
   void initState() {
@@ -53,6 +45,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<ChangePasswordViewModel>();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -102,9 +95,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: newPasswordController,
                 focusNode: _newPasswordFocusNode,
                 onChanged: (value) {
-                  setState(() {
-                    _passwordStrength = checkPasswordStrength(value);
-                  });
+                  context
+                      .read<ChangePasswordViewModel>()
+                      .updatePasswordStrength(value);
+                  setState(() {});
                 },
               ),
               const SizedBox(height: 10),
@@ -127,10 +121,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ),
                         child: FractionallySizedBox(
                           alignment: Alignment.centerLeft,
-                          widthFactor: _passwordStrength / 9,
+                          widthFactor: viewModel.passwordStrength / 9,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: getPasswordStrength(_passwordStrength),
+                              color: getPasswordStrength(
+                                viewModel.passwordStrength,
+                              ),
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
@@ -142,9 +138,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            getStrengthText(_passwordStrength),
+                            getPasswordStrengthText(viewModel.passwordStrength),
                             style: TextStyle(
-                              color: getPasswordStrength(_passwordStrength),
+                              color: getPasswordStrength(
+                                viewModel.passwordStrength,
+                              ),
                               fontSize: 12,
                             ),
                           ),
@@ -179,11 +177,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               const SizedBox(height: 40),
 
               // Hiển thị lỗi
-              if (_errorMessage != null)
+              if (viewModel.errorMessage != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    _errorMessage!,
+                    viewModel.errorMessage!,
                     style: GoogleFonts.beVietnamPro(
                       color: Colors.red,
                       fontSize: 14,
@@ -192,44 +190,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
               const SizedBox(height: 20),
               // Save Button
-              ActionButtonWidget(
-                buttonText: _isLoading
+              AppButtonWidget(
+                buttonText: viewModel.isLoading
                     ? 'general.loading'.tr()
                     : 'account.save_changes'.tr(),
                 onTap: () async {
-                  if (_isLoading) return;
-                  // Xác minh
-                  if (newPasswordController.text !=
-                      reenterPasswordController.text) {
-                    setState(
-                      () => _errorMessage = 'auth.password_not_match'.tr(),
-                    );
-                    return;
-                  }
-
-                  if (newPasswordController.text.length < 8) {
-                    setState(() => _errorMessage = 'auth.min_chars'.tr());
-                    return;
-                  }
-
-                  setState(() {
-                    _isLoading = true;
-                    _errorMessage = null;
-                  });
-
-                  // Gọi changePassword
-                  final result = await _authService.changePassword(
+                  final viewModel = context.read<ChangePasswordViewModel>();
+                  final success = await viewModel.changePassword(
                     currentPassword: currentPasswordController.text,
                     newPassword: newPasswordController.text,
+                    reenterPassword: reenterPasswordController.text,
                   );
 
-                  if (!mounted) return;
-
-                  setState(() => _isLoading = false);
-                  // Thoát khi ấn thay đổi
-                  if (result == null) {
-                    // Success
-                    // ignore: use_build_context_synchronously
+                  if (success && mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('general.success'.tr()),
@@ -237,11 +210,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         duration: Duration(seconds: 1),
                       ),
                     );
-                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
-                  } else {
-                    // Gọi lỗi
-                    setState(() => _errorMessage = result);
                   }
                 },
               ),

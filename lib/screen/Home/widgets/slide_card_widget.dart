@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:travel_app/screen/Home/models/destination_model.dart';
-import 'button_widget.dart';
+import 'heart_button_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SlideCardWidget extends StatefulWidget {
@@ -195,7 +195,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                           ),
 
                           // Icon trái tim
-                          HeartButton(),
+                          HeartButtonWidget(),
                         ],
                       ),
                     ),

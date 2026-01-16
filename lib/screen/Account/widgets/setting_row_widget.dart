@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class OptionWidget extends StatefulWidget {
+class SettingRowWidget extends StatefulWidget {
   final IconData optionIcon;
   final String optionText;
   final VoidCallback? onTap;
-  const OptionWidget({
+  const SettingRowWidget({
     super.key,
     required this.optionText,
     required this.optionIcon,
@@ -13,10 +13,10 @@ class OptionWidget extends StatefulWidget {
   });
 
   @override
-  State<OptionWidget> createState() => _OptionWidgetState();
+  State<SettingRowWidget> createState() => _SettingRowWidgetState();
 }
 
-class _OptionWidgetState extends State<OptionWidget> {
+class _SettingRowWidgetState extends State<SettingRowWidget> {
   bool _isClick = false;
   @override
   Widget build(BuildContext context) {

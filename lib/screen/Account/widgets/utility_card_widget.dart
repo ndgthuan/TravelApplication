@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ExtensionWidget extends StatefulWidget {
+class UtilityCardWidget extends StatefulWidget {
   final IconData icon;
   final String title;
   final VoidCallback? onTap;
-  const ExtensionWidget({
+  const UtilityCardWidget({
     super.key,
     required this.icon,
     required this.title,
@@ -13,10 +13,10 @@ class ExtensionWidget extends StatefulWidget {
   });
 
   @override
-  State<ExtensionWidget> createState() => _ExtensionWidgetState();
+  State<UtilityCardWidget> createState() => _UtilityCardWidgetState();
 }
 
-class _ExtensionWidgetState extends State<ExtensionWidget> {
+class _UtilityCardWidgetState extends State<UtilityCardWidget> {
   bool _isClick = false;
   @override
   Widget build(BuildContext context) {

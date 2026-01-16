@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ForgotPasDialog extends StatefulWidget {
+class ForgotPasswordDialogWidget extends StatefulWidget {
   final TextEditingController controller;
   final Future<void> Function(String email)
   onSendResetEmail; // Hàm gọi method reset email
-  const ForgotPasDialog({
+  const ForgotPasswordDialogWidget({
     super.key,
     required this.controller,
     required this.onSendResetEmail,
   });
 
   @override
-  State<ForgotPasDialog> createState() => _ForgotPasDialogState();
+  State<ForgotPasswordDialogWidget> createState() =>
+      _ForgotPasswordDialogWidgetState();
 }
 
-class _ForgotPasDialogState extends State<ForgotPasDialog> {
+class _ForgotPasswordDialogWidgetState
+    extends State<ForgotPasswordDialogWidget> {
   bool _isResetPasswordPress = false;
   @override
   Widget build(BuildContext context) {

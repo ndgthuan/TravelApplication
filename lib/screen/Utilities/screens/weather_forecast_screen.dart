@@ -5,8 +5,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 import 'package:lottie/lottie.dart';
-import 'package:travel_app/screen/Account/services/weather_service.dart';
-import 'package:travel_app/screen/Account/widgets/hourly_forecast_widget.dart';
+import 'package:travel_app/screen/Utilities/services/weather_service.dart';
+import 'package:travel_app/screen/Utilities/widgets/hourly_forecast_widget.dart';
 
 class WeatherForecastScreen extends StatefulWidget {
   const WeatherForecastScreen({super.key});

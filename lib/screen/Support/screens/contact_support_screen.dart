@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/shared/widgets/action_button_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/shared/widgets/app_button_widget.dart';
 
 class ContactSupportScreen extends StatefulWidget {
   const ContactSupportScreen({super.key});
@@ -229,7 +229,7 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
                               ),
                             ),
                           ),
-                        ActionButtonWidget(
+                        AppButtonWidget(
                           buttonText: 'account.send_report'.tr(),
                           onTap: _sendEmail,
                         ),

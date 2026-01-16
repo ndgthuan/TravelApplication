@@ -5,6 +5,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/core/di/injection.dart';
 import 'package:travel_app/firebase_options.dart';
+import 'package:travel_app/screen/Account/viewmodels/account_view_model.dart';
+import 'package:travel_app/screen/Account/viewmodels/change_password_view_model.dart';
+import 'package:travel_app/screen/Account/viewmodels/information_view_model.dart';
 import 'package:travel_app/screen/Auth/viewmodels/login_view_model.dart';
 import 'package:travel_app/screen/Auth/viewmodels/register_view_model.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
@@ -64,8 +67,21 @@ void main() async {
       fallbackLocale: Locale('en'),
       child: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => getIt<LoginViewModel>()),
-          ChangeNotifierProvider(create: (_) => getIt<RegisterViewModel>()),
+          ChangeNotifierProvider(
+            create: (_) => getIt<LoginViewModel>(),
+          ), // Gọi login parent state
+          ChangeNotifierProvider(
+            create: (_) => getIt<RegisterViewModel>(),
+          ), // Gọi register parent state
+          ChangeNotifierProvider(
+            create: (_) => getIt<AccountViewModel>(),
+          ), // Gọi account parent state
+          ChangeNotifierProvider(
+            create: (_) => getIt<InformationViewModel>(),
+          ), // Gọi profile parent state,
+          ChangeNotifierProvider(
+            create: (_) => getIt<ChangePasswordViewModel>(),
+          ), // Gọi changgePassword parent state
         ],
         child: MyApp(),
       ),

@@ -1,13 +1,14 @@
-import 'package:travel_app/screen/Auth/services/cloudinary_service.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/screen/Account/viewmodels/information_view_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/screen/Account/widgets/profile_field_widget.dart';
-import 'package:travel_app/shared/widgets/action_button_widget.dart';
-import 'package:travel_app/screen/Auth/services/user_service.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:travel_app/shared/widgets/app_button_widget.dart';
 
 class InformationScreen extends StatefulWidget {
   const InformationScreen({super.key});
@@ -17,16 +18,14 @@ class InformationScreen extends StatefulWidget {
 }
 
 class _InformationScreenState extends State<InformationScreen> {
-  String? avatarUrl;
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
   bool isClick = false;
-  bool _isUploading = false;
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final dobController = TextEditingController();
+  final addressController = TextEditingController();
 
   @override
   void dispose() {
@@ -38,58 +37,37 @@ class _InformationScreenState extends State<InformationScreen> {
     super.dispose();
   }
 
+  // Gọi phương thức gán
   @override
   void initState() {
     super.initState();
-    _loadUserData();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final viewModel = context.read<InformationViewModel>();
+      await viewModel.loadUserData();
+      // Cập nhật controllers từ viewModel
+      nameController.text = viewModel.name;
+      emailController.text = viewModel.email;
+      phoneController.text = viewModel.phone;
+      dobController.text = viewModel.dob;
+      addressController.text = viewModel.address;
+    });
   }
 
   // Tạo method chọn ảnh từ gallery
   Future<void> _pickImage() async {
+    final viewModel = context.read<InformationViewModel>();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
     if (image != null) {
-      setState(() {
-        _selectedImage = File(image.path);
-        _isUploading = true;
-      });
-
-      // Check mounted sau khi async hoàn thành
-      if (!mounted) return;
-
-      // Upload ảnh lên firestore
-      final url = await CloudinaryService.uploadImage(File(image.path));
-
-      if (!mounted) return;
-      setState(() {
-        _isUploading = false; // Tắt loading
-        if (url != null) {
-          avatarUrl = url;
-        }
-      });
-      if (url != null) {
-        await UserService.updateUserData({'avatarUrl': url});
-      }
-    }
-  }
-
-  // Load dữ liệu từ Firestore
-  Future<void> _loadUserData() async {
-    final data = await UserService.getCurrentUserData();
-    if (data != null) {
-      setState(() {
-        nameController.text = data['name'] ?? '';
-        phoneController.text = data['phone'] ?? '';
-        dobController.text = data['dob'] ?? '';
-        addressController.text = data['address'] ?? '';
-        emailController.text = data['email'] ?? '';
-        avatarUrl = data['avatarUrl'];
-      });
+      setState(() => _selectedImage = File(image.path));
+      await viewModel.uploadAvatar(File(image.path));
     }
   }
 
   // Tạo format cho ngày tháng năm
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<InformationViewModel>();
     // Rebuild mỗi khi đổi ngôn ngữ
     var _ = context.locale;
     return Scaffold(
@@ -126,14 +104,14 @@ class _InformationScreenState extends State<InformationScreen> {
                                 image: FileImage(_selectedImage!),
                                 fit: BoxFit.cover,
                               )
-                            : avatarUrl != null
+                            : viewModel.avatarUrl != null
                             ? DecorationImage(
-                                image: NetworkImage(avatarUrl!),
+                                image: NetworkImage(viewModel.avatarUrl!),
                                 fit: BoxFit.cover,
                               )
                             : null,
                         // Giữ gradient làm fallback nếu không có avatar
-                        gradient: avatarUrl == null
+                        gradient: viewModel.avatarUrl == null
                             ? LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -142,7 +120,7 @@ class _InformationScreenState extends State<InformationScreen> {
                             : null,
                       ),
                       // Hiển thị icon mặc định nếu không có avatar
-                      child: avatarUrl == null
+                      child: viewModel.avatarUrl == null
                           ? Icon(
                               Icons.person,
                               color: Colors.grey[600],
@@ -183,7 +161,7 @@ class _InformationScreenState extends State<InformationScreen> {
                     ),
 
                     // Loading indicator để đảm bảo sẽ lưu avatar
-                    if (_isUploading)
+                    if (viewModel.isUploading)
                       Positioned.fill(
                         child: Container(
                           decoration: BoxDecoration(
@@ -251,18 +229,19 @@ class _InformationScreenState extends State<InformationScreen> {
             const SizedBox(height: 30),
 
             // Save Button
-            ActionButtonWidget(
+            AppButtonWidget(
               buttonText: "account.save_changes".tr(),
               onTap: () async {
-                await UserService.updateUserData({
-                  'name': nameController.text,
-                  'phone': phoneController.text,
-                  'dob': dobController.text,
-                  'address': addressController.text,
-                });
+                final viewModel = context.read<InformationViewModel>();
+                final success = await viewModel.saveUserData(
+                  name: nameController.text,
+                  phone: phoneController.text,
+                  dob: dobController.text,
+                  address: addressController.text,
+                );
                 // Handle Save Logic
                 // ignore: use_build_context_synchronously
-                Navigator.pop(context, true);
+                if (success) Navigator.pop(context, true);
               },
             ),
             const SizedBox(height: 30),

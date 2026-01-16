@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppLogo extends StatelessWidget {
-  const AppLogo({super.key});
+class AuthLogoWidget extends StatelessWidget {
+  const AuthLogoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

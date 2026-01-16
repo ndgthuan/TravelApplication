@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/screen/Account/widgets/divider_widget.dart';
+import 'package:travel_app/screen/Account/widgets/simple_divider_widget.dart';
 
 class FaqStatWidget extends StatelessWidget {
   final String titleText;
@@ -37,7 +37,7 @@ class FaqStatWidget extends StatelessWidget {
 
               const SizedBox(height: 15),
 
-              DividerWidget(),
+              SimpleDividerWidget(),
 
               const SizedBox(height: 15),
 
