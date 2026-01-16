@@ -83,6 +83,8 @@ dependencies:
 
   # Animation icon
   lottie: ^3.3.2
+  provider: ^6.1.5+1
+  get_it: ^9.2.0
 
 dev_dependencies:
   flutter_test:

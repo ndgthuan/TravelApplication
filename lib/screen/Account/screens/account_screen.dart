@@ -1,19 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:travel_app/screen/Account/widgets/button_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/screen/Account/viewmodels/account_view_model.dart';
 import 'package:travel_app/screen/Account/widgets/setting_card_widget.dart';
-import 'package:travel_app/screen/Account/widgets/stat_widget.dart';
+import 'package:travel_app/screen/Account/widgets/account_stat_card_widget.dart';
 import 'package:travel_app/screen/Account/widgets/utilities_grid_widget.dart';
 import 'package:travel_app/screen/Auth/screens/login_screen.dart';
-import 'package:travel_app/screen/Auth/services/auth_service.dart';
-import 'package:travel_app/screen/Auth/services/cloudinary_service.dart';
-import 'package:travel_app/screen/Auth/services/storage_service.dart';
-import 'package:travel_app/screen/Auth/services/user_service.dart';
+import 'package:travel_app/shared/services/cloudinary_service.dart';
+import 'package:travel_app/shared/widgets/app_button_widget.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -25,33 +22,19 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   bool _isClick = false;
   bool isDarkMode = true;
-  String? _userName;
-  String? _userEmail;
-  String? _avatarUrl;
-  String? _backgroundImageUrl;
-  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadUserData();
-  }
-
-  // Load các dữ liệu từ firestore
-  Future<void> _loadUserData() async {
-    final data = await UserService.getCurrentUserData();
-    if (!mounted) return;
-    setState(() {
-      _userName = data?['name'];
-      _userEmail = data?['email'];
-      _avatarUrl = data?['avatarUrl'];
-      _backgroundImageUrl = data?['backgroundUrl'];
-      _isLoading = false;
+    // Gọi ViewModel load data từ firestore sau khi build xong
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AccountViewModel>().loadUserData();
     });
   }
 
   // Tạo method thay đổi nền
   Future<void> _changeBackgroundImage() async {
+    final viewModel = context.read<AccountViewModel>();
     // Mở thư viện gallery
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(
@@ -70,25 +53,15 @@ class _AccountScreenState extends State<AccountScreen> {
     // Kiểm tra nếu upload thất bại
     if (cloudinaryUrl == null) return;
 
-    // Lưu URL vào Firestore
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
-        {'backgroundUrl': cloudinaryUrl},
-      );
-    }
-
     // Cập nhật UI
-    setState(() {
-      _backgroundImageUrl = cloudinaryUrl;
-    });
+    await viewModel.updateBackgroundUrl(cloudinaryUrl);
   }
 
   @override
   Widget build(BuildContext context) {
     // Rebuild mỗi khi đổi ngôn ngữ
     var _ = context.locale;
-
+    final viewModel = context.watch<AccountViewModel>();
     // Build
     return Scaffold(
       backgroundColor: Color(0xFF000000),
@@ -104,9 +77,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   decoration: BoxDecoration(
                     // Màu nền khi chưa có ảnh
                     color: Color(0xFF1C1C1D),
-                    image: _backgroundImageUrl != null
+                    image: viewModel.backgroundUrl != null
                         ? DecorationImage(
-                            image: NetworkImage(_backgroundImageUrl!),
+                            image: NetworkImage(viewModel.backgroundUrl!),
                             fit: BoxFit.cover,
                           )
                         : null,
@@ -141,14 +114,14 @@ class _AccountScreenState extends State<AccountScreen> {
                         border: Border.all(color: Color(0xFFFFAD35)),
                         shape: BoxShape.circle,
                         // Thay gradient bằng image
-                        image: _avatarUrl != null
+                        image: viewModel.avatarUrl != null
                             ? DecorationImage(
-                                image: NetworkImage(_avatarUrl!),
+                                image: NetworkImage(viewModel.avatarUrl!),
                                 fit: BoxFit.cover,
                               )
                             : null,
                         // Giữ gradient làm fallback nếu không có avatar
-                        gradient: _avatarUrl == null
+                        gradient: viewModel.avatarUrl == null
                             ? LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -157,7 +130,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             : null,
                       ),
                       // Hiển thị icon mặc định nếu không có avatar
-                      child: _avatarUrl == null
+                      child: viewModel.avatarUrl == null
                           ? Icon(
                               Icons.person,
                               color: Colors.grey[600],
@@ -173,7 +146,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
             // Tên người dùng
             Text(
-              _isLoading ? 'Loading...' : (_userName ?? 'NoName'),
+              viewModel.isLoading
+                  ? 'Loading...'
+                  : (viewModel.userName ?? 'NoName'),
               style: GoogleFonts.beVietnamPro(
                 color: Colors.white,
                 fontSize: 24,
@@ -183,7 +158,7 @@ class _AccountScreenState extends State<AccountScreen> {
             const SizedBox(height: 10),
             // Email của người dùng
             Text(
-              _isLoading ? '' : (_userEmail ?? 'No Email'),
+              viewModel.isLoading ? '' : (viewModel.userEmail ?? 'No Email'),
               style: GoogleFonts.beVietnamPro(
                 color: Colors.grey,
                 fontSize: 16,
@@ -199,7 +174,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: StatWidget(
+                    child: AccountStatCardWidget(
                       title: 'navigation.plan'.tr(),
                       number: 8,
                       icon: Icons.insert_drive_file_sharp,
@@ -208,7 +183,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   const SizedBox(width: 5),
 
                   Expanded(
-                    child: StatWidget(
+                    child: AccountStatCardWidget(
                       title: 'navigation.favourite'.tr(),
                       number: 8,
                       icon: Icons.favorite,
@@ -217,7 +192,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   const SizedBox(width: 5),
 
                   Expanded(
-                    child: StatWidget(
+                    child: AccountStatCardWidget(
                       title: 'account.past_trips'.tr(),
                       number: 8,
                       icon: Icons.check,
@@ -260,7 +235,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   });
                 },
                 onDataUpdated: () {
-                  _loadUserData();
+                  viewModel.loadUserData();
                 },
               ),
             ),
@@ -270,14 +245,12 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: ActionButton(
-                      buttonName: 'account.log_out'.tr(),
-                      color: Colors.redAccent,
+                    child: AppButtonWidget(
+                      buttonText: 'account.log_out'.tr(),
+                      style: AppButtonStyle.outlined,
+                      outlineColor: Colors.redAccent,
                       onTap: () async {
-                        // Xoá hoàn toàn Credentials
-                        await StorageService.clearCredentials();
-                        // Đăng xuất Firebase
-                        await AuthService().signOut();
+                        await viewModel.signOut();
                         Navigator.of(
                           // ignore: use_build_context_synchronously
                           context,

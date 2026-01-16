@@ -1,14 +1,17 @@
-import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
+// Đây là trang UI và chỉ có 1 mục đích là gọi UI
+// Không thêm các biến hay phương thức nào trong trang
+import 'package:provider/provider.dart';
+import 'package:travel_app/screen/Auth/viewmodels/login_view_model.dart';
+import 'package:travel_app/screen/Auth/widgets/auth_logo_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/social_login_widget.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
-import '../widgets/dialog_widget.dart';
-import '../services/auth_service.dart';
+import '../widgets/forgot_password_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'register_screen.dart';
-import '../widgets/switch_page_button_widget.dart';
+import '../widgets/auth_switch_button_widget.dart';
 import 'package:animations/animations.dart';
-import '../services/storage_service.dart';
+import '../../../shared/services/storage_service.dart';
 import '../widgets/login_form_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -19,23 +22,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // Các bién
-  bool _isCheck = false;
-  bool _isLoading = false;
-  final bool _isShowing = true;
-
-  final bool _isGooglePressed = false;
-  final bool _isFacebookPressed = false;
   final _resetEmail = TextEditingController();
-
-  // Tạo instance của AuthService
-  final AuthService _authService = AuthService();
-
-  String? _emailError; // Lưu lỗi email từ Firebase
-  String? _passwordError; // Lưu lỗi password từ Firebase
-
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   final _formkey = GlobalKey<FormState>();
 
   @override
@@ -47,6 +36,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void createForgotPassForm() {
+    // Gọi view model
+    final viewModel = context.read<LoginViewModel>();
     showModal(
       context: context,
       configuration: const FadeScaleTransitionConfiguration(
@@ -59,46 +50,41 @@ class _LoginScreenState extends State<LoginScreen> {
         barrierLabel: 'Dismiss',
       ),
       builder: (context) {
-        return ForgotPasDialog(controller: _resetEmail);
+        return ForgotPasswordDialogWidget(
+          controller: _resetEmail,
+          onSendResetEmail: (email) async {
+            await viewModel.sendPasswordResetEmail(email);
+          },
+        );
       },
     );
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _loadSaveCredentails();
+    _loadSaveCredentials();
   }
 
-  Future<void> _loadSaveCredentails() async {
+  Future<void> _loadSaveCredentials() async {
+    final viewModel = context.read<LoginViewModel>();
     final credentials = await StorageService.getCredentials();
+
     if (credentials['email'] != null && credentials['password'] != null) {
       if (!mounted) return;
-      setState(() {
-        emailController.text = credentials['email']!;
-        passwordController.text = credentials['password']!;
-        _isCheck = true;
-        _isLoading = true;
-      });
-
-      // Tự động gọi đăng nhập
-      String? result = await _authService.signIn(
+      emailController.text = credentials['email']!;
+      passwordController.text = credentials['password']!;
+      viewModel.setRememberMe(true);
+      // Tự động đăng nhập
+      final success = await viewModel.signIn(
         email: credentials['email']!,
         password: credentials['password']!,
       );
-
-      if (result == null) {
-        // Thành công thì vào thẳng home
-        if (!mounted) return;
+      if (success && mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => BottomNavigation()),
         );
-      } else {
-        setState(() {
-          _isLoading = false; // Thất bại thì tự bấm
-        });
       }
     }
   }
@@ -107,6 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     // Rebuild mỗi khi đổi ngôn ngữ
     var _ = context.locale;
+
+    // Lắng nghe ViewModel
+    final viewModel = context.watch<LoginViewModel>();
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
@@ -122,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Logo app
-                  AppLogo(),
+                  AuthLogoWidget(),
                   const SizedBox(height: 20),
 
                   // Chữ Welcome!
@@ -136,38 +125,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     emailController: emailController,
                     passwordController: passwordController,
                     formKey: _formkey,
-                    emailError: _emailError,
-                    passwordError: _passwordError,
-                    isCheck: _isCheck,
-                    isShowing: _isShowing,
-                    onRememberMeChanged: () {
-                      setState(() {
-                        _isCheck = !_isCheck;
-                      });
-                    },
-                    onForgotPassword: () {
-                      Color(0xFFFFAD33);
-                      createForgotPassForm();
-                    },
+                    emailError: viewModel.emailError,
+                    passwordError: viewModel.passwordError,
+                    isCheck: viewModel.rememberMe,
+                    isShowing: true,
+                    onRememberMeChanged: () => viewModel.toggleRememberMe(),
+                    onForgotPassword: () => createForgotPassForm(),
                     onLogin: () async {
                       // Nếu đang loading thì trả về
-                      if (_isLoading) return;
-
-                      // Xoá các lỗi sau khi có ấn lại
-                      setState(() {
-                        _isLoading = true;
-                        _emailError = null;
-                        _passwordError = null;
-                      });
+                      if (viewModel.isLoading) return;
 
                       // Kiểm tra đầu ra result
                       if (_formkey.currentState!.validate()) {
-                        String? result = await _authService.signIn(
+                        final success = await viewModel.signIn(
                           email: emailController.text,
                           password: passwordController.text,
                         );
-                        if (result == null) {
-                          if (_isCheck) {
+
+                        if (success) {
+                          if (viewModel.rememberMe) {
                             await StorageService.saveCredentials(
                               email: emailController.text,
                               password: passwordController.text,
@@ -176,42 +152,46 @@ class _LoginScreenState extends State<LoginScreen> {
                             await StorageService.clearCredentials();
                           }
 
-                          Navigator.pushReplacement(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BottomNavigation(),
-                            ),
-                          );
-                        } else {
-                          // Truyền đầu ra error vào các biến
-                          setState(() {
-                            if (result.contains(' or ')) {
-                              // Lỗi cả email và password
-                              _emailError = result;
-                              _passwordError = result;
-                            } else if (result.toLowerCase().contains('email') ||
-                                result.contains('Account')) {
-                              _emailError = result;
-                            } else {
-                              _passwordError = result;
-                            }
-                          });
-                          _formkey.currentState!.validate();
+                          if (mounted) {
+                            Navigator.pushReplacement(
+                              // ignore: use_build_context_synchronously
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BottomNavigation(),
+                              ),
+                            );
+                          } else {
+                            _formkey.currentState!.validate();
+                          }
                         }
                       }
-
-                      // Validate nếu thành công hay thất bại để khi nhấn thì vẫn sẽ chạy lại
-                      setState(() {
-                        _isLoading = false;
-                      });
                     },
                   ),
                   const SizedBox(height: 20),
 
                   SocialLoginWidget(
-                    isGooglePressed: _isGooglePressed,
-                    isFacebookPressed: _isFacebookPressed,
+                    isGooglePressed: viewModel.isGooglePressed,
+                    isFacebookPressed: viewModel.isFacebookPressed,
+                    onGoogleTap: () async {
+                      final success = await viewModel.signInWithGoogle();
+                      if (success && mounted) {
+                        Navigator.pushReplacement(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          MaterialPageRoute(builder: (_) => BottomNavigation()),
+                        );
+                      }
+                    },
+                    onFacebookTap: () async {
+                      final success = await viewModel.signInWithFacebook();
+                      if (success && mounted) {
+                        Navigator.pushReplacement(
+                          // ignore: use_build_context_synchronously
+                          context,
+                          MaterialPageRoute(builder: (_) => BottomNavigation()),
+                        );
+                      }
+                    },
                   ),
                   SizedBox(height: 20),
 
@@ -219,7 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SwitchPageButtonWidget(
+                      AuthSwitchButtonWidget(
                         formerText: "auth.dont_have_account".tr(),
                         latterText: "auth.sign_up".tr(),
                         destinationScreen: RegisterScreen(),

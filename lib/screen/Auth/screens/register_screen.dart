@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:travel_app/screen/Auth/services/password_service.dart';
-import 'package:travel_app/screen/Auth/widgets/switch_page_button_widget.dart';
-import 'package:travel_app/screen/Auth/widgets/logo_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/shared/utils/password_utils.dart';
+import 'package:travel_app/screen/Auth/viewmodels/register_view_model.dart';
+import 'package:travel_app/screen/Auth/widgets/auth_switch_button_widget.dart';
+import 'package:travel_app/screen/Auth/widgets/auth_logo_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/register_form_widget.dart';
 import 'login_screen.dart';
-import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,16 +16,11 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  bool _isLoading = false;
-  final bool _isShowingPassword = true;
-  final bool _isShowingReenterPassword = true;
-
   // Tạo các phương thức đăng ký
-  String email = "", password = "";
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController reenterpasswordController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final reenterpasswordController = TextEditingController();
 
   // Tạo form key để bọc xung quanh các hộp đăng ký
   final _formkey = GlobalKey<FormState>();
@@ -54,19 +50,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  // Tạo instance của AuthService
-  final AuthService _authService = AuthService();
-
-  String? _emailError; // Lưu lỗi email từ Firebase
-  String? _passwordError;
-  int _passwordStrength = 0; // Biến theo dõi độ mạnh password
-
-  // Tạo các biến để lấy giá trị mật khẩu
-
   @override
   Widget build(BuildContext context) {
     // Rebuild mỗi khi đổi ngôn ngữ
     var _ = context.locale;
+    final viewModel = context.watch<RegisterViewModel>();
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
@@ -82,7 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Logo app
-                  AppLogo(),
+                  AuthLogoWidget(),
                   const SizedBox(height: 20),
 
                   // Chữ Welcome
@@ -99,36 +87,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     emailController: emailController,
                     passwordController: passwordController,
                     reenterpasswordController: reenterpasswordController,
-                    emailError: _emailError,
-                    passwordError: _passwordError,
+                    emailError: viewModel.emailError,
+                    passwordError: viewModel.passwordError,
                     isPasswordFocused: _isPasswordFocused,
-                    isShowingPassword: _isShowingPassword,
-                    isShowingReenterPassword: _isShowingReenterPassword,
+                    isShowingPassword: true,
+                    isShowingReenterPassword: true,
                     passwordFocusNode: _passwordFocusNode,
-                    passwordStrength: _passwordStrength,
+                    passwordStrength: viewModel.passwordStrength,
                     onChange: (value) {
-                      setState(() {
-                        _passwordStrength = checkPasswordStrength(value);
-                      });
+                      viewModel.updatePasswordStrength(
+                        checkPasswordStrength(value),
+                      );
                     },
                     onTap: () async {
-                      if (_isLoading) return;
-                      // Reset lỗi cũ
-                      setState(() {
-                        _emailError = null;
-                        _passwordError = null;
-                        _isLoading = true;
-                      });
+                      // Loading khi đang trong qua trình đăng ký
+                      if (viewModel.isLoading) return;
                       // Tạo form đăng ký
                       if (_formkey.currentState!.validate()) {
-                        AuthResult? result = await _authService.signUp(
+                        final success = await viewModel.signUp(
                           email: emailController.text,
                           password: passwordController.text,
                           name: nameController.text,
                         );
 
-                        // Kiểm tra nếu đăng ký thành công
-                        if (result != null && result.isSuccess) {
+                        if (success && mounted) {
                           Navigator.pushReplacement(
                             // ignore: use_build_context_synchronously
                             context,
@@ -136,25 +118,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               builder: (context) => LoginScreen(),
                             ),
                           );
-                        } else if (result != null && result.error != null) {
-                          if (result.error!.contains('email') ||
-                              result.error!.contains('Email')) {
-                            setState(() {
-                              _emailError = result.error;
-                            });
-                            _formkey.currentState!.validate();
-                          } else if (result.error!.contains('password')) {
-                            setState(() {
-                              _passwordError = result.error;
-                            });
-                            _formkey.currentState!.validate();
-                          }
+                        } else {
+                          _formkey.currentState!.validate();
                         }
                       }
-
-                      setState(() {
-                        _isLoading = false;
-                      });
                     },
                   ),
                   const SizedBox(height: 20),
@@ -163,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SwitchPageButtonWidget(
+                      AuthSwitchButtonWidget(
                         formerText: "auth.already_have_account".tr(),
                         latterText: "auth.log_in".tr(),
                         destinationScreen: LoginScreen(),

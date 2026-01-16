@@ -2,7 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/core/di/injection.dart';
 import 'package:travel_app/firebase_options.dart';
+import 'package:travel_app/screen/Account/viewmodels/account_view_model.dart';
+import 'package:travel_app/screen/Account/viewmodels/change_password_view_model.dart';
+import 'package:travel_app/screen/Account/viewmodels/information_view_model.dart';
+import 'package:travel_app/screen/Auth/viewmodels/login_view_model.dart';
+import 'package:travel_app/screen/Auth/viewmodels/register_view_model.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import 'screen/Onboarding/screens/start_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -20,6 +27,7 @@ void main() async {
 
   // Language init
   await EasyLocalization.ensureInitialized();
+  setupDependencies();
   runApp(
     // For web
     // EasyLocalization(
@@ -57,7 +65,26 @@ void main() async {
       ],
       path: 'lib/assets/translations',
       fallbackLocale: Locale('en'),
-      child: MyApp(),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => getIt<LoginViewModel>(),
+          ), // Gọi login parent state
+          ChangeNotifierProvider(
+            create: (_) => getIt<RegisterViewModel>(),
+          ), // Gọi register parent state
+          ChangeNotifierProvider(
+            create: (_) => getIt<AccountViewModel>(),
+          ), // Gọi account parent state
+          ChangeNotifierProvider(
+            create: (_) => getIt<InformationViewModel>(),
+          ), // Gọi profile parent state,
+          ChangeNotifierProvider(
+            create: (_) => getIt<ChangePasswordViewModel>(),
+          ), // Gọi changgePassword parent state
+        ],
+        child: MyApp(),
+      ),
     ),
   );
 }

@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/screen/Auth/widgets/social_button_widget.dart';
-import '../services/auth_service.dart';
 
 class SocialLoginWidget extends StatelessWidget {
   final bool isGooglePressed;
   final bool isFacebookPressed;
+  final VoidCallback onGoogleTap; // // Hàm xử lý khi ấn button google
+  final VoidCallback onFacebookTap; // Hàm xử lý khi ấn button facebook
 
-  // Tạo instance của AuthService
-  final AuthService _authService = AuthService();
-
-  SocialLoginWidget({
+  const SocialLoginWidget({
     super.key,
     required this.isGooglePressed,
     required this.isFacebookPressed,
+    required this.onGoogleTap,
+    required this.onFacebookTap,
   });
 
   @override
@@ -52,14 +52,14 @@ class SocialLoginWidget extends StatelessWidget {
             SocialButtonWidget(
               isPressed: isGooglePressed,
               imagePath: "lib/assets/images/google_logo.png",
-              authFunction: _authService.signInWithGoogle,
+              onTap: onGoogleTap,
             ),
 
             // Facebook Logo
             SocialButtonWidget(
               isPressed: isFacebookPressed,
               imagePath: 'lib/assets/images/facebook_logo.png',
-              authFunction: _authService.signInWithFacebook,
+              onTap: onFacebookTap,
             ),
           ],
         ),

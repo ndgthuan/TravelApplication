@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/shared/widgets/action_button_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/email_field_widget.dart';
 import 'package:travel_app/screen/Auth/widgets/password_field_widget.dart';
+import 'package:travel_app/shared/widgets/app_button_widget.dart';
 
 class LoginFormWidget extends StatelessWidget {
   final TextEditingController emailController;
@@ -115,7 +115,7 @@ class LoginFormWidget extends StatelessWidget {
         const SizedBox(height: 10),
 
         // Thanh đăng nhập
-        ActionButtonWidget(buttonText: "auth.login".tr(), onTap: onLogin),
+        AppButtonWidget(buttonText: "auth.login".tr(), onTap: onLogin),
       ],
     );
   }

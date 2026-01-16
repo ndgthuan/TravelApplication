@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:travel_app/screen/Account/screens/currency_exchange_screen.dart';
-import 'package:travel_app/screen/Account/screens/text_translation_screen.dart';
-import 'package:travel_app/screen/Account/screens/weather_forecast_screen.dart';
-import 'package:travel_app/screen/Account/screens/world_clock_screen.dart';
-import 'extension_widget.dart';
+import 'package:travel_app/screen/Utilities/screens/currency_exchange_screen.dart';
+import 'package:travel_app/screen/Utilities/screens/text_translation_screen.dart';
+import 'package:travel_app/screen/Utilities/screens/weather_forecast_screen.dart';
+import 'package:travel_app/screen/Utilities/screens/world_clock_screen.dart';
+import 'utility_card_widget.dart';
 
 class UtilitiesGridWidget extends StatelessWidget {
   const UtilitiesGridWidget({super.key});
@@ -16,7 +16,7 @@ class UtilitiesGridWidget extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: ExtensionWidget(
+              child: UtilityCardWidget(
                 icon: Icons.monetization_on,
                 title: 'home.currency_exchange'.tr(),
                 onTap: () {
@@ -31,7 +31,7 @@ class UtilitiesGridWidget extends StatelessWidget {
             const SizedBox(width: 5),
 
             Expanded(
-              child: ExtensionWidget(
+              child: UtilityCardWidget(
                 icon: Icons.g_translate,
                 title: 'home.text_translation'.tr(),
                 onTap: () {
@@ -50,7 +50,7 @@ class UtilitiesGridWidget extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: ExtensionWidget(
+              child: UtilityCardWidget(
                 icon: Icons.cloud,
                 title: 'home.weather_forecast'.tr(),
                 onTap: () {
@@ -65,7 +65,7 @@ class UtilitiesGridWidget extends StatelessWidget {
             const SizedBox(width: 5),
 
             Expanded(
-              child: ExtensionWidget(
+              child: UtilityCardWidget(
                 icon: Icons.public,
                 title: 'home.world_clock'.tr(),
                 onTap: () {

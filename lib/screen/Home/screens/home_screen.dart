@@ -4,7 +4,7 @@ import 'package:travel_app/screen/Home/models/destination_model.dart';
 import 'package:travel_app/screen/Home/services/destination_service.dart';
 import 'package:travel_app/screen/Home/widgets/slide_card_widget.dart';
 import 'package:travel_app/screen/Home/widgets/scroll_card_widget.dart';
-import 'package:travel_app/screen/Home/widgets/divider_widget.dart';
+import 'package:travel_app/screen/Home/widgets/gradient_divider_widget.dart';
 import 'package:travel_app/screen/Home/widgets/title_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              DividerWidget(),
+              GradientDividerWidget(),
 
               // Địa điểm nội bật
               TitleWidget(
@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
               const SizedBox(height: 30),
 
-              DividerWidget(),
+              GradientDividerWidget(),
 
               // Có thể bạn sẽ thích
               TitleWidget(titleText: 'home.you_might_like'.tr(), fontSize: 20),
