@@ -1,17 +1,11 @@
 {
   "general": {
     "welcome": "Willkommen",
-    "save": "Speichern",
-    "submit": "Absenden",
-    "cancel": "Abbrechen",
-    "error": "Fehler",
     "success": "Erfolg",
     "loading": "Laden..."
   },
   "auth": {
-    "login_title": "Willkommen zurück!",
     "login_subtitle": "Melden Sie sich an, um Ihre Reise fortzusetzen",
-    "signup_title": "Willkommen!",
     "signup_subtitle": "Registrieren Sie sich, um Ihre Reise fortzusetzen",
     "email": "E-Mail",
     "password": "Passwort",
@@ -32,7 +26,6 @@
     "reset_email_title": "E-Mail zurücksetzen",
     "reset_email_instruction": "Geben Sie Ihre E-Mail ein",
     "resend_email": "E-Mail erneut senden",
-    "password_strength": "Passwortstärke",
     "password_empty": "Passwort ist leer",
     "email_empty": "E-Mail ist leer",
     "username_empty": "Benutzername ist leer",
@@ -50,7 +43,11 @@
     "user_not_found": "Benutzer nicht gefunden",
     "wrong_password": "Aktuelles Passwort ist falsch",
     "new_password_weak": "Neues Passwort ist zu schwach",
-    "unknown_error": "Ein Fehler ist aufgetreten"
+    "unknown_error": "Ein Fehler ist aufgetreten",
+    "google_cancelled": "Google-Anmeldung wurde abgebrochen",
+    "google_failed": "Google-Anmeldung fehlgeschlagen",
+    "facebook_cancelled": "Facebook-Anmeldung wurde abgebrochen",
+    "facebook_failed": "Facebook-Anmeldung fehlgeschlagen"
   },
   "account": {
     "utilities": "Dienstprogramme",
@@ -73,7 +70,9 @@
     "faq_offline_mode_title": "Kann ich die App offline nutzen?",
     "faq_offline_mode_body": "Ja! Ihre gespeicherten Pläne und Favoriten sind offline verfügbar. Einige Funktionen wie der Währungsumtausch erfordern jedoch eine Internetverbindung",
     "faq_sync_data_title": "Wie synchronisiere ich Daten zwischen Geräten?",
-    "faq_sync_data_body": "Ihre Daten werden automatisch synchronisiert, wenn Sie sich auf verschiedenen Ger\u00e4ten mit demselben Konto anmelden. Stellen Sie sicher, dass Sie eine Internetverbindung haben",
+    "faq_sync_data_body": "Ihre Daten werden automatisch synchronisiert, wenn Sie sich auf verschiedenen Geräten mit demselben Konto anmelden. Stellen Sie sicher, dass Sie eine Internetverbindung haben",
+    "faq_report_problem_title": "Wie melde ich ein Problem?",
+    "faq_report_problem_body": "Gehen Sie zu 'Konto' -> 'Hilfe & Support' -> 'Support kontaktieren'. Beschreiben Sie Ihr Problem und wir werden so schnell wie möglich antworten",
     "terms_of_service_title": "Nutzungsbedingungen",
     "terms_of_service_body": "Die Nutzungsbedingungen wurden erstellt, um Ihre Bedingungen und die Organisation Ihrer Informationen zu kontaktieren",
     "privacy_policy_title": "Datenschutzrichtlinie",
@@ -94,19 +93,24 @@
     "dark_mode": "Dunkelmodus",
     "help_support": "Hilfe & Support",
     "log_out": "Abmelden",
-    "upload_image": "Bild hochladen",
     "full_name": "Vollständiger Name",
     "phone_number": "Telefonnummer",
     "date_of_birth": "Geburtsdatum",
     "address": "Adresse",
+    "no_name": "Kein Name",
+    "no_email": "Keine E-Mail",
+    "enter_name": "Geben Sie Ihren Namen ein",
+    "enter_email": "Geben Sie Ihre E-Mail ein",
+    "enter_phone": "Geben Sie Ihre Telefonnummer ein",
+    "enter_address": "Geben Sie Ihre Adresse ein",
+    "invalid_date": "Ungültiges Datum",
     "contact_support": "Support kontaktieren",
     "terms_privacy": "Nutzungsbedingungen & Datenschutz",
     "user_guide": "Benutzerhandbuch",
     "faqs": "FAQs",
     "save_changes": "Änderungen speichern",
     "read_full_document": "Vollständiges Dokument lesen",
-    "subject": "Betreff",
-    "description": "Beschreibung"
+    "subject": "Betreff"
   },
   "home": {
     "home": "Startseite",

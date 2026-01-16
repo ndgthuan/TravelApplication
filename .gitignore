@@ -53,3 +53,9 @@ app.*.map.json
 
 # Ignore api key
 .env
+
+# Scripts folder (local tools)
+scripts/
+
+# Instruction file (local notes)
+INSTRUCTION.md

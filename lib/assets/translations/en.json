@@ -1,17 +1,11 @@
 {
   "general": {
     "welcome": "Welcome",
-    "save": "Save",
-    "submit": "Submit",
-    "cancel": "Cancel",
-    "error": "Error",
     "success": "Success",
     "loading": "Loading..."
   },
   "auth": {
-    "login_title": "Welcome!",
     "login_subtitle": "Log in to continue your journey",
-    "signup_title": "Welcome!",
     "signup_subtitle": "Sign up to continue your journey",
     "email": "Email",
     "password": "Password",
@@ -32,7 +26,7 @@
     "reset_email_title": "Reset Email",
     "reset_email_instruction": "Enter your email",
     "resend_email": "Resend email",
-    "password_strength": "Password strength",
+
     "password_empty": "Password is empty",
     "email_empty": "Email is empty",
     "username_empty": "Username is empty",
@@ -50,7 +44,11 @@
     "user_not_found": "User not found",
     "wrong_password": "Current password is incorrect",
     "new_password_weak": "New password is too weak",
-    "unknown_error": "An error occurred"
+    "unknown_error": "An error occurred",
+    "google_cancelled": "Google sign-in was cancelled",
+    "google_failed": "Google sign-in failed",
+    "facebook_cancelled": "Facebook sign-in was cancelled",
+    "facebook_failed": "Facebook sign-in failed"
   },
   "account": {
     "account": "Account",
@@ -61,11 +59,18 @@
     "dark_mode": "Dark Mode",
     "help_support": "Help & Support",
     "log_out": "Log out",
-    "upload_image": "Upload Image",
+
     "full_name": "Full Name",
     "phone_number": "Phone Number",
     "date_of_birth": "Date of Birth",
     "address": "Address",
+    "no_name": "No Name",
+    "no_email": "No Email",
+    "enter_name": "Enter your name",
+    "enter_email": "Enter your email",
+    "enter_phone": "Enter your phone number",
+    "enter_address": "Enter your address",
+    "invalid_date": "Invalid date",
     "contact_support": "Contact Support",
     "terms_privacy": "Terms & Privacy",
     "user_guide": "User Guide",
@@ -73,7 +78,7 @@
     "save_changes": "Save changes",
     "read_full_document": "Read Full Document",
     "subject": "Subject",
-    "description": "Description",
+
     "utilities": "Utilities",
     "past_trips": "Past Trips",
     "subject_hint": "e.g. Account Issue",
@@ -95,6 +100,8 @@
     "faq_offline_mode_body": "Yes! Your saved plans and favorites are available offline. However, some features like currency exchange require internet connection",
     "faq_sync_data_title": "How to sync my data across devices?",
     "faq_sync_data_body": "Your data is automatically synced when you sign in with the same account on different devices. Make sure you have an internet connection",
+    "faq_report_problem_title": "How to report a problem?",
+    "faq_report_problem_body": "Go to 'Account' -> 'Help & Support' -> 'Contact Support'. Describe your issue and we will respond as soon as possible",
     "terms_of_service_title": "Terms of Service",
     "terms_of_service_body": "Terms of Service is born to contact your Terms and Androrsnization of your information",
     "privacy_policy_title": "Privacy Policy",

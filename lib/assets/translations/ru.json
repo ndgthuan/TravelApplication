@@ -1,17 +1,11 @@
 {
   "general": {
     "welcome": "Добро пожаловать",
-    "save": "Сохранить",
-    "submit": "Отправить",
-    "cancel": "Отмена",
-    "error": "Ошибка",
     "success": "Успех",
     "loading": "Загрузка..."
   },
   "auth": {
-    "login_title": "С возвращением!",
     "login_subtitle": "Войдите, чтобы продолжить путешествие",
-    "signup_title": "Добро пожаловать!",
     "signup_subtitle": "Зарегистрируйтесь, чтобы продолжить путешествие",
     "email": "Электронная почта",
     "password": "Пароль",
@@ -32,7 +26,6 @@
     "reset_email_title": "Сброс Email",
     "reset_email_instruction": "Введите ваш email",
     "resend_email": "Отправить снова",
-    "password_strength": "Надежность пароля",
     "password_empty": "Пароль пуст",
     "email_empty": "Email пуст",
     "username_empty": "Имя пользователя пусто",
@@ -50,7 +43,11 @@
     "user_not_found": "Пользователь не найден",
     "wrong_password": "Текущий пароль неверен",
     "new_password_weak": "Новый пароль слишком слабый",
-    "unknown_error": "Произошла ошибка"
+    "unknown_error": "Произошла ошибка",
+    "google_cancelled": "Вход через Google отменен",
+    "google_failed": "Вход через Google не удался",
+    "facebook_cancelled": "Вход через Facebook отменен",
+    "facebook_failed": "Вход через Facebook не удался"
   },
   "account": {
     "utilities": "Утилиты",
@@ -74,6 +71,8 @@
     "faq_offline_mode_body": "Да! Сохраненные планы и избранное доступны оффлайн. Однако некоторые функции (например, обмен валют) требуют интернет-соединения",
     "faq_sync_data_title": "Как синхронизировать данные между устройствами?",
     "faq_sync_data_body": "Ваши данные автоматически синхронизируются при входе в один аккаунт на разных устройствах. Убедитесь, что есть интернет",
+    "faq_report_problem_title": "Как сообщить о проблеме?",
+    "faq_report_problem_body": "Перейдите в 'Аккаунт' -> 'Помощь и поддержка' -> 'Связаться с поддержкой'. Опишите проблему, и мы ответим как можно скорее",
     "terms_of_service_title": "Условия использования",
     "terms_of_service_body": "Условия использования созданы для связи ваших условий и организации вашей информации",
     "privacy_policy_title": "Политика конфиденциальности",
@@ -94,19 +93,24 @@
     "dark_mode": "Темная тема",
     "help_support": "Помощь и поддержка",
     "log_out": "Выйти",
-    "upload_image": "Загрузить фото",
     "full_name": "Полное имя",
     "phone_number": "Номер телефона",
     "date_of_birth": "Дата рождения",
     "address": "Адрес",
+    "no_name": "Нет имени",
+    "no_email": "Нет email",
+    "enter_name": "Введите ваше имя",
+    "enter_email": "Введите ваш email",
+    "enter_phone": "Введите ваш телефон",
+    "enter_address": "Введите ваш адрес",
+    "invalid_date": "Неверная дата",
     "contact_support": "Связаться с поддержкой",
     "terms_privacy": "Условия и конфиденциальность",
     "user_guide": "Руководство",
     "faqs": "FAQ",
     "save_changes": "Сохранить изменения",
     "read_full_document": "Читать документ полностью",
-    "subject": "Тема",
-    "description": "Описание"
+    "subject": "Тема"
   },
   "home": {
     "home": "Главная",

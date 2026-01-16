@@ -1,17 +1,11 @@
 {
   "general": {
     "welcome": "환영합니다",
-    "save": "저장",
-    "submit": "제출",
-    "cancel": "취소",
-    "error": "오류",
     "success": "성공",
     "loading": "로딩 중..."
   },
   "auth": {
-    "login_title": "환영합니다!",
     "login_subtitle": "여행을 계속하려면 로그인하세요",
-    "signup_title": "환영합니다!",
     "signup_subtitle": "여행을 계속하려면 가입하세요",
     "email": "이메일",
     "password": "비밀번호",
@@ -32,7 +26,6 @@
     "reset_email_title": "이메일 재설정",
     "reset_email_instruction": "이메일을 입력하세요",
     "resend_email": "이메일 재전송",
-    "password_strength": "비밀번호 강도",
     "password_empty": "비밀번호를 입력하세요",
     "email_empty": "이메일을 입력하세요",
     "username_empty": "사용자 이름을 입력하세요",
@@ -50,7 +43,11 @@
     "user_not_found": "사용자를 찾을 수 없습니다",
     "wrong_password": "현재 비밀번호가 올바르지 않습니다",
     "new_password_weak": "새 비밀번호가 너무 약합니다",
-    "unknown_error": "오류가 발생했습니다"
+    "unknown_error": "오류가 발생했습니다",
+    "google_cancelled": "Google 로그인이 취소되었습니다",
+    "google_failed": "Google 로그인에 실패했습니다",
+    "facebook_cancelled": "Facebook 로그인이 취소되었습니다",
+    "facebook_failed": "Facebook 로그인에 실패했습니다"
   },
   "account": {
     "utilities": "유용",
@@ -74,6 +71,8 @@
     "faq_offline_mode_body": "네! 저장된 계획과 즐겨찾기는 오프라인에서 사용 가능합니다. 단, 환율 변환 등 일부 기능은 인터넷 연결이 필요합니다",
     "faq_sync_data_title": "기기 간 데이터 동기화 방법은?",
     "faq_sync_data_body": "다른 기기에서 동일한 계정으로 로그인하면 데이터가 자동으로 동기화됩니다. 인터넷 연결을 확인하세요",
+    "faq_report_problem_title": "문제를 신고하는 방법은?",
+    "faq_report_problem_body": "'계정' -> '도움말 및 지원' -> '지원 문의'로 이동하세요. 문제를 설명해 주시면 최대한 빨리 답변 드리겠습니다",
     "terms_of_service_title": "서비스 약관",
     "terms_of_service_body": "서비스 약관은 귀하의 약관 및 정보 구성에 연락하기 위해 만들어졌습니다",
     "privacy_policy_title": "개인정보 보호정책",
@@ -94,19 +93,24 @@
     "dark_mode": "다크 모드",
     "help_support": "도움말 및 지원",
     "log_out": "로그아웃",
-    "upload_image": "이미지 업로드",
     "full_name": "성명",
     "phone_number": "전화번호",
     "date_of_birth": "생년월일",
     "address": "주소",
+    "no_name": "이름 없음",
+    "no_email": "이메일 없음",
+    "enter_name": "이름을 입력하세요",
+    "enter_email": "이메일을 입력하세요",
+    "enter_phone": "전화번호를 입력하세요",
+    "enter_address": "주소를 입력하세요",
+    "invalid_date": "유효하지 않은 날짜",
     "contact_support": "지원 문의",
     "terms_privacy": "약관 및 개인정보 보호",
     "user_guide": "사용자 가이드",
     "faqs": "자주 묻는 질문",
     "save_changes": "변경 사항 저장",
     "read_full_document": "전체 문서 읽기",
-    "subject": "주제",
-    "description": "설명"
+    "subject": "주제"
   },
   "home": {
     "home": "홈",
