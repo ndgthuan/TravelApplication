@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/auth_service.dart';
 
 class ForgotPasDialog extends StatefulWidget {
-  final controller;
-  const ForgotPasDialog({super.key, required this.controller});
+  final TextEditingController controller;
+  final Future<void> Function(String email)
+  onSendResetEmail; // Hàm gọi method reset email
+  const ForgotPasDialog({
+    super.key,
+    required this.controller,
+    required this.onSendResetEmail,
+  });
 
   @override
   State<ForgotPasDialog> createState() => _ForgotPasDialogState();
@@ -13,7 +18,6 @@ class ForgotPasDialog extends StatefulWidget {
 
 class _ForgotPasDialogState extends State<ForgotPasDialog> {
   bool _isResetPasswordPress = false;
-  final AuthService _authService = AuthService();
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -69,7 +73,9 @@ class _ForgotPasDialogState extends State<ForgotPasDialog> {
               onTapCancel: () => setState(() => _isResetPasswordPress = false),
               onTap: () async {
                 if (widget.controller.text.isNotEmpty) {
-                  await _authService.verifyEmail(email: widget.controller.text);
+                  await widget.onSendResetEmail(
+                    widget.controller.text,
+                  ); // Gọi callback
                   // Đóng dialog sau khi gửi
                   if (context.mounted) {
                     Navigator.pop(context);

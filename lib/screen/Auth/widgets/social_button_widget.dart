@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/shared/widgets/navigation_widget.dart';
 
 class SocialButtonWidget extends StatefulWidget {
   final bool isPressed;
   final String imagePath;
-  final Future<dynamic> Function() authFunction;
+  final VoidCallback onTap;
   const SocialButtonWidget({
     super.key,
     required this.isPressed,
     required this.imagePath,
-    required this.authFunction,
+    required this.onTap,
   });
 
   @override
@@ -34,16 +33,7 @@ class _SocialButtonWidgetState extends State<SocialButtonWidget> {
         onTapCancel: () => setState(() => isPressed = false),
 
         // Thêm phương thức đăng nhập bằng google
-        onTap: () async {
-          final result = await widget.authFunction();
-          if (result != null && context.mounted) {
-            Navigator.pushReplacement(
-              // ignore: use_build_context_synchronously
-              context,
-              MaterialPageRoute(builder: (context) => BottomNavigation()),
-            );
-          }
-        },
+        onTap: widget.onTap,
         child: AnimatedScale(
           scale: isPressed ? 0.9 : 1.0,
           duration: const Duration(milliseconds: 150),
