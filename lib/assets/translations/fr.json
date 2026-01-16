@@ -1,17 +1,11 @@
 {
   "general": {
     "welcome": "Bienvenue",
-    "save": "Enregistrer",
-    "submit": "Soumettre",
-    "cancel": "Annuler",
-    "error": "Erreur",
     "success": "Succès",
     "loading": "Chargement..."
   },
   "auth": {
-    "login_title": "Bon retour!",
     "login_subtitle": "Connectez-vous pour continuer votre voyage",
-    "signup_title": "Bienvenue!",
     "signup_subtitle": "Inscrivez-vous pour continuer votre voyage",
     "email": "E-mail",
     "password": "Mot de passe",
@@ -32,7 +26,6 @@
     "reset_email_title": "Réinitialiser l'e-mail",
     "reset_email_instruction": "Entrez votre e-mail",
     "resend_email": "Renvoyer l'e-mail",
-    "password_strength": "Force du mot de passe",
     "password_empty": "Le mot de passe est vide",
     "email_empty": "L'e-mail est vide",
     "username_empty": "Le nom d'utilisateur est vide",
@@ -50,7 +43,11 @@
     "user_not_found": "Utilisateur introuvable",
     "wrong_password": "Le mot de passe actuel est incorrect",
     "new_password_weak": "Le nouveau mot de passe est trop faible",
-    "unknown_error": "Une erreur s'est produite"
+    "unknown_error": "Une erreur s'est produite",
+    "google_cancelled": "La connexion Google a été annulée",
+    "google_failed": "La connexion Google a échoué",
+    "facebook_cancelled": "La connexion Facebook a été annulée",
+    "facebook_failed": "La connexion Facebook a échoué"
   },
   "account": {
     "utilities": "Utilitaires",
@@ -73,7 +70,9 @@
     "faq_offline_mode_title": "Puis-je utiliser l'application hors ligne ?",
     "faq_offline_mode_body": "Oui ! Vos plans et favoris enregistrés sont disponibles hors ligne. Cependant, certaines fonctionnalités comme le change de devises nécessitent une connexion Internet",
     "faq_sync_data_title": "Comment synchroniser mes données entre appareils ?",
-    "faq_sync_data_body": "Vos donn\u00e9es sont automatiquement synchronis\u00e9es lorsque vous vous connectez avec le m\u00eame compte sur diff\u00e9rents appareils. Assurez-vous d'avoir une connexion Internet",
+    "faq_sync_data_body": "Vos données sont automatiquement synchronisées lorsque vous vous connectez avec le même compte sur différents appareils. Assurez-vous d'avoir une connexion Internet",
+    "faq_report_problem_title": "Comment signaler un problème ?",
+    "faq_report_problem_body": "Allez dans 'Compte' -> 'Aide & Support' -> 'Contacter le support'. Décrivez votre problème et nous vous répondrons dès que possible",
     "terms_of_service_title": "Conditions d'utilisation",
     "terms_of_service_body": "Les conditions d'utilisation sont nées pour contacter vos conditions et l'organisation de vos informations",
     "privacy_policy_title": "Politique de confidentialité",
@@ -94,19 +93,24 @@
     "dark_mode": "Mode sombre",
     "help_support": "Aide & Support",
     "log_out": "Se déconnecter",
-    "upload_image": "Télécharger une image",
     "full_name": "Nom complet",
     "phone_number": "Numéro de téléphone",
     "date_of_birth": "Date de naissance",
     "address": "Adresse",
+    "no_name": "Pas de nom",
+    "no_email": "Pas d'email",
+    "enter_name": "Entrez votre nom",
+    "enter_email": "Entrez votre email",
+    "enter_phone": "Entrez votre numéro de téléphone",
+    "enter_address": "Entrez votre adresse",
+    "invalid_date": "Date invalide",
     "contact_support": "Contacter le support",
     "terms_privacy": "Conditions & Confidentialit\u00e9",
     "user_guide": "Guide de l'utilisateur",
     "faqs": "FAQ",
     "save_changes": "Enregistrer les modifications",
     "read_full_document": "Lire le document complet",
-    "subject": "Sujet",
-    "description": "Description"
+    "subject": "Sujet"
   },
   "home": {
     "home": "Accueil",

@@ -196,10 +196,12 @@ class AuthRepositoryImpl implements IAuthRepository {
     required String uid, // Lưu cái uid khác
     required String name, // Lưu tên
     required String email, // Lưu email
+    String? photoUrl, // Lưu avatar của google/facebook mặc định
   }) async {
     await _firestore.collection('users').doc(uid).set({
       'name': name,
       'email': email,
+      'avatarUrl': photoUrl,
       'createdAt': FieldValue.serverTimestamp(),
     });
   }
@@ -215,6 +217,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         uid: user.uid,
         name: user.displayName ?? '',
         email: user.email ?? '',
+        photoUrl: user.photoURL,
       );
     }
   }

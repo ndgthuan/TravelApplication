@@ -1,17 +1,11 @@
 {
   "general": {
     "welcome": "欢迎",
-    "save": "保存",
-    "submit": "提交",
-    "cancel": "取消",
-    "error": "错误",
     "success": "成功",
     "loading": "加载中..."
   },
   "auth": {
-    "login_title": "欢迎回来！",
     "login_subtitle": "登录以继续您的旅程",
-    "signup_title": "欢迎！",
     "signup_subtitle": "注册以继续您的旅程",
     "email": "电子邮件",
     "password": "密码",
@@ -32,7 +26,6 @@
     "reset_email_title": "重置邮箱",
     "reset_email_instruction": "输入您的邮箱",
     "resend_email": "重发邮件",
-    "password_strength": "密码强度",
     "password_empty": "密码不能为空",
     "email_empty": "邮箱不能为空",
     "username_empty": "用户名不能为空",
@@ -50,7 +43,11 @@
     "user_not_found": "用户未找到",
     "wrong_password": "当前密码不正确",
     "new_password_weak": "新密码太弱",
-    "unknown_error": "发生错误"
+    "unknown_error": "发生错误",
+    "google_cancelled": "Google登录已取消",
+    "google_failed": "Google登录失败",
+    "facebook_cancelled": "Facebook登录已取消",
+    "facebook_failed": "Facebook登录失败"
   },
   "account": {
     "utilities": "实用程序",
@@ -73,7 +70,9 @@
     "faq_offline_mode_title": "我可以离线使用应用吗？",
     "faq_offline_mode_body": "可以！您保存的计划和收藏可以离线访问。但是，某些功能（如货币兑换）需要网络连接",
     "faq_sync_data_title": "如何在设备之间同步数据？",
-    "faq_sync_data_body": "\u5f53\u60a8\u5728\u4e0d\u540c\u8bbe\u5907\u4e0a\u767b\u5f55\u540c\u4e00\u8d26\u6237\u65f6\uff0c\u6570\u636e\u4f1a\u81ea\u52a8\u540c\u6b65\u3002\u8bf7\u786e\u4fdd\u60a8\u6709\u7f51\u7edc\u8fde\u63a5",
+    "faq_sync_data_body": "当您在不同设备上登录同一账户时，数据会自动同步。请确保您有网络连接",
+    "faq_report_problem_title": "如何报告问题？",
+    "faq_report_problem_body": "转到'账户' -> '帮助与支持' -> '联系支持'。描述您的问题，我们会尽快回复",
     "terms_of_service_title": "\u670d\u52a1\u6761\u6b3e",
     "terms_of_service_body": "服务条款旨在联系您的条款和信息的组织",
     "privacy_policy_title": "隐私政策",
@@ -94,19 +93,24 @@
     "dark_mode": "深色模式",
     "help_support": "帮助与支持",
     "log_out": "退出登录",
-    "upload_image": "上传图片",
     "full_name": "全名",
     "phone_number": "电话号码",
     "date_of_birth": "出生日期",
     "address": "地址",
+    "no_name": "无姓名",
+    "no_email": "无邮箱",
+    "enter_name": "请输入您的姓名",
+    "enter_email": "请输入您的邮箱",
+    "enter_phone": "请输入您的电话号码",
+    "enter_address": "请输入您的地址",
+    "invalid_date": "日期无效",
     "contact_support": "\u8054\u7cfb\u652f\u6301",
     "terms_privacy": "\u6761\u6b3e\u4e0e\u9690\u79c1",
     "user_guide": "用户指南",
     "faqs": "常见问题",
     "save_changes": "保存更改",
     "read_full_document": "阅读完整文档",
-    "subject": "主题",
-    "description": "描述"
+    "subject": "主题"
   },
   "home": {
     "home": "首页",
