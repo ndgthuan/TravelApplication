@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:lottie/lottie.dart';
 
 class HourlyForecastWidget extends StatefulWidget {
-  final List<Map<String, dynamic>> hourlyData; // Thêm dòng này
+  final List<Map<String, dynamic>> hourlyData;
   const HourlyForecastWidget({super.key, required this.hourlyData});
 
   @override
@@ -41,7 +41,7 @@ class _HourlyForecastWidgetState extends State<HourlyForecastWidget> {
               separatorBuilder: (context, index) => SizedBox(width: 10),
               itemBuilder: (context, index) {
                 final item = widget.hourlyData[index];
-                final isNow = item['time'] == 'Now';
+                final isNow = item['time'] == 'weather.now'.tr();
                 return Container(
                   width: 70,
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),

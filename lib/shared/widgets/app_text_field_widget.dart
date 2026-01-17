@@ -25,6 +25,7 @@ class AppTextFieldWidget extends StatelessWidget {
   final FocusNode? focusNode;
   // Style
   final bool showLabel; // Hiện label phía trên field
+  final double horizontalPadding; // Padding mặc định
   const AppTextFieldWidget({
     super.key,
     this.labelText,
@@ -42,12 +43,13 @@ class AppTextFieldWidget extends StatelessWidget {
     this.onChanged,
     this.focusNode,
     this.showLabel = false,
+    this.horizontalPadding = 20,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
