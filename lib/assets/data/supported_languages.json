@@ -1,4 +1,6 @@
 [
+  {
+  "code": "auto", "name": "Auto Detect", "flag": "🌐"},
   {"code": "vi", "name": "Tiếng Việt", "flag": "🇻🇳"},
   {"code": "en", "name": "English", "flag": "🇬🇧"},
   {"code": "zh-cn", "name": "简体中文", "flag": "🇨🇳"},

@@ -7,6 +7,9 @@ import '../../../domain/repositories/i_auth_repository.dart';
 enum LoginState { initial, loading, success, error }
 
 class LoginViewModel extends ChangeNotifier {
+  //==========================================================================//
+  //                        DEPENDENCIES                                      //
+  //==========================================================================//
   // Sử dụng Dependency Injection để nhận repository qua hàm khởi tạo
   final IAuthRepository _authRepository;
   LoginViewModel(this._authRepository);
@@ -99,7 +102,7 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
-  /// Đăng nhập bằng Facebook
+  // Đăng nhập bằng Facebook
   Future<bool> signInWithFacebook() async {
     _isFacebookPressed = true;
     _state = LoginState.loading;
@@ -118,7 +121,7 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
-  /// Gửi email reset password
+  // Gửi email reset password
   Future<void> sendPasswordResetEmail(String email) async {
     await _authRepository.sendPasswordResetEmail(email: email);
   }

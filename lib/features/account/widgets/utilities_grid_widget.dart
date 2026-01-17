@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:travel_app/features/Utilities/screens/currency_exchange_screen.dart';
-import 'package:travel_app/features/Utilities/screens/text_translation_screen.dart';
-import 'package:travel_app/features/Utilities/screens/weather_forecast_screen.dart';
-import 'package:travel_app/features/Utilities/screens/world_clock_screen.dart';
+import 'package:travel_app/features/utilities/currency_exchange/screens/currency_exchange_screen.dart';
+import 'package:travel_app/features/utilities/text_translation/screens/text_translation_screen.dart';
+import 'package:travel_app/features/utilities/weather_forecast/screens/weather_forecast_screen.dart';
+import 'package:travel_app/features/utilities/world_clock/screens/world_clock_screen.dart';
 import 'utility_card_widget.dart';
 
 class UtilitiesGridWidget extends StatelessWidget {

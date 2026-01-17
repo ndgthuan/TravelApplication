@@ -8,6 +8,9 @@ enum RegisterState { initial, loading, success, error }
 
 // Tạo class kế thừa ChangeNotifier
 class RegisterViewModel extends ChangeNotifier {
+  //==========================================================================//
+  //                        DEPENDENCIES                                      //
+  //==========================================================================//
   // Sử dụng Dependency Injection để nhận repository qua hàm khởi tạo
   final IAuthRepository _authRepository;
   RegisterViewModel(this._authRepository);

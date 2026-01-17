@@ -242,32 +242,21 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: AppButtonWidget(
-                      buttonText: 'account.log_out'.tr(),
-                      style: AppButtonStyle.outlined,
-                      outlineColor: Colors.redAccent,
-                      onTap: () async {
-                        await viewModel.signOut();
-                        Navigator.of(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          rootNavigator: true,
-                        ).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginScreen(),
-                          ),
-                          (Route<dynamic> route) => false,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+            AppButtonWidget(
+              buttonText: 'account.log_out'.tr(),
+              style: AppButtonStyle.outlined,
+              outlineColor: Colors.redAccent,
+              onTap: () async {
+                await viewModel.signOut();
+                Navigator.of(
+                  // ignore: use_build_context_synchronously
+                  context,
+                  rootNavigator: true,
+                ).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (Route<dynamic> route) => false,
+                );
+              },
             ),
             const SizedBox(height: 20),
           ],
