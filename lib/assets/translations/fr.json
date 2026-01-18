@@ -1,4 +1,4 @@
-{
+﻿{
   "general": {
     "welcome": "Bienvenue",
     "success": "Succès",
@@ -86,6 +86,7 @@
     "guide_using_utilities": "Utiliser les utilitaires",
     "guide_using_utilities_body": "Nous proposons des utilitaires pratiques : Change de devises, Traduction, Météo et Horloge mondiale.",
     "account": "Compte",
+    "wishlist": "Favoris",
     "personal_information": "Informations personnelles",
     "change_password": "Changer le mot de passe",
     "password_security_hint": "Mot de passe pour la sécurité du compte",
@@ -123,7 +124,7 @@
   },
   "navigation": {
     "plan": "Planifier",
-    "favourite": "Favoris",
+    "explore": "Explorer",
     "notification": "Notification"
   },
   "onboarding": {
@@ -173,4 +174,5 @@
     "same_time": "Même heure",
     "today_offset": "Aujourd'hui, {offset} h"
   }
+  ,"ocr": { "error": "Impossible de reconnaître le texte" }
 }

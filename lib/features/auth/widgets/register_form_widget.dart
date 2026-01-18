@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/shared/widgets/password_field_widget.dart';
 import 'package:travel_app/shared/utils/password_utils.dart';
@@ -44,7 +45,7 @@ class RegisterFormWidget extends StatelessWidget {
         // Hộp nhập Username
         AppTextFieldWidget(
           labelText: "auth.username".tr(),
-          prefixIcon: Icons.person,
+          prefixIcon: CupertinoIcons.person,
           controller: nameController,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -77,7 +78,7 @@ class RegisterFormWidget extends StatelessWidget {
           focusNode: passwordFocusNode,
           isShowing: isShowingPassword,
           labelText: "auth.password".tr(),
-          prefixIcon: Icons.lock_outline,
+          prefixIcon: CupertinoIcons.lock,
           controller: passwordController,
           onChanged: onChange,
           validator: (value) {
@@ -146,7 +147,7 @@ class RegisterFormWidget extends StatelessWidget {
         PasswordFieldWidget(
           isShowing: isShowingReenterPassword,
           labelText: "auth.reenter_password".tr(),
-          prefixIcon: Icons.lock_outline,
+          prefixIcon: CupertinoIcons.lock,
           controller: reenterpasswordController,
           validator: (value) {
             if (value == null || value.isEmpty) {

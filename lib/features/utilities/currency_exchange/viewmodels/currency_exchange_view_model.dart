@@ -1,4 +1,4 @@
-// Mục đích của file này quản lý state và login cho CurrencyExchangeScreen
+﻿// Mục đích của file này quản lý state và logic cho CurrencyExchangeScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -1,4 +1,4 @@
-{
+﻿{
   "general": {
     "welcome": "Willkommen",
     "success": "Erfolg",
@@ -86,6 +86,7 @@
     "guide_using_utilities": "Dienstprogramme nutzen",
     "guide_using_utilities_body": "Wir bieten nützliche Dienstprogramme: Währungsumtausch, Übersetzung, Wetter und Weltuhr.",
     "account": "Konto",
+    "wishlist": "Favoriten",
     "personal_information": "Persönliche Informationen",
     "change_password": "Passwort ändern",
     "password_security_hint": "Passwort für Ihre Kontosicherheit",
@@ -123,7 +124,7 @@
   },
   "navigation": {
     "plan": "Planen",
-    "favourite": "Favoriten",
+    "explore": "Entdecken",
     "notification": "Benachrichtigung"
   },
   "onboarding": {
@@ -173,4 +174,5 @@
     "same_time": "Gleiche Zeit",
     "today_offset": "Heute, {offset} Std"
   }
+  ,"ocr": { "error": "Text konnte nicht erkannt werden" }
 }

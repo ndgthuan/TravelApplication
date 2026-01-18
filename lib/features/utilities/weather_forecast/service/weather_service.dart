@@ -1,4 +1,4 @@
-// WeatherService chỉ lo gọi API lấy dữ liệu thời tiết
+﻿// WeatherService chỉ lo gọi API lấy dữ liệu thời tiết
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;

@@ -1,4 +1,4 @@
-/// GeocodingService - Chỉ lo việc gọi API tìm kiếm địa điểm
+﻿/// GeocodingService - Chỉ lo việc gọi API tìm kiếm địa điểm
 /// Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
 
 import 'dart:convert';

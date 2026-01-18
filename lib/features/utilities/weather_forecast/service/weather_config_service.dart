@@ -1,4 +1,4 @@
-// WeatherConfigService chỉ lo load và xử lý weather config từ JSON
+﻿// WeatherConfigService chỉ lo load và xử lý weather config từ JSON
 // Cung cấp icon URL và text cho các weather code
 
 import 'dart:convert';

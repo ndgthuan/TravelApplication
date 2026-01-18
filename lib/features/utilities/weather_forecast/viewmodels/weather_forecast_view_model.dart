@@ -1,4 +1,4 @@
-// Mục đích của file này quản lý state và logic cho WeatherForecastScreen
+﻿// Mục đích của file này quản lý state và logic cho WeatherForecastScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
@@ -206,6 +206,7 @@ class WeatherForecastViewModel extends ChangeNotifier {
     return dailyList;
   }
 
+  // Format giờ thành AM PM
   String _formatHour(String timeStr) {
     final dateTime = DateTime.parse(timeStr);
     final now = DateTime.now();

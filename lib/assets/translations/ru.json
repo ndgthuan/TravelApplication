@@ -1,4 +1,4 @@
-{
+﻿{
   "general": {
     "welcome": "Добро пожаловать",
     "success": "Успех",
@@ -86,6 +86,7 @@
     "guide_using_utilities": "Использование утилит",
     "guide_using_utilities_body": "Мы предлагаем полезные утилиты: обмен валют, перевод, погода и мировые часы.",
     "account": "Аккаунт",
+    "wishlist": "Избранное",
     "personal_information": "Личная информация",
     "change_password": "Сменить пароль",
     "password_security_hint": "Пароль для безопасности вашего аккаунта",
@@ -123,7 +124,7 @@
   },
   "navigation": {
     "plan": "План",
-    "favourite": "Избранное",
+    "explore": "Обзор",
     "notification": "Уведомления"
   },
   "onboarding": {
@@ -173,4 +174,5 @@
     "same_time": "То же время",
     "today_offset": "Сегодня, {offset} ч"
   }
+  ,"ocr": { "error": "Не удалось распознать текст" }
 }

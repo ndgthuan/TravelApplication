@@ -1,4 +1,4 @@
-{
+﻿{
   "general": {
     "welcome": "Welcome",
     "success": "Success",
@@ -81,6 +81,7 @@
 
     "utilities": "Utilities",
     "past_trips": "Past Trips",
+    "wishlist": "Wishlist",
     "subject_hint": "e.g. Account Issue",
     "message": "Message",
     "message_hint": "Type your message here...",
@@ -126,7 +127,7 @@
   },
   "navigation": {
     "plan": "Plan",
-    "favourite": "Favourite",
+    "explore": "Explore",
     "notification": "Notification"
   },
   "onboarding": {
@@ -176,4 +177,5 @@
     "same_time": "Same time",
     "today_offset": "Today, {offset} HRS"
   }
+  ,"ocr": { "error": "Failed to recognize text from image" }
 }

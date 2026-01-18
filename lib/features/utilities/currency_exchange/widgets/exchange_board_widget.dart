@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ExchangeBoardWidget extends StatelessWidget {
@@ -78,7 +79,7 @@ class ExchangeBoardWidget extends StatelessWidget {
                           ),
                           SizedBox(width: 4),
                           Icon(
-                            Icons.keyboard_arrow_down,
+                            CupertinoIcons.chevron_down,
                             color: Colors.white,
                             size: 20,
                           ),

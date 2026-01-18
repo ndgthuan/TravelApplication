@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/features/Support/screens/contact_support_screen.dart';
@@ -36,7 +37,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
           children: [
             const SizedBox(height: 20),
             SupportOptionWidget(
-              icon: Icons.help,
+              icon: CupertinoIcons.question_circle,
               taskName: 'account.faqs'.tr(),
               onTap: () {
                 Navigator.push(
@@ -46,7 +47,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
               },
             ),
             SupportOptionWidget(
-              icon: Icons.message_outlined,
+              icon: CupertinoIcons.chat_bubble,
               taskName: 'account.contact_support'.tr(),
               onTap: () {
                 Navigator.push(
@@ -58,7 +59,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
               },
             ),
             SupportOptionWidget(
-              icon: Icons.menu_book_sharp,
+              icon: CupertinoIcons.book,
               taskName: 'account.user_guide'.tr(),
               onTap: () {
                 Navigator.push(
@@ -68,7 +69,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
               },
             ),
             SupportOptionWidget(
-              icon: Icons.insert_drive_file,
+              icon: CupertinoIcons.doc,
               taskName: 'account.terms_privacy'.tr(),
               onTap: () {
                 Navigator.push(

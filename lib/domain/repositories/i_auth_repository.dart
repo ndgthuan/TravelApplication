@@ -1,4 +1,4 @@
-// Mục dích của file là định nghĩa hợp đồng cho các phương thức Auth
+﻿// Mục dích của file là định nghĩa hợp đồng cho các phương thức Auth
 // ViewModel sẽ phụ thuộc vào Interface này, không phụ thuộc vào Firebase trực tiếp
 // UI sẽ tách rời và chỉ cần gọi không cần biết bên trong thực hiện như nào
 import '../models/auth_result.dart';

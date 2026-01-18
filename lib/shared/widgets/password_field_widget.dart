@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PasswordFieldWidget extends StatefulWidget {
@@ -103,7 +104,7 @@ class _PasswordFieldWidgetState extends State<PasswordFieldWidget> {
                   isShowing = !isShowing;
                 }),
                 icon: Icon(
-                  isShowing ? Icons.visibility_off : Icons.visibility,
+                  isShowing ? CupertinoIcons.eye_slash : CupertinoIcons.eye,
                   color: Colors.grey[600],
                 ),
               ),

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:travel_app/features/home/models/destination_model.dart';
 import 'heart_button_widget.dart';
@@ -144,7 +145,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                                 children: [
                                   // Icon ngôi sao
                                   Icon(
-                                    Icons.star,
+                                    CupertinoIcons.star_fill,
                                     color: Color(0xFFFFAD35),
                                     size: 15,
                                   ),

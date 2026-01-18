@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:travel_app/features/account/widgets/simple_divider_widget.dart';
 
 class FaqCardWidget extends StatelessWidget {

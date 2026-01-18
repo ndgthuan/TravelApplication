@@ -1,7 +1,8 @@
-import 'package:provider/provider.dart';
+﻿import 'package:provider/provider.dart';
 import 'package:travel_app/features/account/viewmodels/information_view_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -123,7 +124,7 @@ class _InformationScreenState extends State<InformationScreen> {
                       // Hiển thị icon mặc định nếu không có avatar
                       child: viewModel.avatarUrl == null
                           ? Icon(
-                              Icons.person,
+                              CupertinoIcons.person,
                               color: Colors.grey[600],
                               size: 60,
                             )
@@ -152,7 +153,7 @@ class _InformationScreenState extends State<InformationScreen> {
                               border: Border.all(color: Colors.black, width: 2),
                             ),
                             child: const Icon(
-                              Icons.edit,
+                              CupertinoIcons.pen,
                               size: 18,
                               color: Colors.black,
                             ),
@@ -182,7 +183,7 @@ class _InformationScreenState extends State<InformationScreen> {
             ),
 
             AppTextFieldWidget(
-              prefixIcon: Icons.person,
+              prefixIcon: CupertinoIcons.person,
               labelText: 'account.full_name'.tr(),
               hintText: 'account.enter_name'.tr(),
               controller: nameController,
@@ -191,7 +192,7 @@ class _InformationScreenState extends State<InformationScreen> {
             const SizedBox(height: 15),
 
             AppTextFieldWidget(
-              prefixIcon: Icons.mail_outline,
+              prefixIcon: CupertinoIcons.mail,
               labelText: 'auth.email'.tr(),
               hintText: 'account.enter_email'.tr(),
               controller: emailController,
@@ -201,7 +202,7 @@ class _InformationScreenState extends State<InformationScreen> {
             const SizedBox(height: 15),
 
             AppTextFieldWidget(
-              prefixIcon: Icons.phone_outlined,
+              prefixIcon: CupertinoIcons.phone,
               labelText: 'account.phone_number'.tr(),
               hintText: 'account.enter_phone'.tr(),
               controller: phoneController,
@@ -215,7 +216,7 @@ class _InformationScreenState extends State<InformationScreen> {
             const SizedBox(height: 15),
 
             AppTextFieldWidget(
-              prefixIcon: Icons.calendar_month_outlined,
+              prefixIcon: CupertinoIcons.calendar,
               labelText: 'account.date_of_birth'.tr(),
               hintText: "DD/MM/YYYY",
               controller: dobController,
@@ -241,7 +242,7 @@ class _InformationScreenState extends State<InformationScreen> {
             const SizedBox(height: 15),
 
             AppTextFieldWidget(
-              prefixIcon: Icons.push_pin_outlined,
+              prefixIcon: CupertinoIcons.pin,
               labelText: 'account.address'.tr(),
               hintText: 'account.enter_address'.tr(),
               controller: addressController,

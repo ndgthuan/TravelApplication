@@ -1,4 +1,4 @@
-{
+﻿{
   "general": {
     "welcome": "ようこそ",
     "success": "成功",
@@ -51,6 +51,7 @@
   },
   "account": {
     "account": "アカウント",
+    "wishlist": "お気に入り",
     "personal_information": "個人情報",
     "change_password": "パスワード変更",
     "password_security_hint": "アカウント保護のためのパスワード",
@@ -124,7 +125,7 @@
   },
   "navigation": {
     "plan": "計画",
-    "favourite": "お気に入り",
+    "explore": "探索",
     "notification": "通知"
   },
   "onboarding": {
@@ -174,4 +175,5 @@
     "same_time": "同じ時刻",
     "today_offset": "今日、{offset}時間"
   }
+  ,"ocr": { "error": "画像からテキストを認識できませんでした" }
 }

@@ -1,5 +1,6 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -132,7 +133,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       // Hiển thị icon mặc định nếu không có avatar
                       child: viewModel.avatarUrl == null
                           ? Icon(
-                              Icons.person,
+                              CupertinoIcons.person,
                               color: Colors.grey[600],
                               size: 60,
                             )
@@ -179,16 +180,16 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: AccountStatCardWidget(
                       title: 'navigation.plan'.tr(),
                       number: 0,
-                      icon: Icons.insert_drive_file_sharp,
+                      icon: CupertinoIcons.doc,
                     ),
                   ),
                   const SizedBox(width: 5),
 
                   Expanded(
                     child: AccountStatCardWidget(
-                      title: 'navigation.favourite'.tr(),
+                      title: 'account.wishlist'.tr(),
                       number: 0,
-                      icon: Icons.favorite,
+                      icon: CupertinoIcons.heart_fill,
                     ),
                   ),
                   const SizedBox(width: 5),
@@ -197,7 +198,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: AccountStatCardWidget(
                       title: 'account.past_trips'.tr(),
                       number: 0,
-                      icon: Icons.check,
+                      icon: CupertinoIcons.checkmark,
                     ),
                   ),
                 ],

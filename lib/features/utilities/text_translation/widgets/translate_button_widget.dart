@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class TranslateButtonWidget extends StatefulWidget {
@@ -57,7 +58,7 @@ class _TranslateButtonWidgetState extends State<TranslateButtonWidget> {
                     ),
                   ),
 
-                  Icon(Icons.keyboard_arrow_down, color: Color(0xFFFFAD35)),
+                  Icon(CupertinoIcons.chevron_down, color: Color(0xFFFFAD35)),
                 ],
               ),
             ),

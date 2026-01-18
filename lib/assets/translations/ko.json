@@ -1,4 +1,4 @@
-{
+﻿{
   "general": {
     "welcome": "환영합니다",
     "success": "성공",
@@ -86,6 +86,7 @@
     "guide_using_utilities": "유틸리티 사용하기",
     "guide_using_utilities_body": "환율 변환, 텍스트 번역, 날씨 예보, 세계 시계 등 유용한 유틸리티를 제공합니다.",
     "account": "계정",
+    "wishlist": "즐겨찾기",
     "personal_information": "개인 정보",
     "change_password": "비밀번호 변경",
     "password_security_hint": "계정 보안을 위한 비밀번호",
@@ -123,7 +124,7 @@
   },
   "navigation": {
     "plan": "계획",
-    "favourite": "즐겨찾기",
+    "explore": "탐색",
     "notification": "알림"
   },
   "onboarding": {
@@ -173,4 +174,5 @@
     "same_time": "같은 시간",
     "today_offset": "오늘, {offset}시간"
   }
+  ,"ocr": { "error": "이미지에서 텍스트를 인식할 수 없습니다" }
 }

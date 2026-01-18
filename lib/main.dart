@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -68,6 +68,18 @@ void main() async {
     //       ChangeNotifierProvider(
     //         create: (_) => getIt<ContactSupportViewModel>(),
     //       ), // Gọi contactSupport parent state
+    //       ChangeNotifierProvider(
+    //         create: (_) => getIt<WorldClockViewModel>(),
+    //       ), // Gọi worldClock parent state
+    //       ChangeNotifierProvider(
+    //         create: (_) => getIt<CurrencyExchangeViewModel>(),
+    //       ), // Gọi currencyExchange parent state
+    //       ChangeNotifierProvider(
+    //         create: (_) => getIt<TextTranslationViewModel>(),
+    //       ), // Gọi textTranslation parent state
+    //       ChangeNotifierProvider(
+    //         create: (_) => getIt<WeatherForecastViewModel>(),
+    //       ), // Gọi weatherForecast parent state
     //     ],
     //     child: DevicePreview(
     //       enabled: !kReleaseMode,

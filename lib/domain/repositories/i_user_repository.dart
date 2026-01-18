@@ -1,4 +1,4 @@
-// Mục đích của file này là lấy thông tin người dùng
+﻿// Mục đích của file này là lấy thông tin người dùng
 // Bên cạnh đó file này có giúp edit info trong profile screen
 // Đây còn được gọi là menu của gọi thông tin hay thay thế user
 import '../models/user_model.dart';

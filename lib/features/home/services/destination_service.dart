@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:travel_app/features/home/models/destination_model.dart';
 
