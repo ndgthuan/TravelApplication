@@ -1,4 +1,4 @@
-// Đây là trang UI và chỉ có 1 mục đích là gọi UI
+﻿// Đây là trang UI và chỉ có 1 mục đích là gọi UI
 // Không thêm các biến hay phương thức nào trong trang
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/Auth/viewmodels/login_view_model.dart';

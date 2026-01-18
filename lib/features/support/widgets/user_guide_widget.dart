@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserGuideWidget extends StatefulWidget {
@@ -59,7 +60,7 @@ class _UserGuideWidgetState extends State<UserGuideWidget> {
                       turns: _isExpanded ? 0.5 : 0,
                       duration: Duration(milliseconds: 300),
                       child: Icon(
-                        Icons.keyboard_arrow_down,
+                        CupertinoIcons.chevron_down,
                         color: _isExpanded
                             ? Color(0xFFFFAD35)
                             : Colors.grey[600],

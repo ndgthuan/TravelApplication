@@ -1,6 +1,7 @@
-// Mục đích của file này là đăng ký tất cả Repository và ViewModel vào một nơi tập trung
+﻿// Mục đích của file này là đăng ký tất cả Repository và ViewModel vào một nơi tập trung
 // Dùng package get_it để inject
 import 'package:get_it/get_it.dart';
+import 'package:travel_app/features/utilities/text_translation/services/image_translation_service.dart';
 
 // Import services
 import 'package:travel_app/features/utilities/text_translation/services/speech_tts_service.dart';
@@ -44,6 +45,9 @@ void setupDependencies() {
   );
   getIt.registerLazySingleton<TimezoneUtilService>(() => TimezoneUtilService());
   getIt.registerLazySingleton<WeatherService>(() => WeatherService());
+  getIt.registerLazySingleton<ImageTranslationService>(
+    () => ImageTranslationService(),
+  );
   getIt.registerLazySingleton<WeatherConfigService>(
     () => WeatherConfigService(),
   );
@@ -94,7 +98,11 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<TextTranslationViewModel>(
-    () => TextTranslationViewModel(getIt<SpeechTtsService>()),
+    () => TextTranslationViewModel(
+      getIt<SpeechTtsService>(),
+      getIt<ImageTranslationService>(),
+      getIt<IUserRepository>(),
+    ),
   );
 
   getIt.registerFactory<WeatherForecastViewModel>(

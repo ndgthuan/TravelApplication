@@ -1,5 +1,6 @@
-import 'package:google_fonts/google_fonts.dart';
+﻿import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import '../models/destination_model.dart';
 
 class ScrollCardWidget extends StatefulWidget {
@@ -19,11 +20,15 @@ Widget _buildStars(double rating) {
   return Row(
     children: List.generate(5, (index) {
       if (index < rating.floor()) {
-        return Icon(Icons.star, color: Colors.amber, size: 15);
+        return Icon(CupertinoIcons.star_fill, color: Colors.amber, size: 15);
       } else if (index < rating) {
-        return Icon(Icons.star_half, color: Colors.amber, size: 15);
+        return Icon(
+          CupertinoIcons.star_lefthalf_fill,
+          color: Colors.amber,
+          size: 15,
+        );
       } else {
-        return Icon(Icons.star_border, color: Colors.amber, size: 15);
+        return Icon(CupertinoIcons.star, color: Colors.amber, size: 15);
       }
     }),
   );
@@ -100,7 +105,7 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                           children: [
                             // Icon địa điểm
                             Icon(
-                              Icons.location_on,
+                              CupertinoIcons.location_fill,
                               color: Color(0xFFFFAD35),
                               size: 13,
                             ),
@@ -174,26 +179,9 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
         Positioned(
           top: 0,
           right: 5, // Căn theo padding của card
-          child: Container(
+          child: SizedBox(
             width: 50,
             height: 50,
-            decoration: BoxDecoration(
-              color: Color(0xFFFFAD35), // Cùng màu với card
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20), // Bo góc trên phải (theo card)
-                bottomLeft: Radius.circular(
-                  20,
-                ), // Bo góc dưới trái (tạo hình tab)
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0xFF000000).withValues(alpha: 0.3),
-                  offset: Offset(0, 6),
-                  blurRadius: 12,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
             child: GestureDetector(
               onTapDown: (_) => setState(() => isPressed = true),
               onTapUp: (_) => setState(() => isPressed = false),
@@ -208,8 +196,10 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                 duration: Duration(milliseconds: 100),
                 curve: Curves.easeInOut,
                 child: Icon(
-                  isFavourite ? Icons.favorite : Icons.favorite_outline,
-                  color: Colors.black,
+                  isFavourite
+                      ? CupertinoIcons.heart_fill
+                      : CupertinoIcons.heart,
+                  color: isFavourite ? Color(0xFFFFAD35) : Colors.white,
                 ),
               ),
             ),

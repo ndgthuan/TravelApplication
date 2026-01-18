@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Các style cho button
@@ -10,6 +10,7 @@ class AppButtonWidget extends StatefulWidget {
   final VoidCallback onTap;
   final AppButtonStyle style;
   final Color? outlineColor;
+  final bool isLoading; // Loading state
 
   const AppButtonWidget({
     super.key,
@@ -17,6 +18,7 @@ class AppButtonWidget extends StatefulWidget {
     required this.onTap,
     this.style = AppButtonStyle.filled,
     this.outlineColor,
+    this.isLoading = false,
   });
 
   @override
@@ -31,10 +33,16 @@ class _AppButtonWidgetState extends State<AppButtonWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: widget.onTap,
+        onTapDown: widget.isLoading
+            ? null
+            : (_) => setState(() => _isPressed = true),
+        onTapUp: widget.isLoading
+            ? null
+            : (_) => setState(() => _isPressed = false),
+        onTapCancel: widget.isLoading
+            ? null
+            : () => setState(() => _isPressed = false),
+        onTap: widget.isLoading ? null : widget.onTap,
         child: AnimatedScale(
           scale: _isPressed ? 0.95 : 1.0,
           duration: const Duration(milliseconds: 100),
@@ -49,26 +57,24 @@ class _AppButtonWidgetState extends State<AppButtonWidget> {
 
   // Style 1: Filled (màu cam đặc)
   Widget _buildFilledButton() {
-    return SizedBox(
+    return Container(
+      height: 65,
       width: double.infinity,
-      child: ElevatedButton(
-        onPressed: widget.onTap,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFFFAD35),
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          elevation: 0,
-        ),
-        child: Text(
-          widget.buttonText,
-          style: GoogleFonts.beVietnamPro(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+      decoration: BoxDecoration(
+        color: widget.isLoading ? Color(0xFFFFAD35) : const Color(0xFFFFAD35),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Center(
+        child: widget.isLoading
+            ? const CircularProgressIndicator(color: Colors.black)
+            : Text(
+                widget.buttonText,
+                style: GoogleFonts.beVietnamPro(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
       ),
     );
   }
@@ -80,14 +86,16 @@ class _AppButtonWidgetState extends State<AppButtonWidget> {
       height: 60,
       width: double.infinity,
       decoration: BoxDecoration(
-        border: Border.all(color: color),
+        border: Border.all(color: widget.isLoading ? Colors.grey : color),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Center(
-        child: Text(
-          widget.buttonText,
-          style: GoogleFonts.beVietnamPro(color: color, fontSize: 15),
-        ),
+        child: widget.isLoading
+            ? CircularProgressIndicator(color: color)
+            : Text(
+                widget.buttonText,
+                style: GoogleFonts.beVietnamPro(color: color, fontSize: 15),
+              ),
       ),
     );
   }

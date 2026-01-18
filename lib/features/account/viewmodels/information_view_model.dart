@@ -1,4 +1,4 @@
-// Mục đích của file này quản lý state và login cho ProfileScreen
+﻿// Mục đích của file này quản lý state và login cho ProfileScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'package:flutter/material.dart';
 import '../../../domain/repositories/i_user_repository.dart';

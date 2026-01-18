@@ -1,5 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
@@ -59,7 +60,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      Icons.location_pin,
+                      CupertinoIcons.location_fill,
                       color: Color(0xFFFFAD35),
                       size: 18,
                     ),
@@ -133,19 +134,19 @@ class CurrentWeatherCardWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _buildWeatherDetail(
-                        Icons.water_drop,
+                        CupertinoIcons.drop,
                         'weather.humidity'.tr(),
                         '$humidity%',
                       ),
                       Container(width: 1, height: 43, color: Color(0xFFFFAD35)),
                       _buildWeatherDetail(
-                        Icons.air,
+                        CupertinoIcons.wind,
                         'weather.wind'.tr(),
                         '$windSpeed km/h',
                       ),
                       Container(width: 1, height: 43, color: Color(0xFFFFAD35)),
                       _buildWeatherDetail(
-                        Icons.wb_sunny_outlined,
+                        CupertinoIcons.sun_max,
                         'weather.uv_index'.tr(),
                         '$uvIndex',
                       ),

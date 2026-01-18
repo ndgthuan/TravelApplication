@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,7 @@ class AddClockBottomSheet extends StatelessWidget {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: Icon(Icons.close, color: Colors.grey),
+                      icon: Icon(CupertinoIcons.xmark, color: Colors.grey),
                     ),
                   ],
                 ),
@@ -55,7 +56,7 @@ class AddClockBottomSheet extends StatelessWidget {
                   controller: searchController,
                   onChanged: (query) => vm.searchCities(query),
                   hintText: 'world_clock.search_hint'.tr(),
-                  prefixIcon: Icons.search,
+                  prefixIcon: CupertinoIcons.search,
                   horizontalPadding: 0,
                   suffixIcon: vm.isSearching
                       ? Padding(
@@ -97,7 +98,7 @@ class AddClockBottomSheet extends StatelessWidget {
 
                       return ListTile(
                         leading: Icon(
-                          Icons.location_on,
+                          CupertinoIcons.location_fill,
                           color: Color(0xFFFFAD35),
                         ),
                         title: Text(

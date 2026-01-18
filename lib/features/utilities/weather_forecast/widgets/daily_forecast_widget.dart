@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:lottie/lottie.dart';
@@ -63,7 +64,7 @@ class DailyForecastWidget extends StatelessWidget {
                       width: 40,
                       height: 40,
                       errorBuilder: (context, error, stackTrace) =>
-                          Icon(Icons.error, color: Colors.white, size: 20),
+                          Icon(CupertinoIcons.exclamationmark_circle, color: Colors.white, size: 20),
                     ),
                     // Temperature range
                     Row(

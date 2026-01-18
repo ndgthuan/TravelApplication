@@ -1,4 +1,4 @@
-// Mục dích của file này là thực hiện các yêu cầu mà người dùng đưa ra
+﻿// Mục dích của file này là thực hiện các yêu cầu mà người dùng đưa ra
 // Bên i_auth_repository sẽ được gọi function và file này sẽ là file được thực hiện
 // Nếu sau này có đổi sang Supabase hay .. thì chỉ cần implment lại file này
 import 'package:firebase_auth/firebase_auth.dart';

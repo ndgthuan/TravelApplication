@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:travel_app/features/account/screens/account_screen.dart';
-import 'package:travel_app/features/favourite/screens/favourite_screen.dart';
+import 'package:travel_app/features/explore/screens/explore_screen.dart';
 import 'package:travel_app/features/home/screens/home_screen.dart';
 import 'package:travel_app/features/notification/screens/notification_screen.dart';
 import 'package:travel_app/features/plan/screens/plan_screen.dart';
@@ -27,30 +28,33 @@ class BottomNavigation extends StatelessWidget {
       tabs: [
         PersistentTabConfig(
           screen: PlanScreen(),
-          item: _buildItem(icon: Icons.map, title: 'navigation.plan'.tr()),
+          item: _buildItem(
+            icon: CupertinoIcons.map,
+            title: 'navigation.plan'.tr(),
+          ),
         ),
         PersistentTabConfig(
-          screen: FavouriteScreen(),
+          screen: ExploreScreen(),
           item: _buildItem(
-            icon: Icons.favorite,
-            title: 'navigation.favourite'.tr(),
+            icon: CupertinoIcons.compass,
+            title: 'navigation.explore'.tr(),
           ),
         ),
         PersistentTabConfig(
           screen: HomeScreen(),
-          item: _buildItem(icon: Icons.house, title: 'home.home'.tr()),
+          item: _buildItem(icon: CupertinoIcons.home, title: 'home.home'.tr()),
         ),
         PersistentTabConfig(
           screen: NotificationScreen(),
           item: _buildItem(
-            icon: Icons.notifications,
+            icon: CupertinoIcons.bell,
             title: 'navigation.notification'.tr(),
           ),
         ),
         PersistentTabConfig(
           screen: AccountScreen(),
           item: _buildItem(
-            icon: Icons.account_circle_rounded,
+            icon: CupertinoIcons.person_circle,
             title: 'account.account'.tr(),
           ),
         ),

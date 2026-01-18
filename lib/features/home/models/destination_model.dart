@@ -1,4 +1,4 @@
-class Destination {
+﻿class Destination {
   final String country;
   final String name;
   final String city;

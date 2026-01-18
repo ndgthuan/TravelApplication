@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/shared/widgets/password_field_widget.dart';
@@ -54,7 +55,7 @@ class LoginFormWidget extends StatelessWidget {
         PasswordFieldWidget(
           isShowing: isShowing,
           labelText: "auth.password".tr(),
-          prefixIcon: Icons.lock_outline,
+          prefixIcon: CupertinoIcons.lock,
           controller: passwordController,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -83,8 +84,8 @@ class LoginFormWidget extends StatelessWidget {
                       onTap: onRememberMeChanged,
                       child: Icon(
                         isCheck
-                            ? Icons.check_box
-                            : Icons.check_box_outline_blank,
+                            ? CupertinoIcons.checkmark_square_fill
+                            : CupertinoIcons.square,
                         color: Color(0xFFFFAD35),
                       ),
                     ),

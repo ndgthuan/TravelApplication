@@ -1,4 +1,4 @@
-// Mục đích của file này là file trung gian để gọi giữa UI và logic
+﻿// Mục đích của file này là file trung gian để gọi giữa UI và logic
 // UI KHÔNG CẦN BIẾT FIREBASE LÀM GÌ ĐẰNG SAU, CHỈ CÓ GỌI METHOD THÔI
 import 'package:flutter/material.dart';
 import '../../../domain/repositories/i_auth_repository.dart';

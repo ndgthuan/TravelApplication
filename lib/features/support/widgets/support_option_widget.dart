@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SupportOptionWidget extends StatefulWidget {
@@ -66,7 +67,7 @@ class _SupportOptionWidgetState extends State<SupportOptionWidget> {
                   ),
 
                   // Icon mũi tên
-                  Icon(Icons.arrow_forward_ios, color: Colors.grey[600]),
+                  Icon(CupertinoIcons.chevron_forward, color: Colors.grey[600]),
                 ],
               ),
             ),

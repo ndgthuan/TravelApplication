@@ -1,4 +1,4 @@
-// Mục đích của file là load và ghi thông tin từ Firestore
+﻿// Mục đích của file là load và ghi thông tin từ Firestore
 // Nếu có hiệu chỉnh bên UI thì cũng không ảnh hưởng tới các thông tin được lưu
 class UserModel {
   // Liệt kê các thông tin từ Firebase Firestore
@@ -11,6 +11,7 @@ class UserModel {
   final String? dob;
   final String? address;
   final DateTime? createAt;
+  final String? preferredLanguage; // Ngôn ngữ đích được chọn
 
   const UserModel({
     required this.uid,
@@ -22,6 +23,7 @@ class UserModel {
     this.dob,
     this.address,
     this.createAt,
+    this.preferredLanguage,
   });
 
   // Lấy các thông tin từ dạng Json của Firestore
@@ -37,6 +39,7 @@ class UserModel {
       phone: json['phone'], // Gán thông tin có value là phone
       dob: json['dob'], // Gán thông tin có value là dob
       address: json['address'], // Gán thông tin có value là address
+      preferredLanguage: json['preferredLanguage'], // Gán ngôn ngữ ưa thích
     );
   }
 
@@ -50,6 +53,7 @@ class UserModel {
       'phone': phone, // Ghi vào value là phone
       'dob': dob, // Ghi vào value là dob
       'address': address, // Ghi vào value là address
+      'preferredLanguage': preferredLanguage, // Ghi ngôn ngữ được chọn
     };
   }
 }

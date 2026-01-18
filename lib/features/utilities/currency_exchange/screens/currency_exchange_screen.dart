@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -106,7 +107,7 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
-                            Icons.swap_vert,
+                            CupertinoIcons.arrow_up_arrow_down,
                             color: Colors.black,
                             size: 24,
                           ),

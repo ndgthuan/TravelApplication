@@ -1,4 +1,4 @@
-// Mục đích của file này quản lý state và logic cho WorldClockScreen
+﻿// Mục đích của file này quản lý state và logic cho WorldClockScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'dart:async';
 import 'package:flutter/material.dart';

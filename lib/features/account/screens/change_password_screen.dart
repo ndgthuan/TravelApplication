@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/account/viewmodels/change_password_view_model.dart';
@@ -65,7 +66,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Icon chiếc khiên bảo vệ
-              Icon(Icons.shield_outlined, color: Color(0xFFFFAD35), size: 250),
+              Icon(CupertinoIcons.shield, color: Color(0xFFFFAD35), size: 250),
               const SizedBox(height: 10),
 
               Text(
@@ -82,7 +83,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 isShowing: true,
                 showTitle: true,
                 hintText: 'auth.current_password'.tr(),
-                prefixIcon: Icons.lock_outline,
+                prefixIcon: CupertinoIcons.lock,
                 controller: currentPasswordController,
               ),
               const SizedBox(height: 20),

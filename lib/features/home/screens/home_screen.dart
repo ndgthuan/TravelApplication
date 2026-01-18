@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/features/home/models/destination_model.dart';
 import 'package:travel_app/features/home/services/destination_service.dart';

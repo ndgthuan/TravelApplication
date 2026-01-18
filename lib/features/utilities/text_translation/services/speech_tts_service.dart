@@ -1,4 +1,4 @@
-// Mục đích của trang service này là chứa các method thực hiện
+﻿// Mục đích của trang service này là chứa các method thực hiện
 // Các method gồm nghe, chuyển văn bản thành giọng nói, giọng nói thành chữ,...
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:speech_to_text/speech_to_text.dart' as stt;

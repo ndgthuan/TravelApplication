@@ -1,4 +1,4 @@
-/// TimezoneUtilService - Chỉ lo logic tính toán timezone
+﻿/// TimezoneUtilService - Chỉ lo logic tính toán timezone
 /// Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
 
 class TimezoneUtilService {

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +50,7 @@ class CurrencyPickerBottomSheet extends StatelessWidget {
                         ),
                       ),
                       trailing: isSelected
-                          ? Icon(Icons.check_circle, color: Color(0xFFFFAD35))
+                          ? Icon(CupertinoIcons.checkmark_circle, color: Color(0xFFFFAD35))
                           : null,
                       onTap: () {
                         vm.selectCurrency(currency, isFrom);

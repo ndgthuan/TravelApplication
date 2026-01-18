@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -29,7 +30,7 @@ class SearchSectionWidget extends StatelessWidget {
           cursorColor: Color(0xFFFFAD35),
           style: GoogleFonts.beVietnamPro(color: Colors.white),
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search, color: Colors.grey),
+            prefixIcon: Icon(CupertinoIcons.search, color: Colors.grey),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
@@ -60,7 +61,7 @@ class SearchSectionWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 final location = searchResults[index];
                 return ListTile(
-                  leading: Icon(Icons.location_on, color: Color(0xFFFFAD35)),
+                  leading: Icon(CupertinoIcons.location_fill, color: Color(0xFFFFAD35)),
                   title: Text(
                     location['city'] ?? location['name'] ?? '',
                     style: GoogleFonts.beVietnamPro(color: Colors.white),

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/features/utilities/currency_exchange/screens/currency_exchange_screen.dart';
 import 'package:travel_app/features/utilities/text_translation/screens/text_translation_screen.dart';
@@ -17,7 +18,7 @@ class UtilitiesGridWidget extends StatelessWidget {
           children: [
             Expanded(
               child: UtilityCardWidget(
-                icon: Icons.monetization_on,
+                icon: CupertinoIcons.money_dollar_circle,
                 title: 'home.currency_exchange'.tr(),
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push(
@@ -66,7 +67,7 @@ class UtilitiesGridWidget extends StatelessWidget {
 
             Expanded(
               child: UtilityCardWidget(
-                icon: Icons.public,
+                icon: CupertinoIcons.globe,
                 title: 'home.world_clock'.tr(),
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push(

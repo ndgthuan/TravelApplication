@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_flags/country_flags.dart';
 
@@ -87,7 +88,7 @@ class _LanguageCardWidgetState extends State<LanguageCardWidget> {
 
                   // Icon hiện khi được chọn
                   if (widget.isSelected)
-                    Icon(Icons.check_circle, color: Colors.green, size: 28),
+                    Icon(CupertinoIcons.checkmark_circle, color: Colors.green, size: 28),
                 ],
               ),
             ),

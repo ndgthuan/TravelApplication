@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/features/account/screens/change_password_screen.dart';
 import 'package:travel_app/features/Support/screens/help_support_screen.dart';
@@ -36,7 +37,7 @@ class SettingCardWidget extends StatelessWidget {
               // Thông tin cá nhân
               SettingRowWidget(
                 optionText: 'account.personal_information'.tr(),
-                optionIcon: Icons.person_outline,
+                optionIcon: CupertinoIcons.person,
                 onTap: () async {
                   final result =
                       await Navigator.of(context, rootNavigator: true).push(
@@ -57,7 +58,7 @@ class SettingCardWidget extends StatelessWidget {
               const SizedBox(height: 20),
               SettingRowWidget(
                 optionText: 'account.change_password'.tr(),
-                optionIcon: Icons.lock_outline,
+                optionIcon: CupertinoIcons.lock,
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push(
                     MaterialPageRoute(
@@ -72,7 +73,7 @@ class SettingCardWidget extends StatelessWidget {
               const SizedBox(height: 20),
               SettingRowWidget(
                 optionText: 'account.language'.tr(),
-                optionIcon: Icons.language_outlined,
+                optionIcon: CupertinoIcons.globe,
                 onTap: () {
                   Navigator.of(context, rootNavigator: true).push(
                     MaterialPageRoute(builder: (context) => LanguageScreen()),

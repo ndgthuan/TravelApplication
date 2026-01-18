@@ -225,10 +225,25 @@ class ApifyGoogleMapsScraper:
             'imageUrl': image_url
         }
 
-def save_to_json(places: List[Dict], filepath: str):
+def save_to_json(places: List[Dict], filepath: str, append: bool = False):
+    existing_data = []
+    
+    # Nếu append mode và file tồn tại, đọc data cũ
+    if append and os.path.exists(filepath):
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                existing_data = json.load(f)
+            print(f"Loaded {len(existing_data)} existing items from {filepath}")
+        except (json.JSONDecodeError, FileNotFoundError):
+            existing_data = []
+    
+    # Merge data (cũ + mới)
+    merged_data = existing_data + places
+    
     with open(filepath, 'w', encoding='utf-8') as f:
-        json.dump(places, f, ensure_ascii=False, indent=2)
-    print(f"Saved JSON to {filepath}")
+        json.dump(merged_data, f, ensure_ascii=False, indent=2)
+    
+    print(f"Saved {len(merged_data)} total items ({len(places)} new) to {filepath}")
 
 def remove_emoji(text):
     emoji_pattern = re.compile("["
@@ -244,6 +259,7 @@ async def main():
     parser.add_argument('-q', '--query', required=True, help='Search query')
     parser.add_argument('-n', '--num', type=int, default=10, help='Max results')
     parser.add_argument('-o', '--output', default='../../lib/assets/data/popular_destinations.json',help='Output filename (auto .json)')
+    parser.add_argument('-a', '--append', action='store_true', help='Append to existing file instead of overwrite')
     parser.add_argument('-t', '--token', default=os.getenv('APIFY_TOKEN', ''), help='Apify Token')
     
     args = parser.parse_args()
@@ -261,7 +277,7 @@ async def main():
         print("No results found")
         return
     
-    save_to_json(places, output_file)
+    save_to_json(places, output_file, append=args.append)
 
     script_dir = Path(__file__).resolve().parent
     images_folder = script_dir.parent.parent / 'lib' / 'assets' / 'images' / 'destination' / 'popular'

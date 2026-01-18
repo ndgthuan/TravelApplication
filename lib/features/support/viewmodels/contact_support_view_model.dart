@@ -1,4 +1,4 @@
-// Mục đích của file này quản lý state và login cho ContactSupportScreen
+﻿// Mục đích của file này quản lý state và login cho ContactSupportScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

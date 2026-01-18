@@ -1,4 +1,4 @@
-{
+﻿{
   "general": {
     "welcome": "Chào mừng",
     "success": "Thành công",
@@ -77,6 +77,7 @@
     "read_full_document": "Đọc toàn bộ tài liệu",
     "subject": "Chủ đề",
     "past_trips": "Chuyến đi trước",
+    "wishlist": "Yêu thích",
     "subject_hint": "ví dụ: Vấn đề tài khoản",
     "message": "Tin nhắn",
     "message_hint": "Nhập tin nhắn của bạn...",
@@ -122,8 +123,8 @@
     "world_clock": "Đồng hồ thế giới"
   },
   "navigation": {
-    "plan": "Lập kế hoạch",
-    "favourite": "Yêu thích",
+    "plan": "Kế hoạch",
+    "explore": "Khám phá",
     "notification": "Thông báo"
   },
   "onboarding": {
@@ -173,4 +174,5 @@
     "same_time": "Cùng giờ",
     "today_offset": "Hôm nay, {offset} giờ"
   }
+  ,"ocr": { "error": "Không thể nhận diện văn bản từ ảnh" }
 }

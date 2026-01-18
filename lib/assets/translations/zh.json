@@ -1,4 +1,4 @@
-{
+﻿{
   "general": {
     "welcome": "欢迎",
     "success": "成功",
@@ -86,6 +86,7 @@
     "guide_using_utilities": "使用实用程序",
     "guide_using_utilities_body": "我们的应用提供旅行者实用工具：实时汇率的货币兑换、用于外语交流的文本翻译、用于活动规划的天气预报、用于跟踪时区的世界时钟。可从首页或账户实用程序部分访问。",
     "account": "账户",
+    "wishlist": "收藏",
     "personal_information": "个人信息",
     "change_password": "修改密码",
     "password_security_hint": "为了您的账户安全",
@@ -123,7 +124,7 @@
   },
   "navigation": {
     "plan": "计划",
-    "favourite": "收藏",
+    "explore": "探索",
     "notification": "通知"
   },
   "onboarding": {
@@ -173,4 +174,5 @@
     "same_time": "相同时间",
     "today_offset": "今天，{offset}小时"
   }
+  ,"ocr": { "error": "无法识别图片中的文字" }
 }

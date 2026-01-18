@@ -1,4 +1,4 @@
-// Mục đích của file này quản lý state và login cho ChangePasswordScreen
+﻿// Mục đích của file này quản lý state và login cho ChangePasswordScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'package:flutter/material.dart';
 import '../../../domain/repositories/i_auth_repository.dart';

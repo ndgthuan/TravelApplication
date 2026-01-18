@@ -1,10 +1,15 @@
-// Mục đích của file này quản lý state và login cho CurrencyExchangeScreen
+﻿// Mục đích của file này quản lý state và logic cho TextTranslationScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
+import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:translator/translator.dart';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:travel_app/domain/repositories/i_user_repository.dart';
+import 'package:travel_app/features/utilities/text_translation/services/image_translation_service.dart';
 import 'package:travel_app/features/utilities/text_translation/services/speech_tts_service.dart';
 
 class TextTranslationViewModel extends ChangeNotifier {
@@ -12,7 +17,14 @@ class TextTranslationViewModel extends ChangeNotifier {
   //                        DEPENDENCIES                                      //
   //==========================================================================//
   final SpeechTtsService _speechTtsService;
-  TextTranslationViewModel(this._speechTtsService);
+  final ImageTranslationService _imageTranslationService;
+  final IUserRepository _userRepository;
+
+  TextTranslationViewModel(
+    this._speechTtsService,
+    this._imageTranslationService,
+    this._userRepository,
+  );
 
   //==========================================================================//
   //                        STATE VARIABLES                                   //
@@ -25,6 +37,15 @@ class TextTranslationViewModel extends ChangeNotifier {
   String _translatedText = '';
   String _errorMessage = '';
 
+  // Image translation state
+  Uint8List? _originalImageBytes;
+  Uint8List? _translatedImageBytes;
+  File? _selectedImageFile;
+  bool _isTranslatingImage = false;
+
+  // Search state
+  String _searchQuery = '';
+
   // Ngôn ngữ nguồn và đích
   List<Map<String, dynamic>> _supportedLanguages = [];
   Map<String, dynamic> _sourceLanguage = {
@@ -34,8 +55,8 @@ class TextTranslationViewModel extends ChangeNotifier {
   }; // Tự phát hiện ngôn ngữ
   Map<String, dynamic> _targetLanguage = {
     'code': 'vi',
-    'name': 'Tiếng Việt',
-    'flag': 'VN',
+    'name': 'Vietnamese',
+    'flag': '🇻🇳',
   }; // Tiếng việt
 
   // Gọi method để gọi qua UI
@@ -45,9 +66,17 @@ class TextTranslationViewModel extends ChangeNotifier {
   bool get isTranslating => _isTranslating;
   String get translatedText => _translatedText;
   String get errorMessage => _errorMessage;
+  Uint8List? get originalImageBytes => _originalImageBytes;
+  Uint8List? get translatedImageBytes => _translatedImageBytes;
+  bool get isTranslatingImage => _isTranslatingImage;
+  String get searchQuery => _searchQuery;
   List<Map<String, dynamic>> get supportedLanguages => _supportedLanguages;
   Map<String, dynamic> get sourceLanguage => _sourceLanguage;
   Map<String, dynamic> get targetLanguage => _targetLanguage;
+
+  // Kiểm tra có thể swap ngôn ngữ không (không cho swap nếu có auto detect)
+  bool get canSwapLanguages =>
+      _sourceLanguage['code'] != 'auto' && _targetLanguage['code'] != 'auto';
 
   //==========================================================================//
   //                        ACTION METHODS                                    //
@@ -61,23 +90,73 @@ class TextTranslationViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Reset all state when leaving screen
+  void reset() {
+    _translatedText = '';
+    _errorMessage = '';
+    _isCopied = false;
+    _isListening = false;
+    _isTranslating = false;
+    _originalImageBytes = null;
+    _translatedImageBytes = null;
+    _selectedImageFile = null;
+    _isTranslatingImage = false;
+    notifyListeners();
+  }
+
+  // Clear image (khi tap nút X)
+  void clearImage() {
+    _originalImageBytes = null;
+    _translatedImageBytes = null;
+    _selectedImageFile = null;
+    notifyListeners();
+  }
+
   // Load danh sách ngôn ngữ từ JSON
   Future<void> loadLanguages() async {
+    // Nếu đã load rồi, không load lại
+    if (!_isLoadingLanguages) return;
+
     final String jsonString = await rootBundle.loadString(
       'lib/assets/data/supported_languages.json',
     );
     final List<dynamic> jsonData = json.decode(jsonString);
 
     _supportedLanguages = jsonData.cast<Map<String, dynamic>>();
-    _isLoadingLanguages = false;
 
-    // Ngôn ngữ mặc định
-    if (_supportedLanguages.isNotEmpty) {
-      _sourceLanguage = _supportedLanguages[0];
-      _targetLanguage = _supportedLanguages.length > 1
-          ? _supportedLanguages[1]
-          : _supportedLanguages[0];
+    // Load user preference
+    try {
+      final user = await _userRepository.getCurrentUser();
+      if (user?.preferredLanguage != null) {
+        final savedLang = _supportedLanguages.firstWhere(
+          (lang) => lang['code'] == user!.preferredLanguage,
+          orElse: () => _targetLanguage,
+        );
+        _targetLanguage = savedLang;
+      }
+    } catch (e) {
+      log('ERROR LOADING LAGUAGE PREFERENCES: $e');
     }
+
+    _isLoadingLanguages = false;
+    notifyListeners();
+  }
+
+  // Lọc ngôn ngữ theo search query
+  List<Map<String, dynamic>> get filteredLanguages {
+    if (_searchQuery.isEmpty) {
+      return _supportedLanguages;
+    }
+    return _supportedLanguages.where((lang) {
+      final name = (lang['name'] ?? '').toString().toLowerCase();
+      final q = _searchQuery.toLowerCase();
+      return name.contains(q);
+    }).toList();
+  }
+
+  // Cập nhật search query
+  void setSearchQuery(String query) {
+    _searchQuery = query;
     notifyListeners();
   }
 
@@ -118,8 +197,19 @@ class TextTranslationViewModel extends ChangeNotifier {
       _sourceLanguage = lang;
     } else {
       _targetLanguage = lang;
+      // Save user preference
+      _saveLanguagePreference(lang['code']);
     }
     notifyListeners();
+  }
+
+  Future<void> _saveLanguagePreference(String? code) async {
+    if (code == null) return;
+    try {
+      await _userRepository.updateUser({'preferredLanguage': code});
+    } catch (e) {
+      log("ERROR SAVING LAGUAGE PREFERENCES: $e");
+    }
   }
 
   // Speech-to-text: Bắt đầu nghe
@@ -157,5 +247,41 @@ class TextTranslationViewModel extends ChangeNotifier {
       _isCopied = false;
       notifyListeners();
     });
+  }
+
+  // Pick image từ gallery
+  Future<void> pickImageFromGallery() async {
+    final file = await _imageTranslationService.pickImage();
+    if (file != null) {
+      _selectedImageFile = file;
+      _originalImageBytes = await file.readAsBytes();
+      _translatedImageBytes = null; // Reset kết quả cũ
+      notifyListeners();
+    }
+  }
+
+  // Dịch ảnh
+  Future<void> translateImage() async {
+    if (_selectedImageFile == null) {
+      log('TRANSLATE: NO IMAGE FOUND');
+      return;
+    }
+
+    log('TRANSLATE: STARTING TRANSLATION...');
+    _isTranslatingImage = true;
+    notifyListeners();
+
+    try {
+      final result = await _imageTranslationService.translateImage(
+        _selectedImageFile!,
+        _targetLanguage['code'] ?? 'vi',
+      );
+      _translatedImageBytes = result;
+    } catch (e) {
+      _errorMessage = 'image_translation.error';
+    } finally {
+      _isTranslatingImage = false;
+      notifyListeners();
+    }
   }
 }

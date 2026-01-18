@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +7,7 @@ import '../viewmodels/text_translation_view_model.dart';
 import '../widgets/translate_board_widget.dart';
 import '../widgets/translate_button_widget.dart';
 import '../widgets/language_picker_bottom_sheet.dart';
+import '../../../../shared/widgets/app_button_widget.dart';
 
 class TextTranslationScreen extends StatefulWidget {
   const TextTranslationScreen({super.key});
@@ -22,8 +24,13 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
   @override
   void initState() {
     super.initState();
+    // Reset state khi vào lại màn hình
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<TextTranslationViewModel>().loadLanguages();
+      final viewModel = context.read<TextTranslationViewModel>();
+      viewModel.reset();
+      viewModel.loadLanguages(); // Load danh sách ngôn ngữ và preference
+      _inputController.clear();
+      _outputController.clear();
     });
   }
 
@@ -70,17 +77,23 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
         backgroundColor: Color(0xFF1C1C1D),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          child: Column(
-            children: [
-              // Input board
-              TranslateBoardWidget(
+        child: Column(
+          children: [
+            // Input board
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+              child: TranslateBoardWidget(
                 boardText: 'translation.input_hint'.tr(),
-                formerIcon: Icons.camera_alt,
-                latterIcon: viewModel.isListening ? Icons.mic_off : Icons.mic,
+                imageBytes: viewModel.originalImageBytes,
+                formerIcon: CupertinoIcons.photo,
+                latterIcon: viewModel.isListening
+                    ? CupertinoIcons.mic_off
+                    : CupertinoIcons.mic,
                 controller: _inputController,
-                onFormerIconTap: () {}, // TODO: Camera OCR
+                onFormerIconTap: () => viewModel.pickImageFromGallery(),
+                onClearTap: viewModel.originalImageBytes != null
+                    ? () => viewModel.clearImage()
+                    : null,
                 onLatterIconTap: () {
                   if (viewModel.isListening) {
                     viewModel.stopListening();
@@ -91,10 +104,13 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
                   }
                 },
               ),
-              const SizedBox(height: 20),
+            ),
+            const SizedBox(height: 20),
 
-              // Language selector row
-              Row(
+            // Language selector row
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
@@ -116,12 +132,16 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => viewModel.swapLanguages(),
+                    onTap: viewModel.canSwapLanguages
+                        ? () => viewModel.swapLanguages()
+                        : null,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Icon(
-                        Icons.swap_horiz_rounded,
-                        color: Color(0xFFFFAD35),
+                        CupertinoIcons.arrow_right_arrow_left,
+                        color: viewModel.canSwapLanguages
+                            ? Color(0xFFFFAD35)
+                            : Colors.grey[600],
                       ),
                     ),
                   ),
@@ -145,50 +165,42 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+            ),
+            const SizedBox(height: 20),
 
-              // Translate button
-              GestureDetector(
-                onTap: viewModel.isTranslating
-                    ? null
-                    : () => viewModel.translateText(_inputController.text),
-                child: Container(
-                  height: 65,
-                  decoration: BoxDecoration(
-                    color: viewModel.isTranslating
-                        ? Colors.grey
-                        : Color(0xFFFFAD35),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Center(
-                    child: viewModel.isTranslating
-                        ? CircularProgressIndicator(color: Colors.black)
-                        : Text(
-                            'translation.translate_now'.tr(),
-                            style: GoogleFonts.beVietnamPro(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+            // Translate button
+            AppButtonWidget(
+              buttonText: 'translation.translate_now'.tr(),
+              isLoading:
+                  viewModel.isTranslating || viewModel.isTranslatingImage,
+              onTap: () {
+                if (viewModel.originalImageBytes != null) {
+                  viewModel.translateImage();
+                } else {
+                  viewModel.translateText(_inputController.text);
+                }
+              },
+            ),
+            const SizedBox(height: 20),
 
-              // Output board
-              TranslateBoardWidget(
+            // Output board
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: TranslateBoardWidget(
                 boardText: 'translation.output_hint'.tr(),
-                formerIcon: viewModel.isCopied ? Icons.check : Icons.copy,
-                latterIcon: Icons.volume_up,
+                imageBytes: viewModel.translatedImageBytes,
+                formerIcon: viewModel.isCopied
+                    ? CupertinoIcons.checkmark
+                    : Icons.copy,
+                latterIcon: CupertinoIcons.speaker_2,
                 controller: _outputController,
                 readOnly: true,
                 onFormerIconTap: () =>
                     viewModel.copyToClipboard(_outputController.text),
                 onLatterIconTap: () => viewModel.speak(_outputController.text),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

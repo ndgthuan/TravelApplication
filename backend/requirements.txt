@@ -1,0 +1,7 @@
+Flask
+playwright
+apify-client
+scrapy
+aiohttp
+aiofiles
+python-dotenv

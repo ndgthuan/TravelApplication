@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class HeartButtonWidget extends StatefulWidget {
   const HeartButtonWidget({super.key});
@@ -16,7 +17,7 @@ class _HeartButtonWidgetState extends State<HeartButtonWidget> {
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: Color(0xFFFFAD35),
+        color: Colors.black.withValues(alpha: 0.3),
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
@@ -40,8 +41,8 @@ class _HeartButtonWidgetState extends State<HeartButtonWidget> {
           duration: Duration(milliseconds: 100),
           curve: Curves.easeInOut,
           child: Icon(
-            isFavourite ? Icons.favorite : Icons.favorite_border,
-            color: Colors.black,
+            isFavourite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+            color: isFavourite ? Color(0xFFFFAD35) : Colors.white,
             size: 24,
           ),
         ),

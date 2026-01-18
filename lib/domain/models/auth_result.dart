@@ -1,4 +1,4 @@
-// Mục đích của file là trả về thống nhất cho các thể method authentication
+﻿// Mục đích của file là trả về thống nhất cho các thể method authentication
 import 'user_model.dart';
 
 class AuthResult {
