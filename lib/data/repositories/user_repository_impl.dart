@@ -21,6 +21,7 @@ class UserRepositoryImpl implements IUserRepository {
     final user = _firebaseAuth.currentUser;
     if (user == null) return null;
 
+    // Các thông tin được lấy từ uid của users trong Firestore Database
     final doc = await _firestore.collection('users').doc(user.uid).get();
     if (!doc.exists) return null;
 

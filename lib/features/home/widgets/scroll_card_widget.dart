@@ -1,44 +1,41 @@
 ﻿import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../models/destination_model.dart';
+import 'package:travel_app/features/home/models/destination_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:travel_app/features/home/widgets/heart_button_widget.dart';
 
-class ScrollCardWidget extends StatefulWidget {
+class ScrollCardWidget extends StatelessWidget {
   final List<RecommendDestination> recommendDestination;
   final int index;
+
   const ScrollCardWidget({
     super.key,
     required this.recommendDestination,
     required this.index,
   });
 
-  @override
-  State<ScrollCardWidget> createState() => _ScrollCardWidgetState();
-}
+  Widget _buildStars(double rating) {
+    return Row(
+      children: List.generate(5, (index) {
+        if (index < rating.floor()) {
+          return Icon(CupertinoIcons.star_fill, color: Colors.amber, size: 15);
+        } else if (index < rating) {
+          return Icon(
+            CupertinoIcons.star_lefthalf_fill,
+            color: Colors.amber,
+            size: 15,
+          );
+        } else {
+          return Icon(CupertinoIcons.star, color: Colors.amber, size: 15);
+        }
+      }),
+    );
+  }
 
-Widget _buildStars(double rating) {
-  return Row(
-    children: List.generate(5, (index) {
-      if (index < rating.floor()) {
-        return Icon(CupertinoIcons.star_fill, color: Colors.amber, size: 15);
-      } else if (index < rating) {
-        return Icon(
-          CupertinoIcons.star_lefthalf_fill,
-          color: Colors.amber,
-          size: 15,
-        );
-      } else {
-        return Icon(CupertinoIcons.star, color: Colors.amber, size: 15);
-      }
-    }),
-  );
-}
-
-class _ScrollCardWidgetState extends State<ScrollCardWidget> {
-  bool isPressed = false;
-  bool isFavourite = false;
   @override
   Widget build(BuildContext context) {
+    final dest = recommendDestination[index];
     return Stack(
       clipBehavior: Clip.antiAlias,
       children: [
@@ -51,7 +48,6 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
               borderRadius: BorderRadius.circular(20),
               color: Color(0xFF1E1E1E),
             ),
-
             child: Row(
               children: [
                 // Bức hình của địa điểm đề xuất
@@ -61,13 +57,28 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                     height: 105,
                     width: 105,
                     margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                        image: AssetImage(
-                          widget.recommendDestination[widget.index].imagePath,
-                        ),
+                      child: CachedNetworkImage(
+                        imageUrl: dest.imagePath,
                         fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: const Color(0xFF2A2A2A),
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xFFFFAD35),
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: const Color(0xFF2A2A2A),
+                          child: const Icon(
+                            CupertinoIcons.photo,
+                            color: Colors.grey,
+                            size: 30,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -90,7 +101,7 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                         Padding(
                           padding: const EdgeInsets.only(right: 65),
                           child: Text(
-                            widget.recommendDestination[widget.index].name,
+                            dest.name,
                             style: GoogleFonts.beVietnamPro(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -103,7 +114,6 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                         // Địa chỉ địa điểm
                         Row(
                           children: [
-                            // Icon địa điểm
                             Icon(
                               CupertinoIcons.location_fill,
                               color: Color(0xFFFFAD35),
@@ -111,9 +121,7 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                             ),
                             Expanded(
                               child: Text(
-                                widget
-                                    .recommendDestination[widget.index]
-                                    .address,
+                                dest.address,
                                 style: GoogleFonts.beVietnamPro(
                                   color: Colors.white,
                                 ),
@@ -125,23 +133,16 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                         const SizedBox(height: 10),
 
                         Row(
-                          // Số sao
                           children: [
                             Text(
-                              widget.recommendDestination[widget.index].rating
-                                  .toString(),
+                              dest.rating.toString(),
                               style: GoogleFonts.beVietnamPro(
                                 color: Color(0xFFFFAD35),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-
-                            // Star
-                            _buildStars(
-                              widget.recommendDestination[widget.index].rating,
-                            ),
+                            _buildStars(dest.rating),
                             const SizedBox(width: 5),
-                            // Loại điểm đến
                             Flexible(
                               child: Container(
                                 padding: EdgeInsets.symmetric(
@@ -153,9 +154,7 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
                                   borderRadius: BorderRadius.circular(50),
                                 ),
                                 child: Text(
-                                  widget
-                                      .recommendDestination[widget.index]
-                                      .category,
+                                  dest.category,
                                   style: GoogleFonts.beVietnamPro(
                                     color: Colors.white,
                                   ),
@@ -178,31 +177,11 @@ class _ScrollCardWidgetState extends State<ScrollCardWidget> {
         // Icon trái tim ở góc phải
         Positioned(
           top: 0,
-          right: 5, // Căn theo padding của card
+          right: 5,
           child: SizedBox(
             width: 50,
             height: 50,
-            child: GestureDetector(
-              onTapDown: (_) => setState(() => isPressed = true),
-              onTapUp: (_) => setState(() => isPressed = false),
-              onTapCancel: () => setState(() => isPressed = false),
-              onTap: () {
-                setState(() {
-                  isFavourite = !isFavourite;
-                });
-              },
-              child: AnimatedScale(
-                scale: isPressed ? 0.9 : 1.0,
-                duration: Duration(milliseconds: 100),
-                curve: Curves.easeInOut,
-                child: Icon(
-                  isFavourite
-                      ? CupertinoIcons.heart_fill
-                      : CupertinoIcons.heart,
-                  color: isFavourite ? Color(0xFFFFAD35) : Colors.white,
-                ),
-              ),
-            ),
+            child: HeartButtonWidget(isSaved: false),
           ),
         ),
       ],

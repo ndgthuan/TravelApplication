@@ -16,10 +16,9 @@ import 'package:travel_app/domain/repositories/i_auth_repository.dart';
 import 'package:travel_app/data/repositories/auth_repository_impl.dart';
 import 'package:travel_app/data/repositories/user_repository_impl.dart';
 import 'package:travel_app/domain/repositories/i_user_repository.dart';
-import 'package:travel_app/data/repositories/explore_repository_impl.dart';
-import 'package:travel_app/domain/repositories/i_explore_repository.dart';
-import 'package:travel_app/domain/repositories/i_saved_destination_repository.dart';
-import 'package:travel_app/data/repositories/saved_destination_repository_impl.dart';
+
+import 'package:travel_app/domain/repositories/i_home_repository.dart';
+import 'package:travel_app/data/repositories/home_repository_impl.dart';
 
 // Import viewmodels
 import 'package:travel_app/features/Auth/viewmodels/login_view_model.dart';
@@ -32,7 +31,7 @@ import 'package:travel_app/features/utilities/currency_exchange/viewmodels/curre
 import 'package:travel_app/features/utilities/text_translation/viewmodels/text_translation_view_model.dart';
 import 'package:travel_app/features/utilities/world_clock/viewmodels/world_clock_view_model.dart';
 import 'package:travel_app/features/utilities/weather_forecast/viewmodels/weather_forecast_view_model.dart';
-import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
+import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
 
 // Tạo global instance của GetIt
 final GetIt getIt = GetIt.instance;
@@ -48,9 +47,6 @@ void setupDependencies() {
   getIt.registerLazySingleton<TimezoneStorageService>(
     () => TimezoneStorageService(),
   );
-  getIt.registerLazySingleton<ISavedDestinationRepository>(
-    () => SavedDestinationRepositoryImpl(),
-  );
   getIt.registerLazySingleton<TimezoneUtilService>(() => TimezoneUtilService());
   getIt.registerLazySingleton<WeatherService>(() => WeatherService());
   getIt.registerLazySingleton<ImageTranslationService>(
@@ -65,15 +61,7 @@ void setupDependencies() {
   //==========================================================================//
   getIt.registerLazySingleton<IAuthRepository>(() => AuthRepositoryImpl());
   getIt.registerLazySingleton<IUserRepository>(() => UserRepositoryImpl());
-  getIt.registerLazySingleton<IExploreRepository>(
-    () => ExploreRepositoryImpl(),
-  );
-  getIt.registerFactory<ExploreViewModel>(
-    () => ExploreViewModel(
-      getIt<IExploreRepository>(),
-      getIt<ISavedDestinationRepository>(),
-    ),
-  );
+  getIt.registerLazySingleton<IHomeRepository>(() => HomeRepositoryImpl());
 
   //==========================================================================//
   //           VIEWMODELS (Factory - tạo instance mới mỗi lần gọi)            //
@@ -128,5 +116,9 @@ void setupDependencies() {
       getIt<WeatherService>(),
       getIt<WeatherConfigService>(),
     ),
+  );
+
+  getIt.registerFactory<HomeViewModel>(
+    () => HomeViewModel(getIt<IHomeRepository>()),
   );
 }

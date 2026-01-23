@@ -34,7 +34,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         email: email,
         password: password,
       );
-      log('LOGIN COMPLETED');
+      log('Login Completed');
 
       // Lấy user data từ Firestore
       final user = await _getUserFromFirestore(userCredential.user!.uid);
@@ -64,7 +64,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         name: name,
         email: email,
       );
-      log('REGISTRATION COMPLETED');
+      log('Register Completed');
       final user = await _getUserFromFirestore(userCredential.user!.uid);
       return AuthResult.success(user);
     } on FirebaseAuthException catch (e) {

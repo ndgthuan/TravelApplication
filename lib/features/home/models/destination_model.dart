@@ -6,6 +6,9 @@
   final int reviewCount;
   final String category;
   final String imagePath;
+  final double latitude;
+  final double longitude;
+  final String address;
 
   Destination({
     required this.imagePath,
@@ -15,6 +18,9 @@
     required this.rating,
     required this.reviewCount,
     required this.category,
+    required this.latitude,
+    required this.longitude,
+    required this.address,
   });
 
   // Parse từ file json
@@ -27,6 +33,9 @@
       rating: double.tryParse(json['rating']?.toString() ?? '0') ?? 0.0,
       reviewCount: int.tryParse(json['reviewCount']?.toString() ?? '0') ?? 0,
       category: json['category'] ?? '',
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+      address: json['address'] ?? '',
     );
   }
 }
@@ -37,6 +46,9 @@ class RecommendDestination {
   final double rating;
   final String category;
   final String imagePath;
+  final double latitude;
+  final double longitude;
+  final int reviewCount;
 
   RecommendDestination({
     required this.imagePath,
@@ -44,6 +56,9 @@ class RecommendDestination {
     required this.address,
     required this.rating,
     required this.category,
+    required this.latitude,
+    required this.longitude,
+    required this.reviewCount,
   });
 
   // Parse từ file json
@@ -54,6 +69,9 @@ class RecommendDestination {
       address: json['address'] ?? '',
       rating: double.tryParse(json['rating']?.toString() ?? '0') ?? 0.0,
       category: json['category'] ?? '',
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 0.0,
+      longitude: (json['longitude'] as num?)?.toDouble() ?? 0.0,
+      reviewCount: int.tryParse(json['reviewCount']?.toString() ?? '0') ?? 0,
     );
   }
 }

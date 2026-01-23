@@ -180,7 +180,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: AccountStatCardWidget(
                       title: 'navigation.plan'.tr(),
                       number: 0,
-                      icon: CupertinoIcons.doc,
+                      icon: CupertinoIcons.doc_fill,
                     ),
                   ),
                   const SizedBox(width: 5),

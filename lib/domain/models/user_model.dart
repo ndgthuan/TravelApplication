@@ -11,7 +11,8 @@ class UserModel {
   final String? dob;
   final String? address;
   final DateTime? createAt;
-  final String? preferredLanguage; // Ngôn ngữ đích được chọn
+  final String?
+  preferredLanguage; // Ngôn ngữ được đặt làm giá trị mặc định trong textTranslation
 
   const UserModel({
     required this.uid,

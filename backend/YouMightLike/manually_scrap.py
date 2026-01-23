@@ -17,38 +17,6 @@ from typing import List, Dict
 from dotenv import load_dotenv
 from pathlib import Path
 
-async def download_image(session: aiohttp.ClientSession, url: str, save_path: str):
-    """Download một ảnh từ URL và lưu vào save_path"""
-    try:
-        async with session.get(url) as response:
-            if response.status == 200:
-                # Dùng aiofiles để ghi file async
-                async with aiofiles.open(save_path, 'wb') as f:
-                    await f.write(await response.read())
-                print(f"DOWNLOADED: {save_path}")
-            else:
-                print(f"DOWNLOAD FAIL: {response.status}")
-    except Exception as e:
-        print(f"ERROR: {e}")
-
-async def download_all_images(places: List[Dict], output_folder: str):
-    """Download tất cả ảnh từ list places, đặt tên theo index"""
-    # Tạo thư mục nếu chưa có
-    os.makedirs(output_folder, exist_ok=True)
-    
-    async with aiohttp.ClientSession() as session:
-        tasks = []
-        for index, place in enumerate(places):
-            image_url = place.get('imageUrl', '')
-            if image_url:
-                # Tên file: 0.jpg, 1.jpg, 2.jpg...
-                filename = f"{index}.jpg"
-                save_path = os.path.join(output_folder, filename)
-                tasks.append(download_image(session, image_url, save_path))
-        
-        # Download song song tất cả ảnh
-        await asyncio.gather(*tasks)
-
 # Load .env from project root (TravelApplication/.env)
 env_path = Path(__file__).resolve().parent.parent.parent / '.env'
 load_dotenv(env_path)
@@ -152,6 +120,7 @@ class ApifyScraper:
             "latitude": item.get('location', {}).get('lat'),
             "longitude": item.get('location', {}).get('lng'),
             "rating": item.get('totalScore'), 
+            "reviewCount": item.get('reviewsCount'),
             "category": category,
             "imageUrl": image_url
         }
@@ -212,10 +181,6 @@ async def main():
             
         print(f"\nDone! Saved {len(results)} places to '{OUTPUT_FILE}'.")
         print("You can open this file to check the JSON structure.")
-        script_dir = Path(__file__).resolve().parent
-        images_folder = script_dir.parent.parent / 'lib' / 'assets' / 'images' / 'destination' / 'recommend'
-
-        await download_all_images(results, str(images_folder))
     else:
         print("\nNo results found. Try another keyword.")
 
