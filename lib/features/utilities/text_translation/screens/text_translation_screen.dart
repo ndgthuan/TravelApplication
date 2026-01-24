@@ -1,6 +1,5 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/shared/widgets/app_bar_widget.dart';
