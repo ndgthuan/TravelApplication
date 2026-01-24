@@ -52,7 +52,7 @@ class LoginViewModel extends ChangeNotifier {
   // Reset lại lỗi
   void clearError() {
     _emailError = null;
-    _emailError = null;
+    _passwordError = null;
     notifyListeners();
   }
 

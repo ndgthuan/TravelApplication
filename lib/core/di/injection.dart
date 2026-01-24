@@ -1,4 +1,4 @@
-﻿// Mục đích của file này là đăng ký tất cả Repository và ViewModel vào một nơi tập trung
+// Mục đích của file này là đăng ký tất cả Repository và ViewModel vào một nơi tập trung
 // Dùng package get_it để inject
 import 'package:get_it/get_it.dart';
 
@@ -21,12 +21,12 @@ import 'package:travel_app/domain/repositories/i_home_repository.dart';
 import 'package:travel_app/data/repositories/home_repository_impl.dart';
 
 // Import viewmodels
-import 'package:travel_app/features/Auth/viewmodels/login_view_model.dart';
-import 'package:travel_app/features/Auth/viewmodels/register_view_model.dart';
+import 'package:travel_app/features/auth/viewmodels/login_view_model.dart';
+import 'package:travel_app/features/auth/viewmodels/register_view_model.dart';
 import 'package:travel_app/features/account/viewmodels/account_view_model.dart';
 import 'package:travel_app/features/account/viewmodels/change_password_view_model.dart';
 import 'package:travel_app/features/account/viewmodels/information_view_model.dart';
-import 'package:travel_app/features/Support/viewmodels/contact_support_view_model.dart';
+import 'package:travel_app/features/support/viewmodels/contact_support_view_model.dart';
 import 'package:travel_app/features/utilities/currency_exchange/viewmodels/currency_exchange_view_model.dart';
 import 'package:travel_app/features/utilities/text_translation/viewmodels/text_translation_view_model.dart';
 import 'package:travel_app/features/utilities/world_clock/viewmodels/world_clock_view_model.dart';

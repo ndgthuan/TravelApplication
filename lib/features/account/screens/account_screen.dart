@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -9,7 +9,7 @@ import 'package:travel_app/features/account/viewmodels/account_view_model.dart';
 import 'package:travel_app/features/account/widgets/setting_card_widget.dart';
 import 'package:travel_app/features/account/widgets/account_stat_card_widget.dart';
 import 'package:travel_app/features/account/widgets/utilities_grid_widget.dart';
-import 'package:travel_app/features/Auth/screens/login_screen.dart';
+import 'package:travel_app/features/auth/screens/login_screen.dart';
 import 'package:travel_app/shared/services/cloudinary_service.dart';
 import 'package:travel_app/shared/widgets/app_button_widget.dart';
 
@@ -77,6 +77,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   height: 200,
                   decoration: BoxDecoration(
                     // Màu nền khi chưa có ảnh
+                    border: Border(
+                      bottom: BorderSide(color: Color(0xFFFFAD35), width: 1),
+                    ),
                     color: Color(0xFF1C1C1D),
                     image: viewModel.backgroundUrl != null
                         ? DecorationImage(

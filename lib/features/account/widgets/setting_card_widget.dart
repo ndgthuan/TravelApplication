@@ -1,8 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/features/account/screens/change_password_screen.dart';
-import 'package:travel_app/features/Support/screens/help_support_screen.dart';
+import 'package:travel_app/features/support/screens/help_support_screen.dart';
 import 'package:travel_app/features/account/screens/information_screen.dart';
 import 'package:travel_app/features/account/screens/language_screen.dart';
 import 'setting_row_widget.dart';

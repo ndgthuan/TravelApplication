@@ -2,7 +2,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/features/Support/viewmodels/contact_support_view_model.dart';
+import 'package:travel_app/features/support/viewmodels/contact_support_view_model.dart';
+import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'package:travel_app/shared/widgets/app_button_widget.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
 
@@ -38,21 +39,12 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<ContactSupportViewModel>();
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: const Color(0xFF1C1C1D),
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          'account.contact_support'.tr(),
-          style: GoogleFonts.beVietnamPro(color: Colors.white),
-        ),
-        surfaceTintColor: Colors.transparent,
-      ),
+      appBar: AppBarWidget(title: 'account.contact_support'.tr()),
       backgroundColor: const Color(0xFF000000),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             // Hộp subject
             AppTextFieldWidget(
               labelText: 'account.subject'.tr(),

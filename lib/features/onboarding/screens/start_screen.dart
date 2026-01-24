@@ -138,7 +138,7 @@ class _StartScreenState extends State<StartScreen>
                           duration: const Duration(milliseconds: 100),
                           curve: Curves.easeInOut,
                           child: SizedBox(
-                            width: 350,
+                            width: double.infinity,
                             height: 80,
                             child: ElevatedButton(
                               onPressed: () {

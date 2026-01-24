@@ -1,11 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/shared/utils/password_utils.dart';
-import 'package:travel_app/features/Auth/viewmodels/register_view_model.dart';
-import 'package:travel_app/features/Auth/widgets/auth_switch_button_widget.dart';
-import 'package:travel_app/features/Auth/widgets/auth_logo_widget.dart';
-import 'package:travel_app/features/Auth/widgets/register_form_widget.dart';
+import 'package:travel_app/features/auth/viewmodels/register_view_model.dart';
+import 'package:travel_app/features/auth/widgets/auth_switch_button_widget.dart';
+import 'package:travel_app/features/auth/widgets/auth_logo_widget.dart';
+import 'package:travel_app/features/auth/widgets/register_form_widget.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -28,20 +28,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
   // Tạo biến ẩn hiện kiểm tra
   final FocusNode _passwordFocusNode = FocusNode();
   bool _isPasswordFocused = false;
+  late VoidCallback _passwordFocusListener;
 
   @override
   void initState() {
     super.initState();
-    _passwordFocusNode.addListener(() {
-      setState(() {
-        _isPasswordFocused = _passwordFocusNode.hasFocus;
-      });
-    });
+    _passwordFocusListener = () {
+      if (mounted) {
+        setState(() {
+          _isPasswordFocused = _passwordFocusNode.hasFocus;
+        });
+      }
+    };
+    _passwordFocusNode.addListener(_passwordFocusListener);
   }
 
   // Giải phóng bộ nhớ để khi không dùng để tránh memory leak
   @override
   void dispose() {
+    _passwordFocusNode.removeListener(_passwordFocusListener);
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();

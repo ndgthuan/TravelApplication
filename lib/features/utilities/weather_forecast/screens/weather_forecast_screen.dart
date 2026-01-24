@@ -1,8 +1,8 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/utilities/weather_forecast/viewmodels/weather_forecast_view_model.dart';
+import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import '../widgets/search_section_widget.dart';
 import '../widgets/current_weather_card_widget.dart';
 import '../widgets/hourly_forecast_widget.dart';
@@ -44,16 +44,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Color(0xFF1C1C1D),
-        centerTitle: true,
-        title: Text(
-          'weather.title'.tr(),
-          style: GoogleFonts.beVietnamPro(color: Colors.white),
-        ),
-      ),
+      appBar: AppBarWidget(title: 'weather.title'.tr()),
       body: viewModel.isLoading
           ? Center(child: CircularProgressIndicator(color: Color(0xFFFFAD35)))
           : SingleChildScrollView(

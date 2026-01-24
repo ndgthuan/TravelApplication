@@ -2,6 +2,7 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import '../widgets/time_zone_card.dart';
 import '../viewmodels/world_clock_view_model.dart';
 import '../widgets/add_clock_bottom_sheet.dart';
@@ -37,16 +38,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
 
     return Scaffold(
       backgroundColor: Color(0xFF000000),
-      appBar: AppBar(
-        surfaceTintColor: Colors.transparent,
-        iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Color(0xFF1C1C1D),
-        centerTitle: true,
-        title: Text(
-          'world_clock.title'.tr(),
-          style: GoogleFonts.beVietnamPro(color: Colors.white),
-        ),
-      ),
+      appBar: AppBarWidget(title: 'world_clock.title'.tr()),
       body: viewModel.isLoading
           ? Center(child: CircularProgressIndicator(color: Color(0xFFFFAD35)))
           : Stack(
@@ -63,7 +55,6 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                         padding: EdgeInsets.only(
                           left: 10,
                           right: 10,
-                          top: 10,
                           bottom: 100,
                         ),
                         itemCount: viewModel.timezones.length,

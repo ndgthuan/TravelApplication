@@ -3,10 +3,10 @@ import 'package:travel_app/features/account/viewmodels/information_view_model.da
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_app/shared/utils/date_input_formatter.dart';
+import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'dart:io';
 
 import 'package:travel_app/shared/widgets/app_button_widget.dart';
@@ -73,16 +73,7 @@ class _InformationScreenState extends State<InformationScreen> {
     // Rebuild mỗi khi đổi ngôn ngữ
     var _ = context.locale;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: const Color(0xFF1C1C1D),
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          'account.personal_information'.tr(),
-          style: GoogleFonts.beVietnamPro(color: Colors.white),
-        ),
-        surfaceTintColor: Colors.transparent,
-      ),
+      appBar: AppBarWidget(title: 'account.personal_information'.tr()),
       backgroundColor: const Color(0xFF000000),
       body: SingleChildScrollView(
         child: Column(
