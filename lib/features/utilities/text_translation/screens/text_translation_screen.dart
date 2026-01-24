@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import '../viewmodels/text_translation_view_model.dart';
 import '../widgets/translate_board_widget.dart';
 import '../widgets/translate_button_widget.dart';
@@ -66,16 +67,7 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'translation.title'.tr(),
-          style: GoogleFonts.beVietnamPro(color: Colors.white),
-        ),
-        iconTheme: const IconThemeData(color: Colors.white),
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: Color(0xFF1C1C1D),
-      ),
+      appBar: AppBarWidget(title: 'translation.title'.tr()),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -1,9 +1,10 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/account/viewmodels/change_password_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'package:travel_app/shared/widgets/password_field_widget.dart';
 import 'package:travel_app/shared/utils/password_utils.dart';
 import 'package:travel_app/shared/widgets/app_button_widget.dart';
@@ -24,19 +25,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   // FocusNode để hiển thị thanh password strength
   final FocusNode _newPasswordFocusNode = FocusNode();
   bool _isNewPasswordFocused = false;
+  late VoidCallback _newPasswordFocusListener;
 
   @override
   void initState() {
     super.initState();
-    _newPasswordFocusNode.addListener(() {
-      setState(() {
-        _isNewPasswordFocused = _newPasswordFocusNode.hasFocus;
-      });
-    });
+    _newPasswordFocusListener = () {
+      if (mounted) {
+        setState(() {
+          _isNewPasswordFocused = _newPasswordFocusNode.hasFocus;
+        });
+      }
+    };
+    _newPasswordFocusNode.addListener(_newPasswordFocusListener);
   }
 
   @override
   void dispose() {
+    _newPasswordFocusNode.removeListener(_newPasswordFocusListener);
     currentPasswordController.dispose();
     newPasswordController.dispose();
     reenterPasswordController.dispose();
@@ -48,16 +54,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<ChangePasswordViewModel>();
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: const Color(0xFF1C1C1D),
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          'account.change_password'.tr(),
-          style: GoogleFonts.beVietnamPro(color: Colors.white),
-        ),
-        surfaceTintColor: Colors.transparent,
-      ),
+      appBar: AppBarWidget(title: 'account.change_password'.tr()),
       backgroundColor: const Color(0xFF000000),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),

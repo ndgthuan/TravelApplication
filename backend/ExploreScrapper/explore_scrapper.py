@@ -92,7 +92,7 @@ class ApifyGoogleMapsScraper:
                 print(f"Run ID: {data['data']['id']}")
                 return data['data']['id']
     
-    async def _wait_for_completion(self, run_id: str, timeout: int = 300):
+    async def _wait_for_completion(self, run_id: str, timeout: int = 900):
         url = f"{self.base_url}/actor-runs/{run_id}?token={self.api_token}"
         start_time = time.time()
         async with aiohttp.ClientSession() as session:
@@ -258,7 +258,7 @@ async def main():
     parser = argparse.ArgumentParser(description='Google Maps Scraper - Backend')
     parser.add_argument('-q', '--query', required=True, help='Search query')
     parser.add_argument('-n', '--num', type=int, default=10, help='Max results')
-    parser.add_argument('-o', '--output', default='../../lib/assets/data/popular_destinations.json',help='Output filename (auto .json)')
+    parser.add_argument('-o', '--output', default='../../lib/assets/data/explore_destinations.json',help='Output filename (auto .json)')
     parser.add_argument('-a', '--append', action='store_true', help='Append to existing file instead of overwrite')
     parser.add_argument('-p', '--photos', action='store_true', help='Download images (disabled by default)')
     parser.add_argument('-t', '--token', default=os.getenv('APIFY_TOKEN', ''), help='Apify Token')

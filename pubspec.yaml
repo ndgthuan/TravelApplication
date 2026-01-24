@@ -96,6 +96,10 @@ dependencies:
   # MapBox
   mapbox_maps_flutter: ^2.0.0
 
+  # OpenStreetMap
+  flutter_map: ^7.0.0
+  latlong2: ^0.9.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

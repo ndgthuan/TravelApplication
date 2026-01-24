@@ -1,9 +1,9 @@
 ﻿// Đây là trang UI và chỉ có 1 mục đích là gọi UI
 // Không thêm các biến hay phương thức nào trong trang
 import 'package:provider/provider.dart';
-import 'package:travel_app/features/Auth/viewmodels/login_view_model.dart';
-import 'package:travel_app/features/Auth/widgets/auth_logo_widget.dart';
-import 'package:travel_app/features/Auth/widgets/social_login_widget.dart';
+import 'package:travel_app/features/auth/viewmodels/login_view_model.dart';
+import 'package:travel_app/features/auth/widgets/auth_logo_widget.dart';
+import 'package:travel_app/features/auth/widgets/social_login_widget.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import '../widgets/forgot_password_dialog_widget.dart';
 import 'package:flutter/material.dart';

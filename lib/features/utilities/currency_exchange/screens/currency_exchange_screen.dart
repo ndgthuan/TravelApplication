@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -7,6 +7,7 @@ import 'package:travel_app/features/utilities/currency_exchange/widgets/exchange
 import 'package:travel_app/features/utilities/currency_exchange/widgets/exchange_rate_chart_widget.dart';
 import 'package:travel_app/features/utilities/currency_exchange/viewmodels/currency_exchange_view_model.dart';
 import 'package:travel_app/features/utilities/currency_exchange/widgets/currency_picker_bottom_sheet.dart';
+import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 
 class CurrencyExchangeScreen extends StatefulWidget {
   const CurrencyExchangeScreen({super.key});
@@ -18,24 +19,31 @@ class CurrencyExchangeScreen extends StatefulWidget {
 class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
   final _amountController = TextEditingController(text: '10');
   bool _isSwapPressed = false;
+  late VoidCallback _amountListener;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CurrencyExchangeViewModel>().loadCurrencies(
-        defaultAmount: _amountController.text,
-      );
+      if (mounted) {
+        context.read<CurrencyExchangeViewModel>().loadCurrencies(
+          defaultAmount: _amountController.text,
+        );
+      }
     });
-    _amountController.addListener(() {
-      context.read<CurrencyExchangeViewModel>().calculateConversion(
-        _amountController.text,
-      );
-    });
+    _amountListener = () {
+      if (mounted) {
+        context.read<CurrencyExchangeViewModel>().calculateConversion(
+          _amountController.text,
+        );
+      }
+    };
+    _amountController.addListener(_amountListener);
   }
 
   @override
   void dispose() {
+    _amountController.removeListener(_amountListener);
     _amountController.dispose();
     super.dispose();
   }
@@ -46,16 +54,7 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Color(0xFF1C1C1D),
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text(
-          'currency.title'.tr(),
-          style: GoogleFonts.beVietnamPro(color: Colors.white),
-        ),
-        surfaceTintColor: Colors.transparent,
-      ),
+      appBar: AppBarWidget(title: 'currency.title'.tr()),
       body: viewModel.isLoading
           ? Center(child: CircularProgressIndicator(color: Color(0xFFFFAD35)))
           : SingleChildScrollView(

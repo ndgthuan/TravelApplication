@@ -1,4 +1,4 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,9 +13,9 @@ import 'package:travel_app/firebase_options.dart';
 import 'package:travel_app/features/account/viewmodels/account_view_model.dart';
 import 'package:travel_app/features/account/viewmodels/change_password_view_model.dart';
 import 'package:travel_app/features/account/viewmodels/information_view_model.dart';
-import 'package:travel_app/features/Auth/viewmodels/login_view_model.dart';
-import 'package:travel_app/features/Auth/viewmodels/register_view_model.dart';
-import 'package:travel_app/features/Support/viewmodels/contact_support_view_model.dart';
+import 'package:travel_app/features/auth/viewmodels/login_view_model.dart';
+import 'package:travel_app/features/auth/viewmodels/register_view_model.dart';
+import 'package:travel_app/features/support/viewmodels/contact_support_view_model.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import 'features/onboarding/screens/start_screen.dart';
 import 'package:flutter/foundation.dart';

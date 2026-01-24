@@ -2,6 +2,7 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/features/account/widgets/language_card_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -25,23 +26,13 @@ class _LanguageScreenState extends State<LanguageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: const Color(0xFF1C1C1D),
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          'account.language'.tr(),
-          style: GoogleFonts.beVietnamPro(color: Colors.white),
-        ),
-        surfaceTintColor: Colors.transparent,
-      ),
+      appBar: AppBarWidget(title: 'account.language'.tr()),
       backgroundColor: const Color(0xFF000000),
       body: Stack(
         children: [
           SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 10),
                 LanguageCardWidget(
                   countryCode: 'US',
                   languageChosenText: 'English',
