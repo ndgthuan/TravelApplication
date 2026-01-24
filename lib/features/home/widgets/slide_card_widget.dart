@@ -2,8 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:travel_app/features/home/models/destination_model.dart';
-import 'heart_button_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:travel_app/features/home/widgets/heart_button_widget.dart';
 
 class SlideCardWidget extends StatefulWidget {
   final PageController controller;
@@ -54,15 +55,15 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
           height: 350,
           child: PageView.builder(
             controller: widget.controller,
-            // Không giới hạn itemCount để loop vô hạn
             onPageChanged: (pageIndex) {
               setState(() {
                 _currentPage = pageIndex % widget.length;
               });
             },
             itemBuilder: (context, pageIndex) {
-              // Dùng modulo để loop vô hạn
               final index = pageIndex % widget.length;
+              final destination = widget.destinations[index];
+
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Stack(
@@ -70,14 +71,31 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                     // 1. Ảnh nền
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
-                        widget.destinations[index].imagePath,
+                      child: CachedNetworkImage(
+                        imageUrl: destination.imagePath,
                         height: 350,
                         width: double.infinity,
                         fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: const Color(0xFF2A2A2A),
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: Color(0xFFFFAD35),
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: const Color(0xFF2A2A2A),
+                          child: const Icon(
+                            CupertinoIcons.photo,
+                            color: Colors.grey,
+                            size: 40,
+                          ),
+                        ),
                       ),
                     ),
-                    // 2. Lớp đen mờ (Để chữ trắng nổi lên)
+                    // 2. Lớp đen mờ
                     Positioned(
                       bottom: 0,
                       left: 0,
@@ -100,7 +118,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                       ),
                     ),
 
-                    // 3. Tên địa điểm
+                    // 3. Thông tin địa điểm
                     Positioned(
                       bottom: 15,
                       left: 20,
@@ -114,17 +132,16 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                widget.destinations[index].country,
+                                destination.country,
                                 style: GoogleFonts.beVietnamPro(
                                   color: Colors.white,
-
                                   fontSize: 14,
                                 ),
                               ),
                               SizedBox(
                                 width: 250,
                                 child: Text(
-                                  widget.destinations[index].name,
+                                  destination.name,
                                   style: GoogleFonts.beVietnamPro(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -134,7 +151,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                                 ),
                               ),
                               Text(
-                                widget.destinations[index].city,
+                                destination.city,
                                 style: GoogleFonts.beVietnamPro(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -143,28 +160,23 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                               ),
                               Row(
                                 children: [
-                                  // Icon ngôi sao
                                   Icon(
                                     CupertinoIcons.star_fill,
                                     color: Color(0xFFFFAD35),
                                     size: 15,
                                   ),
                                   Text(
-                                    widget.destinations[index].rating
-                                        .toString(),
+                                    destination.rating.toString(),
                                     style: GoogleFonts.beVietnamPro(
                                       color: Colors.white,
-
                                       fontSize: 13,
                                     ),
                                   ),
                                   const SizedBox(width: 10),
                                   Text(
-                                    "(${widget.destinations[index].reviewCount} reviews)"
-                                        .toString(),
+                                    "(${destination.reviewCount} reviews)",
                                     style: GoogleFonts.beVietnamPro(
                                       color: Colors.grey.shade300,
-
                                       fontSize: 13,
                                     ),
                                   ),
@@ -184,7 +196,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                                     horizontal: 10,
                                   ),
                                   child: Text(
-                                    widget.destinations[index].category,
+                                    destination.category,
                                     style: GoogleFonts.beVietnamPro(
                                       color: Colors.white,
                                       fontSize: 14,
@@ -194,10 +206,18 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                               ),
                             ],
                           ),
-
-                          // Icon trái tim
-                          HeartButtonWidget(),
                         ],
+                      ),
+                    ),
+
+                    // Icon trái tim ở góc phải
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: HeartButtonWidget(isSaved: false),
                       ),
                     ),
                   ],
@@ -216,7 +236,6 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
             widget.length,
             (index) => GestureDetector(
               onTap: () {
-                // Tính page gần nhất để navigate
                 final currentActualPage = widget.controller.page?.round() ?? 0;
                 final targetPage = currentActualPage - (_currentPage - index);
                 widget.controller.animateToPage(

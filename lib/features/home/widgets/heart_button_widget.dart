@@ -2,7 +2,9 @@
 import 'package:flutter/cupertino.dart';
 
 class HeartButtonWidget extends StatefulWidget {
-  const HeartButtonWidget({super.key});
+  final bool isSaved;
+
+  const HeartButtonWidget({super.key, required this.isSaved});
 
   @override
   State<HeartButtonWidget> createState() => _HeartButtonWidgetState();
@@ -10,7 +12,7 @@ class HeartButtonWidget extends StatefulWidget {
 
 class _HeartButtonWidgetState extends State<HeartButtonWidget> {
   bool isPressed = false;
-  bool isFavourite = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,18 +33,13 @@ class _HeartButtonWidgetState extends State<HeartButtonWidget> {
         onTapDown: (_) => setState(() => isPressed = true),
         onTapUp: (_) => setState(() => isPressed = false),
         onTapCancel: () => setState(() => isPressed = false),
-        onTap: () {
-          setState(() {
-            isFavourite = !isFavourite;
-          });
-        },
         child: AnimatedScale(
           scale: isPressed ? 0.9 : 1.0,
           duration: Duration(milliseconds: 100),
           curve: Curves.easeInOut,
           child: Icon(
-            isFavourite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-            color: isFavourite ? Color(0xFFFFAD35) : Colors.white,
+            widget.isSaved ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+            color: widget.isSaved ? Color(0xFFFFAD35) : Colors.white,
             size: 24,
           ),
         ),

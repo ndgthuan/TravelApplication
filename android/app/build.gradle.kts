@@ -33,6 +33,11 @@ android {
         versionName = flutter.versionName
     }
 
+    // Build mapBox
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
