@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:travel_app/features/home/models/destination_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:travel_app/features/home/widgets/heart_button_widget.dart';
+import 'package:travel_app/shared/widgets/heart_button_widget.dart';
 
 class SlideCardWidget extends StatefulWidget {
   final PageController controller;

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:travel_app/features/home/models/destination_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:travel_app/features/home/widgets/heart_button_widget.dart';
+import 'package:travel_app/shared/widgets/heart_button_widget.dart';
 
 class ScrollCardWidget extends StatelessWidget {
   final List<RecommendDestination> recommendDestination;

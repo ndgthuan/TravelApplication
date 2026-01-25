@@ -16,8 +16,9 @@ import 'package:travel_app/domain/repositories/i_auth_repository.dart';
 import 'package:travel_app/data/repositories/auth_repository_impl.dart';
 import 'package:travel_app/data/repositories/user_repository_impl.dart';
 import 'package:travel_app/domain/repositories/i_user_repository.dart';
-
 import 'package:travel_app/domain/repositories/i_home_repository.dart';
+import 'package:travel_app/domain/repositories/i_explore_repository.dart';
+import 'package:travel_app/data/repositories/explore_repository_impl.dart';
 import 'package:travel_app/data/repositories/home_repository_impl.dart';
 
 // Import viewmodels
@@ -32,6 +33,7 @@ import 'package:travel_app/features/utilities/text_translation/viewmodels/text_t
 import 'package:travel_app/features/utilities/world_clock/viewmodels/world_clock_view_model.dart';
 import 'package:travel_app/features/utilities/weather_forecast/viewmodels/weather_forecast_view_model.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
+import 'package:travel_app/features/explore/view_models/explore_view_model.dart';
 
 // Tạo global instance của GetIt
 final GetIt getIt = GetIt.instance;
@@ -62,6 +64,9 @@ void setupDependencies() {
   getIt.registerLazySingleton<IAuthRepository>(() => AuthRepositoryImpl());
   getIt.registerLazySingleton<IUserRepository>(() => UserRepositoryImpl());
   getIt.registerLazySingleton<IHomeRepository>(() => HomeRepositoryImpl());
+  getIt.registerLazySingleton<IExploreRepository>(
+    () => ExploreRepositoryImpl(),
+  );
 
   //==========================================================================//
   //           VIEWMODELS (Factory - tạo instance mới mỗi lần gọi)            //
@@ -120,5 +125,9 @@ void setupDependencies() {
 
   getIt.registerFactory<HomeViewModel>(
     () => HomeViewModel(getIt<IHomeRepository>()),
+  );
+
+  getIt.registerFactory<ExploreViewModel>(
+    () => ExploreViewModel(repository: getIt<IExploreRepository>()),
   );
 }

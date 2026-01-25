@@ -15,7 +15,7 @@ class ExploreMapScreen extends StatefulWidget {
 
 class _ExploreMapScreenState extends State<ExploreMapScreen> {
   bool isLoading = false;
-  bool _showInfoWindow = false;
+  bool _showInfoWindow = true;
   final MapController _mapController = MapController();
 
   @override
@@ -83,9 +83,9 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                         });
                       },
                       child: const Icon(
-                        Icons.location_on,
+                        CupertinoIcons.heart_fill,
                         color: Color(0xFFFFAD35),
-                        size: 40,
+                        size: 30,
                       ),
                     ),
                   ),
@@ -272,6 +272,37 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                   ),
                 ),
               ],
+            ),
+          ),
+
+          Positioned(
+            bottom: 10,
+            left: 10,
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                color: Color(0xFF2A2A2A),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 15, left: 10),
+                child: Row(
+                  children: [
+                    Icon(
+                      CupertinoIcons.location_fill,
+                      color: Color(0xFFFFAD35),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      '300 Saved Places',
+                      style: GoogleFonts.beVietnamPro(
+                        color: Color(0xFFFFAD35),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
