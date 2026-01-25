@@ -5,7 +5,7 @@ import sys
 from explore_scrapper import ApifyGoogleMapsScraper, save_to_json
 
 API_TOKENS = [
-    "apify_api_J2146SYrN4EfGPdpUZIv43sUocvA6R0FhTVE",
+    "apify_api_hmL1M0rA4tI2AmllBnvWBR1MU6niu026kBJy",
     "apify_api_i5sxpWYasepA0z60XDN7gj1v7bZSTu3LLWFl",
     "apify_api_0YaxjGbdgKjiLvfTiGsTHKl0HRJpb40rWQFk",
     "apify_api_tNO88dS3xvc0Td6H6e8e5obPoXUi7o4eCKMu",
@@ -13,11 +13,7 @@ API_TOKENS = [
 ]
 
 PROVINCES = [
-    "Thua Thien Hue", "Quang Nam", "Quang Ngai", "Binh Dinh", "Phu Yen", "Khanh Hoa",
-    "Ninh Thuan", "Binh Thuan", "Kon Tum", "Gia Lai", "Dak Lak", "Dak Nong", "Lam Dong",
-    "Binh Phuoc", "Tay Ninh", "Binh Duong", "Dong Nai", "Ba Ria Vung Tau", "Long An",
-    "Tien Giang", "Ben Tre", "Tra Vinh", "Vinh Long", "Dong Thap", "An Giang", "Kien Giang",
-    "Hau Giang", "Soc Trang", "Bac Lieu", "Ca Mau"
+    "Bac Lieu", "Ca Mau"
 ]
 
 # Các danh mục cần tìm kiếm

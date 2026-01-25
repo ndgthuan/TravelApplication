@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/core/di/injection.dart';
+import 'package:travel_app/features/explore/view_models/explore_view_model.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
 import 'package:travel_app/features/utilities/currency_exchange/viewmodels/currency_exchange_view_model.dart';
 import 'package:travel_app/features/utilities/text_translation/viewmodels/text_translation_view_model.dart';
@@ -144,6 +145,9 @@ void main() async {
           ChangeNotifierProvider(
             create: (_) => getIt<HomeViewModel>(),
           ), // Gọi HomeScreen parent state
+          ChangeNotifierProvider(
+            create: (_) => getIt<ExploreViewModel>(),
+          ), // Gọi ExploreScreen parent state
         ],
         child: MyApp(),
       ),

@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 
 class HeartButtonWidget extends StatefulWidget {
   final bool isSaved;
+  final VoidCallback? onTap;
 
-  const HeartButtonWidget({super.key, required this.isSaved});
+  const HeartButtonWidget({super.key, required this.isSaved, this.onTap});
 
   @override
   State<HeartButtonWidget> createState() => _HeartButtonWidgetState();
@@ -33,6 +34,7 @@ class _HeartButtonWidgetState extends State<HeartButtonWidget> {
         onTapDown: (_) => setState(() => isPressed = true),
         onTapUp: (_) => setState(() => isPressed = false),
         onTapCancel: () => setState(() => isPressed = false),
+        onTap: widget.onTap,
         child: AnimatedScale(
           scale: isPressed ? 0.9 : 1.0,
           duration: Duration(milliseconds: 100),
