@@ -252,8 +252,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   right: 10,
                                   child: HeartButtonWidget(
                                     isSaved: viewModel.isSaved(item.name),
-                                    onTap: () {
-                                      viewModel.toggleSave(item.name);
+                                    onTap: () async {
+                                      await viewModel.toggleSave(item.name);
+                                      if (!context.mounted) return;
                                       if (viewModel.isSaved(item.name)) {
                                         context
                                             .read<SavedCountProvider>()

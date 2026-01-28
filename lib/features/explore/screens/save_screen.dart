@@ -161,7 +161,7 @@ class _SaveScreenState extends State<SaveScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              CupertinoIcons.heart,
+                              CupertinoIcons.heart_fill,
                               color: Colors.grey,
                               size: 80,
                             ),

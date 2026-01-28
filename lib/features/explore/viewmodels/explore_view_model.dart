@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:travel_app/data/repositories/explore_repository_impl.dart';
 import 'package:travel_app/domain/repositories/i_explore_repository.dart';
 import 'package:travel_app/features/explore/models/destination_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/domain/repositories/i_user_repository.dart';
 
 class ExploreViewModel extends ChangeNotifier {
   //==========================================================================//
   //                        DEPENDENCIES                                      //
   //==========================================================================//
   final IExploreRepository _repository;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final IUserRepository _userRepository;
 
-  ExploreViewModel({IExploreRepository? repository})
-    : _repository = repository ?? ExploreRepositoryImpl();
+  ExploreViewModel(this._repository, this._userRepository);
 
   //==========================================================================//
   //                        STATE VARIABLES                                   //
@@ -122,7 +120,7 @@ class ExploreViewModel extends ChangeNotifier {
 
   // Toggle save/unsave
   Future<void> toggleSave(String name) async {
-    final user = _auth.currentUser;
+    final user = await _userRepository.getCurrentUser();
     if (user == null) return;
 
     if (_savedIds.contains(name)) {
@@ -145,7 +143,7 @@ class ExploreViewModel extends ChangeNotifier {
 
   // Load từ Firestore - gọi khi cần refresh saved list
   Future<void> refreshSavedDestinations() async {
-    final user = _auth.currentUser;
+    final user = await _userRepository.getCurrentUser();
     if (user == null) return;
 
     _savedFromFirestore = await _repository.getSavedDestinations(user.uid);

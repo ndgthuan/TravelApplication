@@ -147,6 +147,7 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<ExploreViewModel>(
-    () => ExploreViewModel(repository: getIt<IExploreRepository>()),
+    () =>
+        ExploreViewModel(getIt<IExploreRepository>(), getIt<IUserRepository>()),
   );
 }
