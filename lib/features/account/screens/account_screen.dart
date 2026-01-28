@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/account/viewmodels/account_view_model.dart';
+import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/account/widgets/setting_card_widget.dart';
 import 'package:travel_app/features/account/widgets/account_stat_card_widget.dart';
 import 'package:travel_app/features/account/widgets/utilities_grid_widget.dart';
@@ -30,6 +31,7 @@ class _AccountScreenState extends State<AccountScreen> {
     // Gọi ViewModel load data từ firestore sau khi build xong
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AccountViewModel>().loadUserData();
+      context.read<ExploreViewModel>().refreshSavedDestinations();
     });
   }
 
@@ -63,6 +65,7 @@ class _AccountScreenState extends State<AccountScreen> {
     // Rebuild mỗi khi đổi ngôn ngữ
     var _ = context.locale;
     final viewModel = context.watch<AccountViewModel>();
+    final exploreViewModel = context.watch<ExploreViewModel>();
     // Build
     return Scaffold(
       backgroundColor: Color(0xFF000000),
@@ -191,7 +194,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Expanded(
                     child: AccountStatCardWidget(
                       title: 'account.wishlist'.tr(),
-                      number: 0,
+                      number: exploreViewModel.savedIds.length,
                       icon: CupertinoIcons.heart_fill,
                     ),
                   ),
