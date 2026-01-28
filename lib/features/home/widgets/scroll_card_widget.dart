@@ -6,13 +6,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travel_app/shared/widgets/heart_button_widget.dart';
 
 class ScrollCardWidget extends StatelessWidget {
-  final List<RecommendDestination> recommendDestination;
+  final List<Destination> destinations;
   final int index;
+  final Function(String name)? onHeartTap;
+  final bool Function(String name) isSaved;
 
   const ScrollCardWidget({
     super.key,
-    required this.recommendDestination,
+    required this.destinations,
     required this.index,
+    required this.isSaved,
+    this.onHeartTap,
   });
 
   Widget _buildStars(double rating) {
@@ -35,7 +39,7 @@ class ScrollCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dest = recommendDestination[index];
+    final dest = destinations[index];
     return Stack(
       clipBehavior: Clip.antiAlias,
       children: [
@@ -181,7 +185,10 @@ class ScrollCardWidget extends StatelessWidget {
           child: SizedBox(
             width: 50,
             height: 50,
-            child: HeartButtonWidget(isSaved: false),
+            child: HeartButtonWidget(
+              isSaved: isSaved(dest.name),
+              onTap: () => onHeartTap?.call(dest.name),
+            ),
           ),
         ),
       ],

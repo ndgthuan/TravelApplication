@@ -1,26 +1,32 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/domain/repositories/i_explore_repository.dart';
 import 'package:travel_app/features/explore/models/destination_model.dart';
 
-// Implementation đọc dữ liệu từ file JSON local
+// Implementation đọc dữ liệu từ API npoint.io
 class ExploreRepositoryImpl implements IExploreRepository {
   List<DestinationModel>? _cachedData;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  static const String _apiUrl = 'https://api.npoint.io/de217cd3d6eebe3e9379';
 
   @override
   Future<List<DestinationModel>> getDestinations() async {
     if (_cachedData != null) return _cachedData!;
 
     try {
-      final String response = await rootBundle.loadString(
-        'lib/assets/data/explore_destinations.json',
-      );
-      final List<dynamic> data = json.decode(response);
-      _cachedData = data.map((e) => DestinationModel.fromJson(e)).toList();
-      return _cachedData!;
+      final response = await http.get(Uri.parse(_apiUrl));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        _cachedData = data.map((e) => DestinationModel.fromJson(e)).toList();
+        return _cachedData!;
+      } else {
+        log("KHÔNG THỂ FETCH DATA TỪ ĐƯỜNG DẪN");
+        return [];
+      }
     } catch (e) {
       log("Lỗi load data: $e");
       return [];
@@ -94,8 +100,8 @@ class ExploreRepositoryImpl implements IExploreRepository {
         country: data['country'] ?? 'Vietnam',
         latitude: (data['latitude'] ?? 0).toDouble(),
         longitude: (data['longitude'] ?? 0).toDouble(),
-        rating: data['rating'] ?? '',
-        reviewCount: data['reviewCount'] ?? '',
+        rating: data['rating']?.toString() ?? '0.0',
+        reviewCount: data['reviewCount']?.toString() ?? '0',
         category: data['category'] ?? '',
         imageUrl: data['imageUrl'] ?? '',
       );

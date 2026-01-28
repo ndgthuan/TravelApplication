@@ -1,12 +1,15 @@
 ﻿// Mục đích của file này quản lý state và logic cho CurrencyExchangeScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter/widgets.dart';
+import 'package:travel_app/domain/repositories/i_currency_repository.dart';
 
 class CurrencyExchangeViewModel extends ChangeNotifier {
+  //==========================================================================//
+  //                        DEPENDENCIES                                      //
+  //==========================================================================//
+  final ICurrencyRepository _currencyRepository;
+  CurrencyExchangeViewModel(this._currencyRepository);
+
   //==========================================================================//
   //                        STATE VARIABLES                                   //
   //==========================================================================//
@@ -17,6 +20,10 @@ class CurrencyExchangeViewModel extends ChangeNotifier {
   Map<String, dynamic> _rates = {};
   double _convertedAmount = 0;
   bool _isLoading = true;
+
+  //==========================================================================//
+  //                        GETTERS                                           //
+  //==========================================================================//
   // Các hàm gọi bên UI
   List<Map<String, dynamic>> get currencies => _currencies;
   Map<String, dynamic> get fromCurrency => _fromCurrency;
@@ -35,21 +42,20 @@ class CurrencyExchangeViewModel extends ChangeNotifier {
   Future<void> loadCurrencies({String defaultAmount = '10'}) async {
     _defaultAmount = defaultAmount;
     try {
-      final String jsonString = await rootBundle.loadString(
-        'lib/assets/data/supported_currencies.json',
-      );
-      final List<dynamic> jsonList = json.decode(jsonString);
-      _currencies = jsonList.cast<Map<String, dynamic>>();
+      _currencies = await _currencyRepository.getSupportedCurrencies();
 
-      // Set defaults
-      _fromCurrency = _currencies.firstWhere(
-        (c) => c['code'] == 'USD',
-        orElse: () => _currencies.first,
-      );
-      _toCurrency = _currencies.firstWhere(
-        (c) => c['code'] == 'VND',
-        orElse: () => _currencies.last,
-      );
+      _fromCurrency = _currencies.isNotEmpty
+          ? _currencies.firstWhere(
+              (c) => c['code'] == 'USD',
+              orElse: () => _currencies.first,
+            )
+          : {};
+      _toCurrency = _currencies.isNotEmpty
+          ? _currencies.firstWhere(
+              (c) => c['code'] == 'VND',
+              orElse: () => _currencies.last,
+            )
+          : {};
       notifyListeners();
       await fetchExchangeRates();
     } catch (e) {
@@ -61,19 +67,11 @@ class CurrencyExchangeViewModel extends ChangeNotifier {
   // Fetch tỷ giá từ API
   Future<void> fetchExchangeRates() async {
     try {
-      final apiKey = dotenv.env['CURRENCY_TOKEN'] ?? '';
-      final response = await http.get(
-        Uri.parse(
-          'https://api.fxratesapi.com/latest?base=${_fromCurrency['code']}&api_key=$apiKey',
-        ),
-      );
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        _rates = data['rates'];
-        _isLoading = false;
-        // Tính conversion với giá trị mặc định
-        calculateConversion(_defaultAmount);
-      }
+      final base = _fromCurrency['code']?.toString() ?? 'USD';
+      _rates = await _currencyRepository.fetchExchangeRates(base);
+      _isLoading = false;
+      calculateConversion(_defaultAmount);
+      notifyListeners();
     } catch (e) {
       _isLoading = false;
       notifyListeners();

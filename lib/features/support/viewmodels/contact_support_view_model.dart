@@ -1,15 +1,21 @@
 ﻿// Mục đích của file này quản lý state và logic cho ContactSupportScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:travel_app/domain/services/i_support_email_service.dart';
+import 'package:travel_app/domain/repositories/i_user_repository.dart';
 
 // Gọi các method trạng thái cho UI
 enum ContactSupportState { initial, sending, success, error }
 
 class ContactSupportViewModel extends ChangeNotifier {
+  //==========================================================================//
+  //                        DEPENDENCIES                                      //
+  //==========================================================================//
+  final ISupportEmailService _supportEmailService;
+  final IUserRepository _userRepository;
+
+  ContactSupportViewModel(this._supportEmailService, this._userRepository);
+
   //==========================================================================//
   //                        STATE VARIABLES                                   //
   //==========================================================================//
@@ -38,57 +44,40 @@ class ContactSupportViewModel extends ChangeNotifier {
 
   // Gửi email hỗ trợ qua EmailJS
   Future<bool> sendSupportEmail({
-    required String subject, // Gọi title
-    required String message, // Gọi thông tin tin nhắn
+    required String subject,
+    required String message,
   }) async {
-    // Validate
     if (subject.trim().isEmpty || message.trim().isEmpty) {
-      _errorMessage = 'account.fill_all_fields'; // Key để translate
+      _errorMessage = 'account.fill_all_fields';
       notifyListeners();
       return false;
     }
     _state = ContactSupportState.sending;
     _errorMessage = null;
     notifyListeners();
-    // Lấy thông tin user hiện tại
-    final user = FirebaseAuth.instance.currentUser;
-    final userName =
-        user?.displayName ??
-        'App User'; // Nếu userName không có display AppUser
-    final userEmail =
-        user?.email ??
-        'no-reply@app.com'; // Nếu email không có display no-reply@app.com
-    final url = Uri.parse(
-      'https://api.emailjs.com/api/v1.0/email/send',
-    ); // Đường dẫn email
+
+    String userName = 'App User';
+    String userEmail = 'no-reply@app.com';
     try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${dotenv.env['PRIVATE_KEY']}',
-        },
-        body: json.encode({
-          'service_id': dotenv.env['SERVICE_ID'],
-          'template_id': dotenv.env['TEMPLATE_ID'],
-          'user_id': dotenv.env['PUBLIC_KEY'],
-          'accessToken': dotenv.env['PRIVATE_KEY'],
-          'template_params': {
-            'title': subject,
-            'message': message,
-            'name': userName,
-            'email': userEmail,
-          },
-        }),
-      );
-      if (response.statusCode == 200) {
-        _state = ContactSupportState.success;
-        notifyListeners();
-        return true;
-      } else {
-        throw Exception('Failed: ${response.body}');
+      final user = await _userRepository.getCurrentUser();
+      if (user != null) {
+        if (user.name.isNotEmpty) userName = user.name;
+        if (user.email.isNotEmpty) userEmail = user.email;
       }
-    } catch (e) {
+    } catch (_) {}
+
+    final success = await _supportEmailService.sendSupportEmail(
+      subject: subject,
+      message: message,
+      userName: userName,
+      userEmail: userEmail,
+    );
+
+    if (success) {
+      _state = ContactSupportState.success;
+      notifyListeners();
+      return true;
+    } else {
       _state = ContactSupportState.error;
       _errorMessage = 'account.send_error';
       notifyListeners();

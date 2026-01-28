@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/features/account/screens/account_screen.dart';
 import 'package:travel_app/features/explore/screens/explore_screen.dart';
 import 'package:travel_app/features/home/screens/home_screen.dart';
 import 'package:travel_app/features/notification/screens/notification_screen.dart';
 import 'package:travel_app/features/plan/screens/plan_screen.dart';
+import 'package:travel_app/shared/providers/saved_count_provider.dart';
 
 class BottomNavigation extends StatelessWidget {
   const BottomNavigation({super.key});
@@ -23,6 +25,8 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final savedCount = context.watch<SavedCountProvider>();
+
     return PersistentTabView(
       controller: PersistentTabController(initialIndex: 2),
       tabs: [
@@ -33,11 +37,22 @@ class BottomNavigation extends StatelessWidget {
             title: 'navigation.plan'.tr(),
           ),
         ),
+        // Explore với badge
         PersistentTabConfig(
           screen: ExploreScreen(),
-          item: _buildItem(
-            icon: CupertinoIcons.compass,
+          item: ItemConfig(
+            icon: Badge(
+              label: Text(
+                '${savedCount.unseenCount}',
+                style: GoogleFonts.beVietnamPro(fontSize: 15),
+              ),
+              isLabelVisible: savedCount.unseenCount > 0,
+              backgroundColor: Color(0xFFFFAD35),
+              child: Icon(CupertinoIcons.compass),
+            ),
             title: 'navigation.explore'.tr(),
+            activeForegroundColor: Color(0xFFFFAD35),
+            textStyle: GoogleFonts.beVietnamPro(fontSize: 14),
           ),
         ),
         PersistentTabConfig(

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/features/explore/screens/explore_map_screen.dart';
+import 'package:travel_app/shared/providers/saved_count_provider.dart';
 import 'package:travel_app/shared/widgets/heart_button_widget.dart';
 import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:travel_app/features/explore/view_models/explore_view_model.dart';
+import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/explore/widgets/category_button_widget.dart';
 import 'package:travel_app/features/explore/widgets/city_filter_bottom_sheet.dart';
 
@@ -45,9 +46,12 @@ class _SaveScreenState extends State<SaveScreen> {
   @override
   void initState() {
     super.initState();
-    // Reset filters khi vào SaveScreen
+    // Reset filters và refresh saved list khi vào SaveScreen
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ExploreViewModel>().resetFilters();
+      context.read<SavedCountProvider>().reset();
+      final viewModel = context.read<ExploreViewModel>();
+      viewModel.resetFilters();
+      viewModel.refreshSavedDestinations(); // Refresh để sync với Firestore
     });
   }
 

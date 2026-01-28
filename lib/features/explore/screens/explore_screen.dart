@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/features/explore/screens/save_screen.dart';
 import 'package:travel_app/features/explore/widgets/city_filter_bottom_sheet.dart';
-import 'package:travel_app/features/explore/view_models/explore_view_model.dart';
+import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
+import 'package:travel_app/shared/providers/saved_count_provider.dart';
 import 'package:travel_app/shared/widgets/heart_button_widget.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
 import 'package:travel_app/features/explore/widgets/category_button_widget.dart';
@@ -102,10 +103,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     curve: Curves.easeInOut,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Icon(
-                        CupertinoIcons.arrow_down_to_line_alt,
-                        color: Colors.white,
-                        size: 35,
+                      child: Badge(
+                        label: Text(
+                          '${context.watch<SavedCountProvider>().unseenCount}',
+                          style: GoogleFonts.beVietnamPro(fontSize: 15),
+                        ),
+                        isLabelVisible:
+                            context.watch<SavedCountProvider>().unseenCount > 0,
+                        backgroundColor: Color(0XFFFFAD35),
+                        child: Icon(
+                          CupertinoIcons.bookmark_fill,
+                          color: Colors.white,
+                          size: 35,
+                        ),
                       ),
                     ),
                   ),
@@ -242,8 +252,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   right: 10,
                                   child: HeartButtonWidget(
                                     isSaved: viewModel.isSaved(item.name),
-                                    onTap: () =>
-                                        viewModel.toggleSave(item.name),
+                                    onTap: () {
+                                      viewModel.toggleSave(item.name);
+                                      if (viewModel.isSaved(item.name)) {
+                                        context
+                                            .read<SavedCountProvider>()
+                                            .increment();
+                                      }
+                                    },
                                   ),
                                 ),
 

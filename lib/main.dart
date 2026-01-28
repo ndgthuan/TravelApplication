@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/core/di/injection.dart';
-import 'package:travel_app/features/explore/view_models/explore_view_model.dart';
+import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
 import 'package:travel_app/features/utilities/currency_exchange/viewmodels/currency_exchange_view_model.dart';
 import 'package:travel_app/features/utilities/text_translation/viewmodels/text_translation_view_model.dart';
@@ -17,6 +17,7 @@ import 'package:travel_app/features/account/viewmodels/information_view_model.da
 import 'package:travel_app/features/auth/viewmodels/login_view_model.dart';
 import 'package:travel_app/features/auth/viewmodels/register_view_model.dart';
 import 'package:travel_app/features/support/viewmodels/contact_support_view_model.dart';
+import 'package:travel_app/shared/providers/saved_count_provider.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import 'features/onboarding/screens/start_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -148,6 +149,9 @@ void main() async {
           ChangeNotifierProvider(
             create: (_) => getIt<ExploreViewModel>(),
           ), // Gọi ExploreScreen parent state
+          ChangeNotifierProvider(
+            create: (_) => SavedCountProvider(),
+          ), // Gọi hiệu ứng add to cart
         ],
         child: MyApp(),
       ),

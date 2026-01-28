@@ -3,9 +3,8 @@
 import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:translator/translator.dart';
-import 'dart:convert';
+import 'package:travel_app/domain/repositories/i_language_repository.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:travel_app/domain/repositories/i_user_repository.dart';
@@ -19,11 +18,13 @@ class TextTranslationViewModel extends ChangeNotifier {
   final SpeechTtsService _speechTtsService;
   final ImageTranslationService _imageTranslationService;
   final IUserRepository _userRepository;
+  final ILanguageRepository _languageRepository;
 
   TextTranslationViewModel(
     this._speechTtsService,
     this._imageTranslationService,
     this._userRepository,
+    this._languageRepository,
   );
 
   //==========================================================================//
@@ -59,6 +60,9 @@ class TextTranslationViewModel extends ChangeNotifier {
     'flag': '🇻🇳',
   }; // Tiếng việt
 
+  //==========================================================================//
+  //                        GETTERS                                           //
+  //==========================================================================//
   // Gọi method để gọi qua UI
   bool get isListening => _isListening;
   bool get isCopied => _isCopied;
@@ -114,17 +118,10 @@ class TextTranslationViewModel extends ChangeNotifier {
 
   // Load danh sách ngôn ngữ từ JSON
   Future<void> loadLanguages() async {
-    // Nếu đã load rồi, không load lại
     if (!_isLoadingLanguages) return;
 
-    final String jsonString = await rootBundle.loadString(
-      'lib/assets/data/supported_languages.json',
-    );
-    final List<dynamic> jsonData = json.decode(jsonString);
+    _supportedLanguages = await _languageRepository.getSupportedLanguages();
 
-    _supportedLanguages = jsonData.cast<Map<String, dynamic>>();
-
-    // Load user preference
     try {
       final user = await _userRepository.getCurrentUser();
       if (user?.preferredLanguage != null) {
@@ -135,7 +132,7 @@ class TextTranslationViewModel extends ChangeNotifier {
         _targetLanguage = savedLang;
       }
     } catch (e) {
-      log('ERROR LOADING LAGUAGE PREFERENCES: $e');
+      log('ERROR LOADING LANGUAGE PREFERENCES: $e');
     }
 
     _isLoadingLanguages = false;
