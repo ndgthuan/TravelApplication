@@ -47,7 +47,7 @@ class ExploreViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    await _loadSavedFromFirestore(); // Thay vì _loadSavedFromDisk
+    await refreshSavedDestinations(); // Load saved data from Firestore
     _categories = await _repository.getCategories();
     _cities = await _repository.getCities();
     _destinations = await _repository.getDestinations();
@@ -56,7 +56,7 @@ class ExploreViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Lấy danh sách địa điểm ĐÃ save (dùng cho SaveScreen)
+  // Lấy danh sách địa điểm đã save (dùng cho SaveScreen)
   List<DestinationModel> get savedDestinations {
     return _savedFromFirestore.where((d) {
       final matchSearch =
@@ -73,7 +73,7 @@ class ExploreViewModel extends ChangeNotifier {
     }).toList();
   }
 
-  // Lấy danh sách địa điểm CHƯA save (dùng cho ExploreScreen)
+  // Lấy danh sách địa điểm chưa save (dùng cho ExploreScreen)
   List<DestinationModel> get unsavedDestinations {
     return _destinations.where((d) {
       final matchSaved = !_savedIds.contains(d.name);
@@ -143,13 +143,14 @@ class ExploreViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Load từ Firestore
-  Future<void> _loadSavedFromFirestore() async {
+  // Load từ Firestore - gọi khi cần refresh saved list
+  Future<void> refreshSavedDestinations() async {
     final user = _auth.currentUser;
     if (user == null) return;
 
     _savedFromFirestore = await _repository.getSavedDestinations(user.uid);
     _savedIds = _savedFromFirestore.map((d) => d.name).toSet();
+    notifyListeners();
   }
 
   //==========================================================================//

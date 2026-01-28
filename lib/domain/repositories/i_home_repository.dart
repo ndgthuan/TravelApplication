@@ -9,4 +9,21 @@ abstract class IHomeRepository {
 
   // Method để lấy các giá trị parse từ file recommend json
   Future<List<RecommendDestination>> getRecommendDestinations();
+
+  // Lấy Top 10 địa điểm
+  Future<List<Destination>> getTop10Destinations();
+
+  // Lấy Top 5 địa điểm
+  Future<List<Destination>> getTop5Destinations();
+
+  // Lấy danh sách đã save từ Firestore
+  Future<List<Destination>> getSavedDestinations(String userId);
+
+  // Save destination
+  Future<void> saveDestination(String userId, Destination destination);
+
+  // Unsave destination
+  Future<void> unsaveDestination(String userId, String name);
+
+  Future<List<Destination>> getAllFromApi();
 }

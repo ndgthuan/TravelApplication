@@ -6,6 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:travel_app/features/utilities/text_translation/services/speech_tts_service.dart';
 import 'package:travel_app/features/utilities/weather_forecast/service/weather_config_service.dart';
 import 'package:travel_app/features/utilities/weather_forecast/service/weather_service.dart';
+import 'package:travel_app/domain/services/i_support_email_service.dart';
+import 'package:travel_app/features/support/services/support_email_service.dart';
 import 'package:travel_app/shared/services/geocoding_service.dart';
 import 'package:travel_app/features/utilities/world_clock/services/timezone_storage_service.dart';
 import 'package:travel_app/features/utilities/world_clock/services/timezone_util_service.dart';
@@ -13,6 +15,8 @@ import 'package:travel_app/features/utilities/text_translation/services/image_tr
 
 // Import respositories
 import 'package:travel_app/domain/repositories/i_auth_repository.dart';
+import 'package:travel_app/domain/repositories/i_currency_repository.dart';
+import 'package:travel_app/data/repositories/currency_repository_impl.dart';
 import 'package:travel_app/data/repositories/auth_repository_impl.dart';
 import 'package:travel_app/data/repositories/user_repository_impl.dart';
 import 'package:travel_app/domain/repositories/i_user_repository.dart';
@@ -20,6 +24,8 @@ import 'package:travel_app/domain/repositories/i_home_repository.dart';
 import 'package:travel_app/domain/repositories/i_explore_repository.dart';
 import 'package:travel_app/data/repositories/explore_repository_impl.dart';
 import 'package:travel_app/data/repositories/home_repository_impl.dart';
+import 'package:travel_app/domain/repositories/i_language_repository.dart';
+import 'package:travel_app/data/repositories/language_repository_impl.dart';
 
 // Import viewmodels
 import 'package:travel_app/features/auth/viewmodels/login_view_model.dart';
@@ -33,7 +39,7 @@ import 'package:travel_app/features/utilities/text_translation/viewmodels/text_t
 import 'package:travel_app/features/utilities/world_clock/viewmodels/world_clock_view_model.dart';
 import 'package:travel_app/features/utilities/weather_forecast/viewmodels/weather_forecast_view_model.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
-import 'package:travel_app/features/explore/view_models/explore_view_model.dart';
+import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 
 // Tạo global instance của GetIt
 final GetIt getIt = GetIt.instance;
@@ -57,6 +63,12 @@ void setupDependencies() {
   getIt.registerLazySingleton<WeatherConfigService>(
     () => WeatherConfigService(),
   );
+  getIt.registerLazySingleton<ILanguageRepository>(
+    () => LanguageRepositoryImpl(),
+  );
+  getIt.registerLazySingleton<ISupportEmailService>(
+    () => SupportEmailService(),
+  );
 
   //==========================================================================//
   //           REPOSITORIES (Singleton - chỉ tạo 1 instance duy nhất)         //
@@ -66,6 +78,9 @@ void setupDependencies() {
   getIt.registerLazySingleton<IHomeRepository>(() => HomeRepositoryImpl());
   getIt.registerLazySingleton<IExploreRepository>(
     () => ExploreRepositoryImpl(),
+  );
+  getIt.registerLazySingleton<ICurrencyRepository>(
+    () => CurrencyRepositoryImpl(),
   );
 
   //==========================================================================//
@@ -92,7 +107,10 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<ContactSupportViewModel>(
-    () => ContactSupportViewModel(),
+    () => ContactSupportViewModel(
+      getIt<ISupportEmailService>(),
+      getIt<IUserRepository>(),
+    ),
   );
 
   getIt.registerFactory<WorldClockViewModel>(
@@ -104,7 +122,7 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<CurrencyExchangeViewModel>(
-    () => CurrencyExchangeViewModel(),
+    () => CurrencyExchangeViewModel(getIt<ICurrencyRepository>()),
   );
 
   getIt.registerFactory<TextTranslationViewModel>(
@@ -112,6 +130,7 @@ void setupDependencies() {
       getIt<SpeechTtsService>(),
       getIt<ImageTranslationService>(),
       getIt<IUserRepository>(),
+      getIt<ILanguageRepository>(),
     ),
   );
 

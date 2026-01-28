@@ -265,7 +265,7 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                         color: Color(0xFF2A2A2A),
                       ),
                       child: Icon(
-                        CupertinoIcons.arrow_down_to_line_alt,
+                        CupertinoIcons.bookmark_fill,
                         color: Color(0xFFFFAD35),
                       ),
                     ),

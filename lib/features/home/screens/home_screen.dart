@@ -6,6 +6,7 @@ import 'package:travel_app/features/home/widgets/slide_card_widget.dart';
 import 'package:travel_app/features/home/widgets/scroll_card_widget.dart';
 import 'package:travel_app/features/home/widgets/gradient_divider_widget.dart';
 import 'package:travel_app/features/home/widgets/title_widget.dart';
+import 'package:travel_app/shared/providers/saved_count_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -100,8 +101,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : SlideCardWidget(
                       controller: _pageController,
-                      length: viewModel.popularDestinations.length,
-                      destinations: viewModel.popularDestinations,
+                      destinations: viewModel.top5Display,
+                      length: viewModel.top5Display.length,
+                      isSaved: viewModel.isSaved,
+                      onHeartTap: (name) {
+                        viewModel.toggleSave(name, false);
+                        if (viewModel.isSaved(name)) {
+                          // Nếu đang save (chưa saved trước đó)
+                          context.read<SavedCountProvider>().increment();
+                        }
+                      },
                     ),
               const SizedBox(height: 30),
 
@@ -114,13 +123,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
-                itemCount: viewModel.recommendDestinations.length,
+                itemCount: viewModel.top10Display.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.only(bottom: 20),
                     child: ScrollCardWidget(
-                      recommendDestination: viewModel.recommendDestinations,
+                      destinations: viewModel.top10Display,
                       index: index,
+                      isSaved: viewModel.isSaved,
+                      onHeartTap: (name) {
+                        viewModel.toggleSave(name, true);
+                        if (viewModel.isSaved(name)) {
+                          context.read<SavedCountProvider>().increment();
+                        }
+                      },
                     ),
                   );
                 },

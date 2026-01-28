@@ -10,11 +10,16 @@ class SlideCardWidget extends StatefulWidget {
   final PageController controller;
   final List<Destination> destinations;
   final int length;
+  final Function(String name)? onHeartTap;
+  final bool Function(String name) isSaved;
+
   const SlideCardWidget({
     super.key,
     required this.controller,
     required this.length,
     required this.destinations,
+    required this.isSaved,
+    this.onHeartTap,
   });
 
   @override
@@ -217,7 +222,11 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                       child: SizedBox(
                         width: 50,
                         height: 50,
-                        child: HeartButtonWidget(isSaved: false),
+                        child: HeartButtonWidget(
+                          isSaved: widget.isSaved(destination.name),
+                          onTap: () =>
+                              widget.onHeartTap?.call(destination.name),
+                        ),
                       ),
                     ),
                   ],
