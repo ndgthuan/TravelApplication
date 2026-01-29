@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,6 +10,24 @@ class HourlyForecastWidget extends StatefulWidget {
 
   @override
   State<HourlyForecastWidget> createState() => _HourlyForecastWidgetState();
+}
+
+Widget _buildIcon(BuildContext context, String? iconUrl) {
+  final url = (iconUrl ?? '').toString().trim();
+  if (url.isEmpty) {
+    return Icon(
+      CupertinoIcons.cloud_sun_fill,
+      color: Color(0xFFFFAD35),
+      size: 40,
+    );
+  }
+  return Lottie.network(
+    url,
+    width: 40,
+    height: 40,
+    errorBuilder: (context, error, stackTrace) =>
+        Icon(CupertinoIcons.exclamationmark_circle, color: Colors.red),
+  );
 }
 
 class _HourlyForecastWidgetState extends State<HourlyForecastWidget> {
@@ -63,13 +81,7 @@ class _HourlyForecastWidgetState extends State<HourlyForecastWidget> {
                               : FontWeight.normal,
                         ),
                       ),
-                      Lottie.network(
-                        item['icon'],
-                        width: 40,
-                        height: 40,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Icon(CupertinoIcons.exclamationmark_circle, color: Colors.red),
-                      ),
+                      _buildIcon(context, item['icon']),
                       Text(
                         '${item['temp'].toInt()}°C',
                         style: GoogleFonts.beVietnamPro(

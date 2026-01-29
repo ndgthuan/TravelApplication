@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/domain/repositories/i_explore_repository.dart';
-import 'package:travel_app/features/explore/models/destination_model.dart';
+import 'package:travel_app/domain/models/destination_model.dart';
 import 'package:travel_app/domain/repositories/i_user_repository.dart';
 
 class ExploreViewModel extends ChangeNotifier {
@@ -55,7 +56,7 @@ class ExploreViewModel extends ChangeNotifier {
       _cities = await _repository.getCities();
       _destinations = await _repository.getDestinations();
     } catch (e) {
-      _errorMessage = 'Không thể tải dữ liệu. Thử lại.';
+      _errorMessage = 'explore.load_error'.tr();
     }
 
     _isLoading = false;
@@ -122,7 +123,7 @@ class ExploreViewModel extends ChangeNotifier {
         _selectedCity,
       );
     } catch (e) {
-      _errorMessage = 'Không thể lọc. Thử lại.';
+      _errorMessage = 'explore.filter_error'.tr();
     }
 
     _isLoading = false;
@@ -155,7 +156,7 @@ class ExploreViewModel extends ChangeNotifier {
         await _repository.saveDestination(user.uid, destination);
       }
     } catch (e) {
-      _errorMessage = 'Không thể lưu / bỏ lưu. Thử lại.';
+      _errorMessage = 'explore.save_error'.tr();
     }
     notifyListeners();
   }
@@ -170,7 +171,7 @@ class ExploreViewModel extends ChangeNotifier {
       _savedFromFirestore = await _repository.getSavedDestinations(user.uid);
       _savedIds = _savedFromFirestore.map((d) => d.name).toSet();
     } catch (e) {
-      _errorMessage = 'Không thể tải danh sách đã lưu.';
+      _errorMessage = 'explore.load_saved_error'.tr();
     }
     notifyListeners();
   }

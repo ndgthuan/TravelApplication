@@ -1,19 +1,19 @@
-﻿// Mục đích của file này quản lý state và logic cho WeatherForecastScreen
+// Mục đích của file này quản lý state và logic cho WeatherForecastScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/shared/services/geocoding_service.dart';
-import 'package:travel_app/features/utilities/weather_forecast/service/weather_service.dart';
-import 'package:travel_app/features/utilities/weather_forecast/service/weather_config_service.dart';
+import 'package:travel_app/domain/services/i_geocoding_service.dart';
+import 'package:travel_app/domain/services/i_weather_service.dart';
+import 'package:travel_app/domain/services/i_weather_config_service.dart';
 
 class WeatherForecastViewModel extends ChangeNotifier {
   //==========================================================================//
   //                        DEPENDENCIES                                      //
   //==========================================================================//
-  final GeocodingService _geocodingService;
-  final WeatherService _weatherService;
-  final WeatherConfigService _weatherConfigService;
+  final IGeocodingService _geocodingService;
+  final IWeatherService _weatherService;
+  final IWeatherConfigService _weatherConfigService;
 
   WeatherForecastViewModel(
     this._geocodingService,
@@ -132,10 +132,10 @@ class WeatherForecastViewModel extends ChangeNotifier {
 
   // Chọn location từ kết quả search
   void selectLocation(Map<String, dynamic> location) {
-    _location = location['name'];
+    _location = location['city'] ?? location['name'] ?? 'Unknown';
     _country = location['country'] ?? '';
-    _latitude = location['latitude'] ?? 0.0;
-    _longitude = location['longitude'] ?? 0.0;
+    _latitude = (location['latitude'] as num?)?.toDouble() ?? 0.0;
+    _longitude = (location['longitude'] as num?)?.toDouble() ?? 0.0;
     _searchResults = [];
     notifyListeners();
     fetchWeather();

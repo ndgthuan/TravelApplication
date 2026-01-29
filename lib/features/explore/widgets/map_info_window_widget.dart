@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:travel_app/features/explore/models/destination_model.dart';
+import 'package:travel_app/domain/models/destination_model.dart';
 
 class MapInfoWindowWidget extends StatelessWidget {
   final DestinationModel dest;
@@ -43,17 +43,22 @@ class MapInfoWindowWidget extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(12),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: dest.imageUrl,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                        Container(color: Colors.grey[300]),
-                    errorWidget: (context, url, error) => Container(
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.error),
-                    ),
-                  ),
+                  child: dest.imageUrl.trim().isEmpty
+                      ? Container(
+                          color: Colors.grey[300],
+                          child: const Icon(Icons.image_not_supported),
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: dest.imageUrl,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) =>
+                              Container(color: Colors.grey[300]),
+                          errorWidget: (context, url, error) => Container(
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.error),
+                          ),
+                        ),
                 ),
               ),
               Expanded(

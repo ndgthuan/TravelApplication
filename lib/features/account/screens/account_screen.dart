@@ -11,7 +11,6 @@ import 'package:travel_app/features/account/widgets/setting_card_widget.dart';
 import 'package:travel_app/features/account/widgets/account_stat_card_widget.dart';
 import 'package:travel_app/features/account/widgets/utilities_grid_widget.dart';
 import 'package:travel_app/features/auth/screens/login_screen.dart';
-import 'package:travel_app/shared/services/cloudinary_service.dart';
 import 'package:travel_app/shared/widgets/app_button_widget.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -35,6 +34,8 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
+  bool _isValidImageUrl(String? url) => url != null && url.trim().isNotEmpty;
+
   // Tạo method thay đổi nền
   Future<void> _changeBackgroundImage() async {
     final viewModel = context.read<AccountViewModel>();
@@ -47,17 +48,9 @@ class _AccountScreenState extends State<AccountScreen> {
     // Kiểm tra nếu user không chọn ảnh
     if (pickedFile == null) return;
 
-    // Chuyển XFile thành File và upload lên Cloudinary
+    // Chuyển XFile thành File và upload qua ViewModel
     final File imageFile = File(pickedFile.path);
-    final String? cloudinaryUrl = await CloudinaryService.uploadImage(
-      imageFile,
-    );
-
-    // Kiểm tra nếu upload thất bại
-    if (cloudinaryUrl == null) return;
-
-    // Cập nhật UI
-    await viewModel.updateBackgroundUrl(cloudinaryUrl);
+    await viewModel.uploadBackgroundImage(imageFile);
   }
 
   @override
@@ -84,7 +77,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       bottom: BorderSide(color: Color(0xFFFFAD35), width: 1),
                     ),
                     color: Color(0xFF1C1C1D),
-                    image: viewModel.backgroundUrl != null
+                    image: _isValidImageUrl(viewModel.backgroundUrl)
                         ? DecorationImage(
                             image: NetworkImage(viewModel.backgroundUrl!),
                             fit: BoxFit.cover,
@@ -121,14 +114,14 @@ class _AccountScreenState extends State<AccountScreen> {
                         border: Border.all(color: Color(0xFFFFAD35)),
                         shape: BoxShape.circle,
                         // Thay gradient bằng image
-                        image: viewModel.avatarUrl != null
+                        image: _isValidImageUrl(viewModel.avatarUrl)
                             ? DecorationImage(
                                 image: NetworkImage(viewModel.avatarUrl!),
                                 fit: BoxFit.cover,
                               )
                             : null,
                         // Giữ gradient làm fallback nếu không có avatar
-                        gradient: viewModel.avatarUrl == null
+                        gradient: !_isValidImageUrl(viewModel.avatarUrl)
                             ? LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -137,7 +130,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             : null,
                       ),
                       // Hiển thị icon mặc định nếu không có avatar
-                      child: viewModel.avatarUrl == null
+                      child: !_isValidImageUrl(viewModel.avatarUrl)
                           ? Icon(
                               CupertinoIcons.person,
                               color: Colors.grey[600],

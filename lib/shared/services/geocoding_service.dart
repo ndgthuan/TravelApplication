@@ -1,10 +1,11 @@
-﻿/// GeocodingService - Chỉ lo việc gọi API tìm kiếm địa điểm
-/// Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
+﻿// GeocodingService - Chỉ lo việc gọi API tìm kiếm địa điểm
+// Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:travel_app/domain/services/i_geocoding_service.dart';
 
-class GeocodingService {
+class GeocodingService implements IGeocodingService {
   final String _baseUrl;
 
   // Constructor cho phép inject base URL

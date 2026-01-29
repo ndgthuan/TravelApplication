@@ -2,8 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/features/explore/models/destination_model.dart';
+import 'package:travel_app/domain/models/destination_model.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ExploreMapSearchOverlay extends StatelessWidget {
   final TextEditingController searchController;
@@ -30,7 +31,7 @@ class ExploreMapSearchOverlay extends StatelessWidget {
         children: [
           AppTextFieldWidget(
             controller: searchController,
-            hintText: 'Tìm kiếm địa điểm...',
+            hintText: "explore.search_hint".tr(),
             prefixIcon: Icons.search,
             horizontalPadding: 0,
             onChanged: onSearchChanged,

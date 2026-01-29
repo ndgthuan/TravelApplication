@@ -1,7 +1,8 @@
-﻿/// TimezoneUtilService - Chỉ lo logic tính toán timezone
-/// Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
+﻿// TimezoneUtilService - Chỉ lo logic tính toán timezone
+// Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
+import 'package:travel_app/domain/services/i_timezone_util_service.dart';
 
-class TimezoneUtilService {
+class TimezoneUtilService implements ITimezoneUtilService {
   // Map common timezones to UTC offset
   static const Map<String, int> _timezoneOffsets = {
     'Asia/Ho_Chi_Minh': 7,

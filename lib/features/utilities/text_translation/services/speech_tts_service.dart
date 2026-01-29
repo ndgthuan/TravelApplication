@@ -3,8 +3,9 @@
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:travel_app/domain/services/i_speech_tts_service.dart';
 
-class SpeechTtsService {
+class SpeechTtsService implements ISpeechTtsService {
   final stt.SpeechToText _speech = stt.SpeechToText();
   final FlutterTts _flutterTts = FlutterTts();
 

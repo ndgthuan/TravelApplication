@@ -152,7 +152,9 @@
     "lowest": "最低",
     "average": "平均",
     "highest": "最高",
-    "unsupported_currency": "不支持此货币"
+    "unsupported_currency": "不支持此货币",
+    "load_error": "无法加载货币",
+    "fetch_rates_error": "无法获取汇率"
   },
   "weather": {
     "title": "天气预报",
@@ -174,5 +176,32 @@
     "same_time": "相同时间",
     "today_offset": "今天，{offset}小时"
   }
-  ,"ocr": { "error": "无法识别图片中的文字" }
+  ,"ocr": { "error": "无法识别图片中的文字" },
+  "explore": {
+    "title": "探索",
+    "search_hint": "搜索目的地...",
+    "all": "全部",
+    "tourist_destinations": "旅游目的地",
+    "no_data": "暂无数据",
+    "my_saves": "我的收藏",
+    "saved_destinations": "已保存的目的地",
+    "no_saved_places": "尚未保存任何地点",
+    "all_cities": "所有城市",
+    "select_city_title": "选择城市",
+    "search_city_hint": "搜索城市...",
+    "city_not_found": "未找到城市",
+    "saved_places": "已保存地点",
+    "categories": {
+      "Hotel": "酒店",
+      "Restaurant": "餐厅",
+      "Cafe": "咖啡馆",
+      "Attraction": "景点",
+      "Malls": "购物中心",
+      "Market": "市场"
+    },
+    "load_error": "无法加载数据。请重试。",
+    "filter_error": "无法筛选。请重试。",
+    "save_error": "无法保存/取消保存。请重试。",
+    "load_saved_error": "无法加载已保存列表。"
+  }
 }

@@ -2,8 +2,9 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:travel_app/domain/services/i_weather_service.dart';
 
-class WeatherService {
+class WeatherService implements IWeatherService {
   final String _baseUrl;
 
   // Constructor cho phép inject base URL

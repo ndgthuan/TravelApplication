@@ -143,6 +143,9 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
                     ExchangeRateChartWidget(
                       fromCurrency: viewModel.fromCurrency['code'] ?? 'USD',
                       toCurrency: viewModel.toCurrency['code'] ?? 'VND',
+                      chartData: viewModel.chartData,
+                      isChartLoading: viewModel.isChartLoading,
+                      chartError: viewModel.chartError,
                     ),
                     SizedBox(height: 15),
 

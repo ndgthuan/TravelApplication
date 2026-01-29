@@ -152,7 +152,9 @@
     "lowest": "Le plus bas",
     "average": "Moyenne",
     "highest": "Le plus haut",
-    "unsupported_currency": "Cette devise n'est pas prise en charge"
+    "unsupported_currency": "Cette devise n'est pas prise en charge",
+    "load_error": "Impossible de charger les devises",
+    "fetch_rates_error": "Impossible de récupérer les taux de change"
   },
   "weather": {
     "title": "Prévisions météo",
@@ -174,5 +176,32 @@
     "same_time": "Même heure",
     "today_offset": "Aujourd'hui, {offset} h"
   }
-  ,"ocr": { "error": "Impossible de reconnaître le texte" }
+  ,"ocr": { "error": "Impossible de reconnaître le texte" },
+  "explore": {
+    "title": "Explorer",
+    "search_hint": "Rechercher des destinations...",
+    "all": "Tout",
+    "tourist_destinations": "Destinations touristiques",
+    "no_data": "Pas de données disponibles",
+    "my_saves": "Mes enregistrements",
+    "saved_destinations": "Destinations enregistrées",
+    "no_saved_places": "Aucun lieu enregistré",
+    "all_cities": "Toutes les villes",
+    "select_city_title": "Sélectionner une ville",
+    "search_city_hint": "Rechercher une ville...",
+    "city_not_found": "Ville non trouvée",
+    "saved_places": "Lieux enregistrés",
+    "categories": {
+      "Hotel": "Hôtel",
+      "Restaurant": "Restaurant",
+      "Cafe": "Café",
+      "Attraction": "Attraction",
+      "Malls": "Centre commercial",
+      "Market": "Marché"
+    },
+    "load_error": "Impossible de charger les données. Veuillez réessayer.",
+    "filter_error": "Impossible de filtrer. Veuillez réessayer.",
+    "save_error": "Impossible d'enregistrer/annuler. Veuillez réessayer.",
+    "load_saved_error": "Impossible de charger la liste enregistrée."
+  }
 }

@@ -155,7 +155,9 @@
     "lowest": "Lowest",
     "average": "Average",
     "highest": "Highest",
-    "unsupported_currency": "This currency is not supported"
+    "unsupported_currency": "This currency is not supported",
+    "load_error": "Failed to load currencies",
+    "fetch_rates_error": "Failed to fetch exchange rates"
   },
   "weather": {
     "title": "Weather Forecast",
@@ -177,5 +179,32 @@
     "same_time": "Same time",
     "today_offset": "Today, {offset} HRS"
   }
-  ,"ocr": { "error": "Failed to recognize text from image" }
+  ,"ocr": { "error": "Failed to recognize text from image" },
+  "explore": {
+    "title": "Explore",
+    "search_hint": "Search destinations...",
+    "all": "All",
+    "tourist_destinations": "Tourist Destinations",
+    "no_data": "No data available",
+    "my_saves": "My Saves",
+    "saved_destinations": "Saved Destinations",
+    "no_saved_places": "No saved places yet",
+    "all_cities": "All cities",
+    "select_city_title": "Select City",
+    "search_city_hint": "Search city...",
+    "city_not_found": "City not found",
+    "saved_places": "Saved Places",
+    "categories": {
+      "Hotel": "Hotel",
+      "Restaurant": "Restaurant",
+      "Cafe": "Cafe",
+      "Attraction": "Attraction",
+      "Malls": "Mall",
+      "Market": "Market"
+    },
+    "load_error": "Unable to load data. Please try again.",
+    "filter_error": "Unable to filter. Please try again.",
+    "save_error": "Unable to save / unsave. Please try again.",
+    "load_saved_error": "Unable to load saved list."
+  }
 }

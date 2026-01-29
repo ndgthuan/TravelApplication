@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -36,15 +36,15 @@ class CurrencyPickerBottomSheet extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final currency = vm.currencies[index];
                     final isSelected = isFrom
-                        ? currency['code'] == vm.fromCurrency['code']
-                        : currency['code'] == vm.toCurrency['code'];
+                        ? currency.code == vm.fromCurrency['code']
+                        : currency.code == vm.toCurrency['code'];
                     return ListTile(
                       leading: Text(
-                        currency['flag']!,
+                        currency.flag,
                         style: TextStyle(fontSize: 24),
                       ),
                       title: Text(
-                        '${currency['code']} - ${currency['name']}',
+                        '${currency.code} - ${currency.name}',
                         style: GoogleFonts.beVietnamPro(
                           color: isSelected ? Color(0xFFFFAD35) : Colors.white,
                         ),

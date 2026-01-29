@@ -1,14 +1,14 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
-import 'package:travel_app/features/home/models/destination_model.dart';
+import 'package:travel_app/domain/models/home_destination_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travel_app/shared/widgets/heart_button_widget.dart';
 
 class SlideCardWidget extends StatefulWidget {
   final PageController controller;
-  final List<Destination> destinations;
+  final List<HomeDestination> destinations;
   final int length;
   final Function(String name)? onHeartTap;
   final bool Function(String name) isSaved;
@@ -76,29 +76,25 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                     // 1. Ảnh nền
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: CachedNetworkImage(
-                        imageUrl: destination.imagePath,
-                        height: 350,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: const Color(0xFF2A2A2A),
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xFFFFAD35),
-                              strokeWidth: 2,
+                      child: destination.imagePath.trim().isEmpty
+                          ? _placeholder(350, double.infinity, 40)
+                          : CachedNetworkImage(
+                              imageUrl: destination.imagePath,
+                              height: 350,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                color: const Color(0xFF2A2A2A),
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFFFFAD35),
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  _placeholder(350, double.infinity, 40),
                             ),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: const Color(0xFF2A2A2A),
-                          child: const Icon(
-                            CupertinoIcons.photo,
-                            color: Colors.grey,
-                            size: 40,
-                          ),
-                        ),
-                      ),
                     ),
                     // 2. Lớp đen mờ
                     Positioned(
@@ -190,9 +186,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                               const SizedBox(height: 10),
                               Container(
                                 decoration: BoxDecoration(
-                                  border: BoxBorder.all(
-                                    color: Color(0XFF1E1E1E),
-                                  ),
+                                  border: Border.all(color: Color(0XFF1E1E1E)),
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.grey.shade800,
                                 ),
@@ -271,4 +265,12 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
       ],
     );
   }
+
+  Widget _placeholder(double height, double width, double iconSize) =>
+      Container(
+        height: height,
+        width: width,
+        color: const Color(0xFF2A2A2A),
+        child: Icon(CupertinoIcons.photo, color: Colors.grey, size: iconSize),
+      );
 }

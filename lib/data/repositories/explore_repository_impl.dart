@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_app/domain/repositories/i_explore_repository.dart';
-import 'package:travel_app/features/explore/models/destination_model.dart';
+import 'package:travel_app/domain/models/destination_model.dart';
 
 // Implementation đọc dữ liệu từ API npoint.io
 class ExploreRepositoryImpl implements IExploreRepository {
@@ -24,12 +24,12 @@ class ExploreRepositoryImpl implements IExploreRepository {
         _cachedData = data.map((e) => DestinationModel.fromJson(e)).toList();
         return _cachedData!;
       } else {
-        log("KHÔNG THỂ FETCH DATA TỪ ĐƯỜNG DẪN");
-        return [];
+        log("GET DESTINATIONS FAILED: ${response.statusCode}");
+        throw Exception('Không thể tải danh sách địa điểm.');
       }
     } catch (e) {
-      log("Lỗi load data: $e");
-      return [];
+      log("getDestinations error: $e");
+      rethrow;
     }
   }
 
@@ -85,27 +85,32 @@ class ExploreRepositoryImpl implements IExploreRepository {
 
   @override
   Future<List<DestinationModel>> getSavedDestinations(String userId) async {
-    final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('saved_destinations')
-        .get();
+    try {
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('saved_destinations')
+          .get();
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return DestinationModel(
-        name: data['name'] ?? '',
-        address: data['address'] ?? '',
-        city: data['city'] ?? '',
-        country: data['country'] ?? 'Vietnam',
-        latitude: (data['latitude'] ?? 0).toDouble(),
-        longitude: (data['longitude'] ?? 0).toDouble(),
-        rating: data['rating']?.toString() ?? '0.0',
-        reviewCount: data['reviewCount']?.toString() ?? '0',
-        category: data['category'] ?? '',
-        imageUrl: data['imageUrl'] ?? '',
-      );
-    }).toList();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return DestinationModel(
+          name: data['name'] ?? '',
+          address: data['address'] ?? '',
+          city: data['city'] ?? '',
+          country: data['country'] ?? 'Vietnam',
+          latitude: (data['latitude'] ?? 0).toDouble(),
+          longitude: (data['longitude'] ?? 0).toDouble(),
+          rating: data['rating']?.toString() ?? '0.0',
+          reviewCount: data['reviewCount']?.toString() ?? '0',
+          category: data['category'] ?? '',
+          imageUrl: data['imageUrl'] ?? '',
+        );
+      }).toList();
+    } catch (e) {
+      log("getSavedDestinations error: $e");
+      rethrow;
+    }
   }
 
   @override
@@ -113,36 +118,46 @@ class ExploreRepositoryImpl implements IExploreRepository {
     String userId,
     DestinationModel destination,
   ) async {
-    await _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('saved_destinations')
-        .add({
-          'name': destination.name,
-          'address': destination.address,
-          'city': destination.city,
-          'country': destination.country,
-          'latitude': destination.latitude,
-          'longitude': destination.longitude,
-          'rating': destination.rating,
-          'reviewCount': destination.reviewCount,
-          'category': destination.category,
-          'imageUrl': destination.imageUrl,
-          'savedAt': FieldValue.serverTimestamp(),
-        });
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('saved_destinations')
+          .add({
+            'name': destination.name,
+            'address': destination.address,
+            'city': destination.city,
+            'country': destination.country,
+            'latitude': destination.latitude,
+            'longitude': destination.longitude,
+            'rating': destination.rating,
+            'reviewCount': destination.reviewCount,
+            'category': destination.category,
+            'imageUrl': destination.imageUrl,
+            'savedAt': FieldValue.serverTimestamp(),
+          });
+    } catch (e) {
+      log("saveDestination error: $e");
+      rethrow;
+    }
   }
 
   @override
   Future<void> unsaveDestination(String userId, String name) async {
-    final snapshot = await _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('saved_destinations')
-        .where('name', isEqualTo: name)
-        .get();
+    try {
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('saved_destinations')
+          .where('name', isEqualTo: name)
+          .get();
 
-    for (var doc in snapshot.docs) {
-      await doc.reference.delete();
+      for (var doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+    } catch (e) {
+      log("unsaveDestination error: $e");
+      rethrow;
     }
   }
 }

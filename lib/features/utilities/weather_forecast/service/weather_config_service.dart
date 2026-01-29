@@ -3,8 +3,9 @@
 
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:travel_app/domain/services/i_weather_config_service.dart';
 
-class WeatherConfigService {
+class WeatherConfigService implements IWeatherConfigService {
   Map<String, dynamic>? _weatherConfigs;
 
   // Getter để biết config đã load chưa

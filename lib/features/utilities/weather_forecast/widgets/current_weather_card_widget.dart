@@ -1,4 +1,4 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -41,13 +41,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
           Positioned(
             top: 10,
             right: 10,
-            child: Lottie.network(
-              iconUrl,
-              width: 150,
-              height: 150,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) => Container(),
-            ),
+            child: _buildWeatherIcon(context, iconUrl),
           ),
 
           // Main Content
@@ -164,6 +158,26 @@ class CurrentWeatherCardWidget extends StatelessWidget {
   //==========================================================================//
   //                        HELPER WIDGETS                                    //
   //==========================================================================//
+  Widget _buildWeatherIcon(BuildContext context, String url) {
+    if (url.trim().isEmpty) {
+      return Icon(
+        CupertinoIcons.cloud_sun_fill,
+        color: Color(0xFFFFAD35),
+        size: 80,
+      );
+    }
+    return Lottie.network(
+      url,
+      width: 150,
+      height: 150,
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) => Icon(
+        CupertinoIcons.cloud_sun_fill,
+        color: Color(0xFFFFAD35),
+        size: 80,
+      ),
+    );
+  }
 
   Widget _buildWeatherDetail(IconData icon, String label, String value) {
     return Row(

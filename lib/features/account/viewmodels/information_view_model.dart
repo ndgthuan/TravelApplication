@@ -2,7 +2,7 @@
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'package:flutter/material.dart';
 import '../../../domain/repositories/i_user_repository.dart';
-import '../../../shared/services/cloudinary_service.dart';
+import 'package:travel_app/domain/services/i_cloudinary_service.dart';
 import 'dart:io';
 
 // Enum quản lý trạng thái màn hình
@@ -13,8 +13,9 @@ class InformationViewModel extends ChangeNotifier {
   //                        DEPENDENCY INJECTION                              //
   //==========================================================================//
   final IUserRepository _userRepository;
+  final ICloudinaryService _cloudinaryService;
 
-  InformationViewModel(this._userRepository);
+  InformationViewModel(this._userRepository, this._cloudinaryService);
 
   //==========================================================================//
   //                        STATE VARIABLES                                   //
@@ -67,7 +68,7 @@ class InformationViewModel extends ChangeNotifier {
   Future<void> uploadAvatar(File imageFile) async {
     _isUploading = true;
     notifyListeners();
-    final url = await CloudinaryService.uploadImage(imageFile);
+    final url = await _cloudinaryService.uploadImage(imageFile);
 
     if (url != null) {
       await _userRepository.updateUser({'avatarUrl': url});

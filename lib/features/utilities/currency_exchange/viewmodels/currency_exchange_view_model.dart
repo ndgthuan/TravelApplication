@@ -1,7 +1,10 @@
-﻿// Mục đích của file này quản lý state và logic cho CurrencyExchangeScreen
+// Mục đích của file này quản lý state và logic cho CurrencyExchangeScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'package:flutter/widgets.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:travel_app/domain/models/historical_rates_model.dart';
 import 'package:travel_app/domain/repositories/i_currency_repository.dart';
+import 'package:travel_app/domain/models/currency_model.dart';
 
 class CurrencyExchangeViewModel extends ChangeNotifier {
   //==========================================================================//
@@ -14,23 +17,31 @@ class CurrencyExchangeViewModel extends ChangeNotifier {
   //                        STATE VARIABLES                                   //
   //==========================================================================//
   // Khai báo biến để gọi bên UI
-  List<Map<String, dynamic>> _currencies = [];
+  List<CurrencyModel> _currencies = [];
   Map<String, dynamic> _fromCurrency = {};
   Map<String, dynamic> _toCurrency = {};
-  Map<String, dynamic> _rates = {};
+  Map<String, double> _rates = {};
   double _convertedAmount = 0;
   bool _isLoading = true;
+  String _errorMessage = '';
+  HistoricalRatesModel? _chartData;
+  bool _isChartLoading = true;
+  String? _chartError;
 
   //==========================================================================//
   //                        GETTERS                                           //
   //==========================================================================//
   // Các hàm gọi bên UI
-  List<Map<String, dynamic>> get currencies => _currencies;
+  List<CurrencyModel> get currencies => _currencies;
   Map<String, dynamic> get fromCurrency => _fromCurrency;
   Map<String, dynamic> get toCurrency => _toCurrency;
-  Map<String, dynamic> get rates => _rates;
+  Map<String, double> get rates => _rates;
   double get convertedAmount => _convertedAmount;
   bool get isLoading => _isLoading;
+  String get errorMessage => _errorMessage;
+  HistoricalRatesModel? get chartData => _chartData;
+  bool get isChartLoading => _isChartLoading;
+  String? get chartError => _chartError;
 
   //==========================================================================//
   //                        ACTION METHODS                                    //
@@ -38,42 +49,55 @@ class CurrencyExchangeViewModel extends ChangeNotifier {
   // Giá trị mặc định để tính khi load xong
   String _defaultAmount = '10';
 
-  // Load danh sách currencies từ JSON
-  Future<void> loadCurrencies({String defaultAmount = '10'}) async {
-    _defaultAmount = defaultAmount;
+  void clearError() {
+    _errorMessage = '';
+    notifyListeners();
+  }
+
+  // Load danh sách currencies từ JSON, set default from/to, fetch rates + chart
+  Future<void> loadCurrencies({String? defaultAmount}) async {
+    _defaultAmount = defaultAmount ?? '10';
+    _errorMessage = '';
     try {
       _currencies = await _currencyRepository.getSupportedCurrencies();
-
-      _fromCurrency = _currencies.isNotEmpty
-          ? _currencies.firstWhere(
-              (c) => c['code'] == 'USD',
-              orElse: () => _currencies.first,
-            )
-          : {};
-      _toCurrency = _currencies.isNotEmpty
-          ? _currencies.firstWhere(
-              (c) => c['code'] == 'VND',
-              orElse: () => _currencies.last,
-            )
-          : {};
+      if (_currencies.length >= 2) {
+        _fromCurrency = {
+          'code': _currencies[0].code,
+          'name': _currencies[0].name,
+          'flag': _currencies[0].flag,
+        };
+        _toCurrency = {
+          'code': _currencies[1].code,
+          'name': _currencies[1].name,
+          'flag': _currencies[1].flag,
+        };
+        await fetchExchangeRates(_currencies[0].code);
+        calculateConversion(_defaultAmount);
+        await fetchChartData();
+      }
+      _isLoading = false;
       notifyListeners();
-      await fetchExchangeRates();
     } catch (e) {
       _isLoading = false;
+      _errorMessage = 'currency.load_error'.tr();
       notifyListeners();
     }
   }
 
   // Fetch tỷ giá từ API
-  Future<void> fetchExchangeRates() async {
+  Future<void> fetchExchangeRates(String baseCurrency) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
     try {
-      final base = _fromCurrency['code']?.toString() ?? 'USD';
-      _rates = await _currencyRepository.fetchExchangeRates(base);
+      final result = await _currencyRepository.fetchExchangeRates(baseCurrency);
+      _rates = result.rates;
       _isLoading = false;
-      calculateConversion(_defaultAmount);
       notifyListeners();
     } catch (e) {
       _isLoading = false;
+      _errorMessage = 'currency.fetch_rates_error'.tr();
       notifyListeners();
     }
   }
@@ -82,7 +106,8 @@ class CurrencyExchangeViewModel extends ChangeNotifier {
   void calculateConversion(String amountText) {
     if (_rates.isEmpty) return;
     final amount = double.tryParse(amountText) ?? 0;
-    final rate = _rates[_toCurrency['code']] ?? 1;
+    final code = _toCurrency['code'] as String?;
+    final rate = (code != null ? _rates[code] : null) ?? 1.0;
     _convertedAmount = amount * rate;
     notifyListeners();
   }
@@ -93,21 +118,56 @@ class CurrencyExchangeViewModel extends ChangeNotifier {
     _fromCurrency = _toCurrency;
     _toCurrency = temp;
     notifyListeners();
-    await fetchExchangeRates();
+    final base = _fromCurrency['code'] as String?;
+    if (base != null) await fetchExchangeRates(base);
+    await fetchChartData();
   }
 
-  // Chọn tiền tệ
-  Future<void> selectCurrency(
-    Map<String, dynamic> currency,
-    bool isFrom,
-  ) async {
+  // Chọn tiền tệ (nhận CurrencyModel từ UI)
+  Future<void> selectCurrency(CurrencyModel currency, bool isFrom) async {
+    final map = {
+      'code': currency.code,
+      'name': currency.name,
+      'flag': currency.flag,
+    };
     if (isFrom) {
-      _fromCurrency = currency;
+      _fromCurrency = map;
     } else {
-      _toCurrency = currency;
+      _toCurrency = map;
     }
     notifyListeners();
-    await fetchExchangeRates();
+    final base = _fromCurrency['code'] as String?;
+    if (base != null) await fetchExchangeRates(base);
+    await fetchChartData();
+  }
+
+  Future<void> fetchChartData() async {
+    final base = _fromCurrency['code'] as String?;
+    final target = _toCurrency['code'] as String?;
+    if (base == null || target == null || base.isEmpty || target.isEmpty) {
+      _chartData = null;
+      _chartError = null;
+      _isChartLoading = false;
+      notifyListeners();
+      return;
+    }
+
+    _isChartLoading = true;
+    _chartError = null;
+    notifyListeners();
+
+    try {
+      _chartData = await _currencyRepository.fetchHistoricalRates(
+        baseCurrency: base,
+        targetCurrency: target,
+      );
+      _chartError = null;
+    } catch (e) {
+      _chartData = null;
+      _chartError = 'currency.unsupported_currency'.tr();
+    }
+    _isChartLoading = false;
+    notifyListeners();
   }
 
   //==========================================================================//

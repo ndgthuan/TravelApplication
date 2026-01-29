@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -94,16 +94,15 @@ class _LanguagePickerBottomSheetState extends State<LanguagePickerBottomSheet> {
                         itemBuilder: (context, index) {
                           final lang = filteredLanguages[index];
                           final isSelected = widget.isSource
-                              ? lang['code'] == viewModel.sourceLanguage['code']
-                              : lang['code'] ==
-                                    viewModel.targetLanguage['code'];
+                              ? lang.code == viewModel.sourceLanguage.code
+                              : lang.code == viewModel.targetLanguage.code;
                           return ListTile(
                             leading: Text(
-                              lang['flag'] ?? '',
+                              lang.flag,
                               style: TextStyle(fontSize: 24),
                             ),
                             title: Text(
-                              lang['name'] ?? '',
+                              lang.name,
                               style: GoogleFonts.beVietnamPro(
                                 color: isSelected
                                     ? Color(0xFFFFAD35)

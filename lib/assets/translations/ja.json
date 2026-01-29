@@ -153,7 +153,9 @@
     "lowest": "最低",
     "average": "平均",
     "highest": "最高",
-    "unsupported_currency": "この通貨はサポートされていません"
+    "unsupported_currency": "この通貨はサポートされていません",
+    "load_error": "通貨を読み込めませんでした",
+    "fetch_rates_error": "為替レートを取得できませんでした"
   },
   "weather": {
     "title": "天気予報",
@@ -175,5 +177,32 @@
     "same_time": "同じ時刻",
     "today_offset": "今日、{offset}時間"
   }
-  ,"ocr": { "error": "画像からテキストを認識できませんでした" }
+  ,"ocr": { "error": "画像からテキストを認識できませんでした" },
+  "explore": {
+    "title": "探索",
+    "search_hint": "目的地を検索...",
+    "all": "すべて",
+    "tourist_destinations": "観光地",
+    "no_data": "データなし",
+    "my_saves": "保存済み",
+    "saved_destinations": "保存された目的地",
+    "no_saved_places": "保存された場所はまだありません",
+    "all_cities": "すべての都市",
+    "select_city_title": "都市を選択",
+    "search_city_hint": "都市を検索...",
+    "city_not_found": "都市が見つかりません",
+    "saved_places": "保存された場所",
+    "categories": {
+      "Hotel": "ホテル",
+      "Restaurant": "レストラン",
+      "Cafe": "カフェ",
+      "Attraction": "観光名所",
+      "Malls": "ショッピングモール",
+      "Market": "市場"
+    },
+    "load_error": "データを読み込めません。再試行してください。",
+    "filter_error": "フィルタリングできません。再試行してください。",
+    "save_error": "保存/保存解除できません。再試行してください。",
+    "load_saved_error": "保存されたリストを読み込めません。"
+  }
 }

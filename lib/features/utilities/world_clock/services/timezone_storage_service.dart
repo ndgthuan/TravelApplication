@@ -1,10 +1,11 @@
-﻿/// TimezoneStorageService - Chỉ lo việc lưu/đọc timezones từ SharedPreferences
-/// Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
+﻿// TimezoneStorageService - Chỉ lo việc lưu/đọc timezones từ SharedPreferences
+// Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
 
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travel_app/domain/services/i_timezone_storage_service.dart';
 
-class TimezoneStorageService {
+class TimezoneStorageService implements ITimezoneStorageService {
   static const String _storageKey = 'saved_timezones';
 
   // Default timezone khi chưa có dữ liệu

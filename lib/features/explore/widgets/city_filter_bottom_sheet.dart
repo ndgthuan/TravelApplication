@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
 
 class CityFilterBottomSheet extends StatefulWidget {
@@ -33,7 +34,7 @@ class _CityFilterBottomSheetState extends State<CityFilterBottomSheet> {
   List<String> get filteredCities {
     if (_searchQuery.isEmpty) return widget.cities;
     return widget.cities.where((city) {
-      final displayName = city.isEmpty ? "Tất cả tỉnh thành" : city;
+      final displayName = city.isEmpty ? "explore.all_cities".tr() : city;
       return displayName.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
   }
@@ -63,7 +64,7 @@ class _CityFilterBottomSheetState extends State<CityFilterBottomSheet> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              "Chọn Tỉnh/Thành phố",
+              "explore.select_city_title".tr(),
               style: GoogleFonts.beVietnamPro(
                 color: Colors.white,
                 fontSize: 18,
@@ -78,7 +79,7 @@ class _CityFilterBottomSheetState extends State<CityFilterBottomSheet> {
             child: AppTextFieldWidget(
               controller: _searchController,
               prefixIcon: Icons.search,
-              hintText: "Tìm tỉnh/thành phố...",
+              hintText: "explore.search_city_hint".tr(),
               horizontalPadding: 0,
               onChanged: (query) {
                 setState(() {
@@ -107,7 +108,7 @@ class _CityFilterBottomSheetState extends State<CityFilterBottomSheet> {
             child: filteredCities.isEmpty
                 ? Center(
                     child: Text(
-                      "Không tìm thấy tỉnh/thành phố",
+                      "explore.city_not_found".tr(),
                       style: GoogleFonts.beVietnamPro(color: Colors.grey),
                     ),
                   )
@@ -117,7 +118,7 @@ class _CityFilterBottomSheetState extends State<CityFilterBottomSheet> {
                       final city = filteredCities[index];
                       final isSelected = city == widget.selectedCity;
                       final displayName = city.isEmpty
-                          ? "Tất cả tỉnh thành"
+                          ? "explore.all_cities".tr()
                           : city;
 
                       return ListTile(
