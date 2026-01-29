@@ -12,6 +12,19 @@ import 'package:travel_app/shared/services/geocoding_service.dart';
 import 'package:travel_app/features/utilities/world_clock/services/timezone_storage_service.dart';
 import 'package:travel_app/features/utilities/world_clock/services/timezone_util_service.dart';
 import 'package:travel_app/features/utilities/text_translation/services/image_translation_service.dart';
+import 'package:travel_app/features/utilities/text_translation/services/translation_service.dart';
+import 'package:travel_app/domain/services/i_translation_service.dart';
+import 'package:travel_app/domain/services/i_cloudinary_service.dart';
+import 'package:travel_app/shared/services/cloudinary_service.dart';
+import 'package:travel_app/domain/services/i_storage_service.dart';
+import 'package:travel_app/shared/services/storage_service.dart';
+import 'package:travel_app/domain/services/i_geocoding_service.dart';
+import 'package:travel_app/domain/services/i_weather_service.dart';
+import 'package:travel_app/domain/services/i_weather_config_service.dart';
+import 'package:travel_app/domain/services/i_speech_tts_service.dart';
+import 'package:travel_app/domain/services/i_image_translation_service.dart';
+import 'package:travel_app/domain/services/i_timezone_storage_service.dart';
+import 'package:travel_app/domain/services/i_timezone_util_service.dart';
 
 // Import respositories
 import 'package:travel_app/domain/repositories/i_auth_repository.dart';
@@ -50,18 +63,20 @@ void setupDependencies() {
   //==========================================================================//
   //           SERVICES (Singleton - dùng chung cho nhiều nơi)                //
   //==========================================================================//
-  getIt.registerLazySingleton<SpeechTtsService>(() => SpeechTtsService());
-  getIt.registerLazySingleton<GeocodingService>(() => GeocodingService());
-  getIt.registerLazySingleton<TimezoneStorageService>(
-    () => TimezoneStorageService(),
+  getIt.registerLazySingleton<IGeocodingService>(() => GeocodingService());
+  getIt.registerLazySingleton<IWeatherService>(() => WeatherService());
+  getIt.registerLazySingleton<IWeatherConfigService>(
+    () => WeatherConfigService(),
   );
-  getIt.registerLazySingleton<TimezoneUtilService>(() => TimezoneUtilService());
-  getIt.registerLazySingleton<WeatherService>(() => WeatherService());
-  getIt.registerLazySingleton<ImageTranslationService>(
+  getIt.registerLazySingleton<ISpeechTtsService>(() => SpeechTtsService());
+  getIt.registerLazySingleton<IImageTranslationService>(
     () => ImageTranslationService(),
   );
-  getIt.registerLazySingleton<WeatherConfigService>(
-    () => WeatherConfigService(),
+  getIt.registerLazySingleton<ITimezoneStorageService>(
+    () => TimezoneStorageService(),
+  );
+  getIt.registerLazySingleton<ITimezoneUtilService>(
+    () => TimezoneUtilService() as ITimezoneUtilService,
   );
   getIt.registerLazySingleton<ILanguageRepository>(
     () => LanguageRepositoryImpl(),
@@ -69,6 +84,9 @@ void setupDependencies() {
   getIt.registerLazySingleton<ISupportEmailService>(
     () => SupportEmailService(),
   );
+  getIt.registerLazySingleton<ICloudinaryService>(() => CloudinaryService());
+  getIt.registerLazySingleton<IStorageService>(() => StorageService());
+  getIt.registerLazySingleton<ITranslationService>(() => TranslationService());
 
   //==========================================================================//
   //           REPOSITORIES (Singleton - chỉ tạo 1 instance duy nhất)         //
@@ -87,7 +105,7 @@ void setupDependencies() {
   //           VIEWMODELS (Factory - tạo instance mới mỗi lần gọi)            //
   //==========================================================================//
   getIt.registerFactory<LoginViewModel>(
-    () => LoginViewModel(getIt<IAuthRepository>()),
+    () => LoginViewModel(getIt<IAuthRepository>(), getIt<IStorageService>()),
   );
 
   getIt.registerFactory<RegisterViewModel>(
@@ -95,11 +113,19 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<AccountViewModel>(
-    () => AccountViewModel(getIt<IUserRepository>(), getIt<IAuthRepository>()),
+    () => AccountViewModel(
+      getIt<IUserRepository>(),
+      getIt<IAuthRepository>(),
+      getIt<IStorageService>(),
+      getIt<ICloudinaryService>(),
+    ),
   );
 
   getIt.registerFactory<InformationViewModel>(
-    () => InformationViewModel(getIt<IUserRepository>()),
+    () => InformationViewModel(
+      getIt<IUserRepository>(),
+      getIt<ICloudinaryService>(),
+    ),
   );
 
   getIt.registerFactory<ChangePasswordViewModel>(
@@ -115,9 +141,9 @@ void setupDependencies() {
 
   getIt.registerFactory<WorldClockViewModel>(
     () => WorldClockViewModel(
-      getIt<GeocodingService>(),
-      getIt<TimezoneStorageService>(),
-      getIt<TimezoneUtilService>(),
+      getIt<IGeocodingService>(),
+      getIt<ITimezoneStorageService>(),
+      getIt<ITimezoneUtilService>(),
     ),
   );
 
@@ -127,23 +153,24 @@ void setupDependencies() {
 
   getIt.registerFactory<TextTranslationViewModel>(
     () => TextTranslationViewModel(
-      getIt<SpeechTtsService>(),
-      getIt<ImageTranslationService>(),
+      getIt<ISpeechTtsService>(),
+      getIt<IImageTranslationService>(),
       getIt<IUserRepository>(),
       getIt<ILanguageRepository>(),
+      getIt<ITranslationService>(),
     ),
   );
 
   getIt.registerFactory<WeatherForecastViewModel>(
     () => WeatherForecastViewModel(
-      getIt<GeocodingService>(),
-      getIt<WeatherService>(),
-      getIt<WeatherConfigService>(),
+      getIt<IGeocodingService>(),
+      getIt<IWeatherService>(),
+      getIt<IWeatherConfigService>(),
     ),
   );
 
   getIt.registerFactory<HomeViewModel>(
-    () => HomeViewModel(getIt<IHomeRepository>()),
+    () => HomeViewModel(getIt<IHomeRepository>(), getIt<IUserRepository>()),
   );
 
   getIt.registerFactory<ExploreViewModel>(

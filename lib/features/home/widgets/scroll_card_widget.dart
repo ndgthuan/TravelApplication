@@ -1,12 +1,12 @@
-﻿import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:travel_app/features/home/models/destination_model.dart';
+import 'package:travel_app/domain/models/home_destination_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travel_app/shared/widgets/heart_button_widget.dart';
 
 class ScrollCardWidget extends StatelessWidget {
-  final List<Destination> destinations;
+  final List<HomeDestination> destinations;
   final int index;
   final Function(String name)? onHeartTap;
   final bool Function(String name) isSaved;
@@ -63,27 +63,36 @@ class ScrollCardWidget extends StatelessWidget {
                     margin: EdgeInsets.all(10),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: CachedNetworkImage(
-                        imageUrl: dest.imagePath,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: const Color(0xFF2A2A2A),
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xFFFFAD35),
-                              strokeWidth: 2,
+                      child: dest.imagePath.trim().isEmpty
+                          ? Container(
+                              color: const Color(0xFF2A2A2A),
+                              child: const Icon(
+                                CupertinoIcons.photo,
+                                color: Colors.grey,
+                                size: 30,
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: dest.imagePath,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                color: const Color(0xFF2A2A2A),
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFFFFAD35),
+                                    strokeWidth: 2,
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: const Color(0xFF2A2A2A),
+                                child: const Icon(
+                                  CupertinoIcons.photo,
+                                  color: Colors.grey,
+                                  size: 30,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: const Color(0xFF2A2A2A),
-                          child: const Icon(
-                            CupertinoIcons.photo,
-                            color: Colors.grey,
-                            size: 30,
-                          ),
-                        ),
-                      ),
                     ),
                   ),
                 ),

@@ -1,4 +1,4 @@
-﻿// Đây là trang UI và chỉ có 1 mục đích là gọi UI
+// Đây là trang UI và chỉ có 1 mục đích là gọi UI
 // Không thêm các biến hay phương thức nào trong trang
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/auth/viewmodels/login_view_model.dart';
@@ -11,7 +11,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'register_screen.dart';
 import '../widgets/auth_switch_button_widget.dart';
 import 'package:animations/animations.dart';
-import '../../../shared/services/storage_service.dart';
 import '../widgets/login_form_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -68,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _loadSaveCredentials() async {
     final viewModel = context.read<LoginViewModel>();
-    final credentials = await StorageService.getCredentials();
+    final credentials = await viewModel.getSavedCredentials();
 
     if (credentials['email'] != null && credentials['password'] != null) {
       if (!mounted) return;
@@ -144,12 +143,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                         if (success) {
                           if (viewModel.rememberMe) {
-                            await StorageService.saveCredentials(
+                            await viewModel.saveCredentials(
                               email: emailController.text,
                               password: passwordController.text,
                             );
                           } else {
-                            await StorageService.clearCredentials();
+                            await viewModel.clearCredentials();
                           }
 
                           if (mounted) {

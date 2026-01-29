@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -106,9 +106,9 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
                 children: [
                   Expanded(
                     child: TranslateButtonWidget(
-                      languageCode: viewModel.sourceLanguage['code'] ?? '',
-                      languageName: viewModel.sourceLanguage['name'] ?? '',
-                      flag: viewModel.sourceLanguage['flag'] ?? '',
+                      languageCode: viewModel.sourceLanguage.code,
+                      languageName: viewModel.sourceLanguage.name,
+                      flag: viewModel.sourceLanguage.flag,
                       onTap: () => showModalBottomSheet(
                         context: context,
                         backgroundColor: Color(0xFF1C1C1D),
@@ -138,9 +138,9 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
                   ),
                   Expanded(
                     child: TranslateButtonWidget(
-                      languageCode: viewModel.targetLanguage['code'] ?? '',
-                      languageName: viewModel.targetLanguage['name'] ?? '',
-                      flag: viewModel.targetLanguage['flag'] ?? '',
+                      languageCode: viewModel.targetLanguage.code,
+                      languageName: viewModel.targetLanguage.name,
+                      flag: viewModel.targetLanguage.flag,
                       onTap: () => showModalBottomSheet(
                         context: context,
                         backgroundColor: Color(0xFF1C1C1D),

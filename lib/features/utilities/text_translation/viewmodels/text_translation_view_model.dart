@@ -1,30 +1,33 @@
-﻿// Mục đích của file này quản lý state và logic cho TextTranslationScreen
+// Mục đích của file này quản lý state và logic cho TextTranslationScreen
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:translator/translator.dart';
+import 'package:travel_app/domain/services/i_translation_service.dart';
 import 'package:travel_app/domain/repositories/i_language_repository.dart';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:travel_app/domain/services/i_speech_tts_service.dart';
+import 'package:travel_app/domain/services/i_image_translation_service.dart';
+import 'package:travel_app/domain/models/language_model.dart';
 import 'package:travel_app/domain/repositories/i_user_repository.dart';
-import 'package:travel_app/features/utilities/text_translation/services/image_translation_service.dart';
-import 'package:travel_app/features/utilities/text_translation/services/speech_tts_service.dart';
 
 class TextTranslationViewModel extends ChangeNotifier {
   //==========================================================================//
   //                        DEPENDENCIES                                      //
   //==========================================================================//
-  final SpeechTtsService _speechTtsService;
-  final ImageTranslationService _imageTranslationService;
+  final ISpeechTtsService _speechTtsService;
+  final IImageTranslationService _imageTranslationService;
   final IUserRepository _userRepository;
   final ILanguageRepository _languageRepository;
+  final ITranslationService _translationService;
 
   TextTranslationViewModel(
     this._speechTtsService,
     this._imageTranslationService,
     this._userRepository,
     this._languageRepository,
+    this._translationService,
   );
 
   //==========================================================================//
@@ -48,17 +51,17 @@ class TextTranslationViewModel extends ChangeNotifier {
   String _searchQuery = '';
 
   // Ngôn ngữ nguồn và đích
-  List<Map<String, dynamic>> _supportedLanguages = [];
-  Map<String, dynamic> _sourceLanguage = {
-    'code': 'auto',
-    'name': 'Auto Detect',
-    'flag': '🌐',
-  }; // Tự phát hiện ngôn ngữ
-  Map<String, dynamic> _targetLanguage = {
-    'code': 'vi',
-    'name': 'Vietnamese',
-    'flag': '🇻🇳',
-  }; // Tiếng việt
+  List<LanguageModel> _supportedLanguages = [];
+  LanguageModel _sourceLanguage = LanguageModel(
+    code: 'auto',
+    name: 'Auto Detect',
+    flag: '🌐',
+  );
+  LanguageModel _targetLanguage = LanguageModel(
+    code: 'vi',
+    name: 'Vietnamese',
+    flag: '🇻🇳',
+  );
 
   //==========================================================================//
   //                        GETTERS                                           //
@@ -74,20 +77,17 @@ class TextTranslationViewModel extends ChangeNotifier {
   Uint8List? get translatedImageBytes => _translatedImageBytes;
   bool get isTranslatingImage => _isTranslatingImage;
   String get searchQuery => _searchQuery;
-  List<Map<String, dynamic>> get supportedLanguages => _supportedLanguages;
-  Map<String, dynamic> get sourceLanguage => _sourceLanguage;
-  Map<String, dynamic> get targetLanguage => _targetLanguage;
+  List<LanguageModel> get supportedLanguages => _supportedLanguages;
+  LanguageModel get sourceLanguage => _sourceLanguage;
+  LanguageModel get targetLanguage => _targetLanguage;
 
   // Kiểm tra có thể swap ngôn ngữ không (không cho swap nếu có auto detect)
   bool get canSwapLanguages =>
-      _sourceLanguage['code'] != 'auto' && _targetLanguage['code'] != 'auto';
+      _sourceLanguage.code != 'auto' && _targetLanguage.code != 'auto';
 
   //==========================================================================//
   //                        ACTION METHODS                                    //
   //==========================================================================//
-  // Translator instance
-  final _translator = GoogleTranslator();
-
   // Clear error message
   void clearError() {
     _errorMessage = '';
@@ -116,17 +116,17 @@ class TextTranslationViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Load danh sách ngôn ngữ từ JSON
+  // Load danh sách ngôn ngữ từ models
   Future<void> loadLanguages() async {
     if (!_isLoadingLanguages) return;
 
-    _supportedLanguages = await _languageRepository.getSupportedLanguages();
-
     try {
+      _supportedLanguages = await _languageRepository.getSupportedLanguages();
+
       final user = await _userRepository.getCurrentUser();
       if (user?.preferredLanguage != null) {
         final savedLang = _supportedLanguages.firstWhere(
-          (lang) => lang['code'] == user!.preferredLanguage,
+          (lang) => lang.code == user!.preferredLanguage,
           orElse: () => _targetLanguage,
         );
         _targetLanguage = savedLang;
@@ -140,12 +140,12 @@ class TextTranslationViewModel extends ChangeNotifier {
   }
 
   // Lọc ngôn ngữ theo search query
-  List<Map<String, dynamic>> get filteredLanguages {
+  List<LanguageModel> get filteredLanguages {
     if (_searchQuery.isEmpty) {
       return _supportedLanguages;
     }
     return _supportedLanguages.where((lang) {
-      final name = (lang['name'] ?? '').toString().toLowerCase();
+      final name = lang.name.toLowerCase();
       final q = _searchQuery.toLowerCase();
       return name.contains(q);
     }).toList();
@@ -165,12 +165,11 @@ class TextTranslationViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final translation = await _translator.translate(
+      _translatedText = await _translationService.translate(
         inputText,
-        from: _sourceLanguage['code']!,
-        to: _targetLanguage['code']!,
+        from: _sourceLanguage.code,
+        to: _targetLanguage.code,
       );
-      _translatedText = translation.text;
       _isTranslating = false;
       notifyListeners();
     } catch (e) {
@@ -189,13 +188,12 @@ class TextTranslationViewModel extends ChangeNotifier {
   }
 
   // Chọn ngôn ngữ
-  void selectLanguage(Map<String, dynamic> lang, bool isSource) {
+  void selectLanguage(LanguageModel lang, bool isSource) {
     if (isSource) {
       _sourceLanguage = lang;
     } else {
       _targetLanguage = lang;
-      // Save user preference
-      _saveLanguagePreference(lang['code']);
+      _saveLanguagePreference(lang.code);
     }
     notifyListeners();
   }
@@ -216,7 +214,7 @@ class TextTranslationViewModel extends ChangeNotifier {
       _isListening = true;
       _speechTtsService.listen(
         onResult: onResult,
-        localeId: _sourceLanguage['code'] ?? 'vi',
+        localeId: _sourceLanguage.code,
       );
       notifyListeners();
     }
@@ -231,7 +229,7 @@ class TextTranslationViewModel extends ChangeNotifier {
 
   // Text-to-speech: Đọc văn bản
   void speak(String text) {
-    _speechTtsService.speak(text, _targetLanguage['code'] ?? 'en');
+    _speechTtsService.speak(text, _targetLanguage.code);
   }
 
   // Sao chép vào clipboard
@@ -252,7 +250,7 @@ class TextTranslationViewModel extends ChangeNotifier {
     if (file != null) {
       _selectedImageFile = file;
       _originalImageBytes = await file.readAsBytes();
-      _translatedImageBytes = null; // Reset kết quả cũ
+      _translatedImageBytes = null;
       notifyListeners();
     }
   }
@@ -271,7 +269,7 @@ class TextTranslationViewModel extends ChangeNotifier {
     try {
       final result = await _imageTranslationService.translateImage(
         _selectedImageFile!,
-        _targetLanguage['code'] ?? 'vi',
+        _targetLanguage.code,
       );
       _translatedImageBytes = result;
     } catch (e) {

@@ -1,4 +1,4 @@
-import 'package:travel_app/features/explore/models/destination_model.dart';
+import 'package:travel_app/domain/models/destination_model.dart';
 
 // Interface định nghĩa các method mà Repository phải có
 abstract class IExploreRepository {

@@ -152,7 +152,9 @@
     "lowest": "Niedrigster",
     "average": "Durchschnitt",
     "highest": "Höchster",
-    "unsupported_currency": "Diese Währung wird nicht unterstützt"
+    "unsupported_currency": "Diese Währung wird nicht unterstützt",
+    "load_error": "Währungen konnten nicht geladen werden",
+    "fetch_rates_error": "Wechselkurse konnten nicht abgerufen werden"
   },
   "weather": {
     "title": "Wettervorhersage",
@@ -174,5 +176,32 @@
     "same_time": "Gleiche Zeit",
     "today_offset": "Heute, {offset} Std"
   }
-  ,"ocr": { "error": "Text konnte nicht erkannt werden" }
+  ,"ocr": { "error": "Text konnte nicht erkannt werden" },
+  "explore": {
+    "title": "Entdecken",
+    "search_hint": "Reiseziele suchen...",
+    "all": "Alle",
+    "tourist_destinations": "Touristenziele",
+    "no_data": "Keine Daten verfügbar",
+    "my_saves": "Meine Speicherungen",
+    "saved_destinations": "Gespeicherte Ziele",
+    "no_saved_places": "Noch keine Orte gespeichert",
+    "all_cities": "Alle Städte",
+    "select_city_title": "Stadt wählen",
+    "search_city_hint": "Stadt suchen...",
+    "city_not_found": "Stadt nicht gefunden",
+    "saved_places": "Gespeicherte Orte",
+    "categories": {
+      "Hotel": "Hotel",
+      "Restaurant": "Restaurant",
+      "Cafe": "Café",
+      "Attraction": "Sehenswürdigkeit",
+      "Malls": "Einkaufszentrum",
+      "Market": "Markt"
+    },
+    "load_error": "Daten konnten nicht geladen werden. Bitte versuchen Sie es erneut.",
+    "filter_error": "Filtern fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "save_error": "Speichern/Abwählen fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "load_saved_error": "Gespeicherte Liste konnte nicht geladen werden."
+  }
 }

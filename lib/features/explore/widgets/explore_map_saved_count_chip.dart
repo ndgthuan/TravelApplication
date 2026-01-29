@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ExploreMapSavedCountChip extends StatelessWidget {
   final int savedCount;
@@ -24,7 +25,7 @@ class ExploreMapSavedCountChip extends StatelessWidget {
             const Icon(CupertinoIcons.location_fill, color: Color(0xFFFFAD35)),
             const SizedBox(width: 10),
             Text(
-              '$savedCount Saved Places',
+              '$savedCount ${"explore.saved_places".tr()}',
               style: GoogleFonts.beVietnamPro(
                 color: const Color(0xFFFFAD35),
                 fontSize: 14,

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
@@ -104,10 +104,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       destinations: viewModel.top5Display,
                       length: viewModel.top5Display.length,
                       isSaved: viewModel.isSaved,
-                      onHeartTap: (name) {
-                        viewModel.toggleSave(name, false);
+                      onHeartTap: (name) async {
+                        await viewModel.toggleSave(name, false);
+                        if (!context.mounted) return;
                         if (viewModel.isSaved(name)) {
-                          // Nếu đang save (chưa saved trước đó)
                           context.read<SavedCountProvider>().increment();
                         }
                       },
@@ -131,8 +131,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       destinations: viewModel.top10Display,
                       index: index,
                       isSaved: viewModel.isSaved,
-                      onHeartTap: (name) {
-                        viewModel.toggleSave(name, true);
+                      onHeartTap: (name) async {
+                        await viewModel.toggleSave(name, true);
+                        if (!context.mounted) return;
                         if (viewModel.isSaved(name)) {
                           context.read<SavedCountProvider>().increment();
                         }

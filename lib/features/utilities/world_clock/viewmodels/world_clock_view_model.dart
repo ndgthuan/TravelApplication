@@ -2,17 +2,17 @@
 // UI chỉ gọi method và lắng nghe state, không xử lý logic
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:travel_app/shared/services/geocoding_service.dart';
-import '../services/timezone_storage_service.dart';
-import '../services/timezone_util_service.dart';
+import 'package:travel_app/domain/services/i_geocoding_service.dart';
+import 'package:travel_app/domain/services/i_timezone_storage_service.dart';
+import 'package:travel_app/domain/services/i_timezone_util_service.dart';
 
 class WorldClockViewModel extends ChangeNotifier {
   //==========================================================================//
   //                        DEPENDENCIES                                      //
   //==========================================================================//
-  final GeocodingService _geocodingService;
-  final TimezoneStorageService _storageService;
-  final TimezoneUtilService _utilService;
+  final IGeocodingService _geocodingService;
+  final ITimezoneStorageService _storageService;
+  final ITimezoneUtilService _utilService;
 
   WorldClockViewModel(
     this._geocodingService,

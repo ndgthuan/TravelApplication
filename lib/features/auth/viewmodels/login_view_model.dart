@@ -1,7 +1,8 @@
-﻿// Mục đích của file này là file trung gian để gọi giữa UI và logic
+// Mục đích của file này là file trung gian để gọi giữa UI và logic
 // UI KHÔNG CẦN BIẾT FIREBASE LÀM GÌ ĐẰNG SAU, CHỈ CÓ GỌI METHOD THÔI
 import 'package:flutter/material.dart';
 import '../../../domain/repositories/i_auth_repository.dart';
+import '../../../domain/services/i_storage_service.dart';
 
 // Tạo một enum để quản lý các trạng thái của màn hình
 enum LoginState { initial, loading, success, error }
@@ -12,7 +13,8 @@ class LoginViewModel extends ChangeNotifier {
   //==========================================================================//
   // Sử dụng Dependency Injection để nhận repository qua hàm khởi tạo
   final IAuthRepository _authRepository;
-  LoginViewModel(this._authRepository);
+  final IStorageService _storageService;
+  LoginViewModel(this._authRepository, this._storageService);
 
   //==========================================================================//
   //                        STATE VARIABLES                                   //
@@ -124,6 +126,29 @@ class LoginViewModel extends ChangeNotifier {
   // Gửi email reset password
   Future<void> sendPasswordResetEmail(String email) async {
     await _authRepository.sendPasswordResetEmail(email: email);
+  }
+
+  /// Lấy credentials đã lưu (email, password) để pre-fill form
+  Future<Map<String, String?>> getSavedCredentials() async {
+    return _storageService.getCredentials();
+  }
+
+  /// Lưu credentials khi user chọn Remember me
+  Future<void> saveCredentials({
+    required String email,
+    required String password,
+    String? token,
+  }) async {
+    await _storageService.saveCredentials(
+      email: email,
+      password: password,
+      token: token,
+    );
+  }
+
+  /// Xóa credentials khi logout hoặc không chọn Remember me
+  Future<void> clearCredentials() async {
+    await _storageService.clearCredentials();
   }
 
   //==========================================================================//

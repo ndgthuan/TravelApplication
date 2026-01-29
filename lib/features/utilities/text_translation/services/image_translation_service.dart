@@ -3,8 +3,9 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_app/domain/services/i_image_translation_service.dart';
 
-class ImageTranslationService {
+class ImageTranslationService implements IImageTranslationService {
   // Dùng localhost vì đã adb reverse tcp:5000 tcp:5000
   static const String _baseUrl = 'http://localhost:5000';
   final _imagePicker = ImagePicker();

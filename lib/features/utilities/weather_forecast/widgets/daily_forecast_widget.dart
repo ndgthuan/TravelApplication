@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -8,6 +8,27 @@ class DailyForecastWidget extends StatelessWidget {
   final List<Map<String, dynamic>> dailyData;
 
   const DailyForecastWidget({super.key, required this.dailyData});
+
+  Widget _buildIcon(BuildContext context, String? iconUrl) {
+    final url = (iconUrl ?? '').toString().trim();
+    if (url.isEmpty) {
+      return Icon(
+        CupertinoIcons.cloud_sun_fill,
+        color: Color(0xFFFFAD35),
+        size: 40,
+      );
+    }
+    return Lottie.network(
+      url,
+      width: 40,
+      height: 40,
+      errorBuilder: (context, error, stackTrace) => Icon(
+        CupertinoIcons.exclamationmark_circle,
+        color: Colors.white,
+        size: 20,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +80,7 @@ class DailyForecastWidget extends StatelessWidget {
                       ),
                     ),
                     // Weather icon
-                    Lottie.network(
-                      item['icon'],
-                      width: 40,
-                      height: 40,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Icon(CupertinoIcons.exclamationmark_circle, color: Colors.white, size: 20),
-                    ),
+                    _buildIcon(context, item['icon']),
                     // Temperature range
                     Row(
                       children: [

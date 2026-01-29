@@ -1,24 +1,25 @@
 import 'dart:math';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_app/domain/repositories/i_home_repository.dart';
-import 'package:travel_app/features/home/models/destination_model.dart';
+import 'package:travel_app/domain/repositories/i_user_repository.dart';
+import 'package:travel_app/domain/models/home_destination_model.dart';
 
 class HomeViewModel extends ChangeNotifier {
   //==========================================================================//
   //                        DEPENDENCIES                                      //
   //==========================================================================//
   final IHomeRepository _homeRepo;
+  final IUserRepository _userRepository;
 
-  HomeViewModel(this._homeRepo);
+  HomeViewModel(this._homeRepo, this._userRepository);
 
   //==========================================================================//
   //                        STATE VARIABLES                                   //
   //==========================================================================//
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  List<Destination> _allApiDestinations = []; // Cache toàn bộ data từ API
-  List<Destination> _top5Display = []; // Top 5 theo reviewCount
-  List<Destination> _top10Display = []; // Top 10 Cafe/Restaurant theo rating
+  List<HomeDestination> _allApiDestinations = []; // Cache toàn bộ data từ API
+  List<HomeDestination> _top5Display = []; // Top 5 theo reviewCount
+  List<HomeDestination> _top10Display =
+      []; // Top 10 Cafe/Restaurant theo rating
   Set<String> _savedIds = {}; // Các ID đã save
   bool isSaved(String name) => _savedIds.contains(name);
   bool _isLoading = true;
@@ -27,8 +28,8 @@ class HomeViewModel extends ChangeNotifier {
   //                        GETTERS                                           //
   //==========================================================================//
   bool get isLoading => _isLoading;
-  List<Destination> get top5Display => _top5Display;
-  List<Destination> get top10Display => _top10Display;
+  List<HomeDestination> get top5Display => _top5Display;
+  List<HomeDestination> get top10Display => _top10Display;
   Set<String> get savedIds => _savedIds;
 
   //==========================================================================//
@@ -59,7 +60,7 @@ class HomeViewModel extends ChangeNotifier {
         .toList();
 
     // 5. Lấy Top 5 (sort by reviewCount) - tất cả category
-    final sortedByReview = List<Destination>.from(unsavedPool)
+    final sortedByReview = List<HomeDestination>.from(unsavedPool)
       ..sort((a, b) => b.reviewCount.compareTo(a.reviewCount));
     _top5Display = sortedByReview.take(5).toList();
 
@@ -67,7 +68,7 @@ class HomeViewModel extends ChangeNotifier {
     final cafeRestaurantPool = unsavedPool
         .where((d) => d.category == 'Cafe' || d.category == 'Restaurant')
         .toList();
-    final sortedByRating = List<Destination>.from(cafeRestaurantPool)
+    final sortedByRating = List<HomeDestination>.from(cafeRestaurantPool)
       ..sort((a, b) => b.rating.compareTo(a.rating));
     _top10Display = sortedByRating.take(10).toList();
 
@@ -76,7 +77,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadSavedIds() async {
-    final user = _auth.currentUser;
+    final user = await _userRepository.getCurrentUser();
     if (user == null) return;
 
     final saved = await _homeRepo.getSavedDestinations(user.uid);
@@ -84,8 +85,9 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> toggleSave(String name, bool isTop10) async {
-    final user = _auth.currentUser;
+    final user = await _userRepository.getCurrentUser();
     if (user == null) return;
+
     if (_savedIds.contains(name)) {
       // Unsave
       _savedIds.remove(name);
@@ -111,7 +113,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void _replaceWithRandom(
-    List<Destination> displayList,
+    List<HomeDestination> displayList,
     int maxSize, {
     bool cafeRestaurantOnly = false,
   }) {

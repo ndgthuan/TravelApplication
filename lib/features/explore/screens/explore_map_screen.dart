@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:travel_app/features/explore/models/destination_model.dart';
+import 'package:travel_app/domain/models/destination_model.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/explore/widgets/explore_map_saved_count_chip.dart';
 import 'package:travel_app/features/explore/widgets/map_info_window_widget.dart';
@@ -41,10 +41,26 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
 
     if (savedDestinations.isEmpty) return;
 
-    final bounds = LatLngBounds.fromPoints(
-      savedDestinations.map((d) => LatLng(d.latitude, d.longitude)).toList(),
-    );
+    final points = savedDestinations
+        .map((d) => LatLng(d.latitude, d.longitude))
+        .where((p) => p.latitude.isFinite && p.longitude.isFinite)
+        .toList();
 
+    if (points.isEmpty) return;
+
+    final allSame =
+        points.length == 1 ||
+        points.every(
+          (p) =>
+              p.latitude == points.first.latitude &&
+              p.longitude == points.first.longitude,
+        );
+    if (allSame) {
+      _mapController.move(points.first, 17.0);
+      return;
+    }
+
+    final bounds = LatLngBounds.fromPoints(points);
     _mapController.fitCamera(
       CameraFit.bounds(bounds: bounds, padding: EdgeInsets.all(50)),
     );
@@ -75,6 +91,7 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
   }
 
   void _flyToDestination(DestinationModel dest) {
+    if (!dest.latitude.isFinite || !dest.longitude.isFinite) return;
     setState(() {
       _hiddenInfoWindows.remove(dest.name); // Hiện lại info window nếu đã ẩn
       _searchController.clear();
@@ -128,56 +145,59 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
 
               MarkerLayer(
                 markers: [
-                  // Tạo markers cho tất cả savedDestinations
-                  ...savedDestinations.map((dest) {
-                    return Marker(
-                      point: LatLng(dest.latitude, dest.longitude),
-                      width: 180, // Luôn đủ lớn chứa info window
-                      height: 200,
-                      alignment: Alignment.bottomCenter,
-                      child: Transform.translate(
-                        // Chỉ có offset khi info window đang hiện
-                        offset: _hiddenInfoWindows.contains(dest.name)
-                            ? Offset.zero
-                            : Offset(0, -139),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            // Info Window (hiện nếu chưa bị đóng)
-                            if (!_hiddenInfoWindows.contains(dest.name))
-                              MapInfoWindowWidget(
-                                dest: dest,
-                                onClose: () {
-                                  setState(() {
-                                    _hiddenInfoWindows.add(dest.name);
-                                  });
-                                },
-                              ),
-                            // Heart icon với GestureDetector riêng
-                            GestureDetector(
-                              onTap: () {
-                                // Hiện lại info window nếu đang ẩn
-                                setState(() {
-                                  _hiddenInfoWindows.remove(dest.name);
-                                });
-                                // Fly tới destination
-                                _mapController.move(
-                                  LatLng(dest.latitude, dest.longitude),
-                                  17.0,
-                                );
-                              },
-                              child: Icon(
-                                CupertinoIcons.heart_fill,
-                                color: Color(0xFFFFAD35),
-                                size: 30,
-                              ),
+                  // Tạo markers cho tất cả savedDestinations (bỏ qua lat/lng NaN/Infinity)
+                  ...savedDestinations
+                      .where((d) => d.latitude.isFinite && d.longitude.isFinite)
+                      .map((dest) {
+                        return Marker(
+                          point: LatLng(dest.latitude, dest.longitude),
+                          width: 180, // Luôn đủ lớn chứa info window
+                          height: 200,
+                          alignment: Alignment.bottomCenter,
+                          child: Transform.translate(
+                            // Chỉ có offset khi info window đang hiện
+                            offset: _hiddenInfoWindows.contains(dest.name)
+                                ? Offset.zero
+                                : Offset(0, -139),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                // Info Window (hiện nếu chưa bị đóng)
+                                if (!_hiddenInfoWindows.contains(dest.name))
+                                  MapInfoWindowWidget(
+                                    dest: dest,
+                                    onClose: () {
+                                      setState(() {
+                                        _hiddenInfoWindows.add(dest.name);
+                                      });
+                                    },
+                                  ),
+                                // Heart icon với GestureDetector riêng
+                                GestureDetector(
+                                  onTap: () {
+                                    if (!dest.latitude.isFinite ||
+                                        !dest.longitude.isFinite)
+                                      return;
+                                    setState(() {
+                                      _hiddenInfoWindows.remove(dest.name);
+                                    });
+                                    _mapController.move(
+                                      LatLng(dest.latitude, dest.longitude),
+                                      17.0,
+                                    );
+                                  },
+                                  child: Icon(
+                                    CupertinoIcons.heart_fill,
+                                    color: Color(0xFFFFAD35),
+                                    size: 30,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }),
+                          ),
+                        );
+                      }),
                 ],
               ),
               // Nguồn openstreetmap

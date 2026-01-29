@@ -1,4 +1,4 @@
-﻿import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:travel_app/features/account/viewmodels/information_view_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +55,8 @@ class _InformationScreenState extends State<InformationScreen> {
     });
   }
 
+  bool _isValidImageUrl(String? url) => url != null && url.trim().isNotEmpty;
+
   // Tạo method chọn ảnh từ gallery
   Future<void> _pickImage() async {
     final viewModel = context.read<InformationViewModel>();
@@ -97,14 +99,16 @@ class _InformationScreenState extends State<InformationScreen> {
                                 image: FileImage(_selectedImage!),
                                 fit: BoxFit.cover,
                               )
-                            : viewModel.avatarUrl != null
+                            : _isValidImageUrl(viewModel.avatarUrl)
                             ? DecorationImage(
                                 image: NetworkImage(viewModel.avatarUrl!),
                                 fit: BoxFit.cover,
                               )
                             : null,
                         // Giữ gradient làm fallback nếu không có avatar
-                        gradient: viewModel.avatarUrl == null
+                        gradient:
+                            _selectedImage == null &&
+                                !_isValidImageUrl(viewModel.avatarUrl)
                             ? LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -113,7 +117,9 @@ class _InformationScreenState extends State<InformationScreen> {
                             : null,
                       ),
                       // Hiển thị icon mặc định nếu không có avatar
-                      child: viewModel.avatarUrl == null
+                      child:
+                          _selectedImage == null &&
+                              !_isValidImageUrl(viewModel.avatarUrl)
                           ? Icon(
                               CupertinoIcons.person,
                               color: Colors.grey[600],

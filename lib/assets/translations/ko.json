@@ -152,7 +152,9 @@
     "lowest": "최저",
     "average": "평균",
     "highest": "최고",
-    "unsupported_currency": "이 통화는 지원되지 않습니다"
+    "unsupported_currency": "이 통화는 지원되지 않습니다",
+    "load_error": "통화를 불러올 수 없습니다",
+    "fetch_rates_error": "환율을 가져올 수 없습니다"
   },
   "weather": {
     "title": "일기 예보",
@@ -174,5 +176,32 @@
     "same_time": "같은 시간",
     "today_offset": "오늘, {offset}시간"
   }
-  ,"ocr": { "error": "이미지에서 텍스트를 인식할 수 없습니다" }
+  ,"ocr": { "error": "이미지에서 텍스트를 인식할 수 없습니다" },
+  "explore": {
+    "title": "탐색",
+    "search_hint": "목적지 검색...",
+    "all": "전체",
+    "tourist_destinations": "관광지",
+    "no_data": "데이터 없음",
+    "my_saves": "저장됨",
+    "saved_destinations": "저장된 목적지",
+    "no_saved_places": "저장된 장소가 없습니다",
+    "all_cities": "모든 도시",
+    "select_city_title": "도시 선택",
+    "search_city_hint": "도시 검색...",
+    "city_not_found": "도시를 찾을 수 없습니다",
+    "saved_places": "저장된 장소",
+    "categories": {
+      "Hotel": "호텔",
+      "Restaurant": "레스토랑",
+      "Cafe": "카페",
+      "Attraction": "명소",
+      "Malls": "쇼핑몰",
+      "Market": "시장"
+    },
+    "load_error": "데이터를 불러올 수 없습니다. 다시 시도해주세요.",
+    "filter_error": "필터링할 수 없습니다. 다시 시도해주세요.",
+    "save_error": "저장/저장 취소할 수 없습니다. 다시 시도해주세요.",
+    "load_saved_error": "저장된 목록을 불러올 수 없습니다."
+  }
 }

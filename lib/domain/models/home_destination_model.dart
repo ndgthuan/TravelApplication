@@ -1,4 +1,6 @@
-﻿class Destination {
+// Model đại diện cho địa điểm trong Home feature
+// Đây là domain model, không phụ thuộc vào data layer
+class HomeDestination {
   final String country;
   final String name;
   final String city;
@@ -10,7 +12,7 @@
   final double longitude;
   final String address;
 
-  Destination({
+  HomeDestination({
     required this.imagePath,
     required this.country,
     required this.name,
@@ -23,9 +25,8 @@
     required this.address,
   });
 
-  // Parse từ file json
-  factory Destination.fromJson(Map<String, dynamic> json) {
-    return Destination(
+  factory HomeDestination.fromJson(Map<String, dynamic> json) {
+    return HomeDestination(
       imagePath: json['imageUrl'] ?? '',
       country: json['country'] ?? '',
       name: json['name'] ?? '',
@@ -40,6 +41,7 @@
   }
 }
 
+// Model cho Recommend Destination
 class RecommendDestination {
   final String name;
   final String address;
@@ -61,7 +63,6 @@ class RecommendDestination {
     required this.reviewCount,
   });
 
-  // Parse từ file json
   factory RecommendDestination.fromJson(Map<String, dynamic> json) {
     return RecommendDestination(
       imagePath: json['imageUrl'] ?? '',
