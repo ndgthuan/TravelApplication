@@ -9,6 +9,7 @@ import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/features/explore/utils/category_icons.dart';
 import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/explore/widgets/category_button_widget.dart';
 import 'package:travel_app/features/explore/widgets/city_filter_bottom_sheet.dart';
@@ -18,25 +19,6 @@ class SaveScreen extends StatefulWidget {
 
   @override
   State<SaveScreen> createState() => _SaveScreenState();
-}
-
-IconData _getCategoryIcon(String category) {
-  switch (category) {
-    case 'Hotel':
-      return Icons.hotel;
-    case 'Restaurant':
-      return Icons.restaurant;
-    case 'Cafe':
-      return Icons.coffee;
-    case 'Attraction':
-      return Icons.location_on;
-    case 'Mall':
-      return Icons.local_mall_rounded;
-    case 'Market':
-      return Icons.maps_home_work_outlined;
-    default:
-      return Icons.apps;
-  }
 }
 
 class _SaveScreenState extends State<SaveScreen> {
@@ -63,6 +45,22 @@ class _SaveScreenState extends State<SaveScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<ExploreViewModel>();
+
+    if (viewModel.hasError && viewModel.errorMessage != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(viewModel.errorMessage!),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        viewModel.clearError();
+      });
+    }
+
     return Scaffold(
       backgroundColor: Color(0xFF000000),
       appBar: AppBarWidget(title: 'My Saves'),
@@ -73,13 +71,12 @@ class _SaveScreenState extends State<SaveScreen> {
             prefixIcon: Icons.search,
             hintText: "Tìm kiếm địa điểm...",
             horizontalPadding: 10,
-            onChanged: (query) =>
-                context.read<ExploreViewModel>().search(query),
-            suffixIcon: context.watch<ExploreViewModel>().searchQuery.isNotEmpty
+            onChanged: (query) => viewModel.search(query),
+            suffixIcon: viewModel.searchQuery.isNotEmpty
                 ? GestureDetector(
                     onTap: () {
                       _searchController.clear();
-                      context.read<ExploreViewModel>().clearSearch();
+                      viewModel.clearSearch();
                     },
                     child: Icon(
                       CupertinoIcons.xmark_circle_fill,
@@ -95,13 +92,10 @@ class _SaveScreenState extends State<SaveScreen> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: context.watch<ExploreViewModel>().categories.map((
-                  category,
-                ) {
-                  final viewModel = context.read<ExploreViewModel>();
+                children: viewModel.categories.map((category) {
                   return CategoryButtonWidget(
                     name: category.isEmpty ? 'Tất cả' : category,
-                    icon: _getCategoryIcon(category),
+                    icon: getCategoryIcon(category),
                     isSelected: viewModel.selectedCategory == category,
                     onTap: () => viewModel.selectCategory(category),
                   );
@@ -124,7 +118,6 @@ class _SaveScreenState extends State<SaveScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    final viewModel = context.read<ExploreViewModel>();
                     showModalBottomSheet(
                       context: context,
                       backgroundColor: Colors.transparent,
@@ -151,7 +144,6 @@ class _SaveScreenState extends State<SaveScreen> {
               children: [
                 Builder(
                   builder: (context) {
-                    final viewModel = context.watch<ExploreViewModel>();
                     final saved = viewModel.savedDestinations;
 
                     // Empty state
@@ -179,112 +171,124 @@ class _SaveScreenState extends State<SaveScreen> {
                     }
 
                     // Có data
-                    return GridView.custom(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      gridDelegate: SliverQuiltedGridDelegate(
-                        crossAxisCount: 4,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        repeatPattern: QuiltedGridRepeatPattern.inverted,
-                        pattern: [QuiltedGridTile(2, 2), QuiltedGridTile(2, 2)],
-                      ),
-                      childrenDelegate: SliverChildBuilderDelegate((
-                        context,
-                        index,
-                      ) {
-                        final item = saved[index];
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              CachedNetworkImage(
-                                imageUrl: item.imageUrl,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) =>
-                                    Container(color: Colors.grey[800]),
-                                errorWidget: (context, url, error) =>
-                                    Container(color: Colors.grey[800]),
-                              ),
-                              Positioned(
-                                top: 10,
-                                right: 10,
-                                child: HeartButtonWidget(
-                                  isSaved: true,
-                                  onTap: () => viewModel.toggleSave(item.name),
+                    return RefreshIndicator(
+                      onRefresh: () => viewModel.refreshSavedDestinations(),
+                      color: Color(0xFFFFAD35),
+                      child: GridView.custom(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        gridDelegate: SliverQuiltedGridDelegate(
+                          crossAxisCount: 4,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          repeatPattern: QuiltedGridRepeatPattern.inverted,
+                          pattern: [
+                            QuiltedGridTile(2, 2),
+                            QuiltedGridTile(2, 2),
+                          ],
+                        ),
+                        childrenDelegate: SliverChildBuilderDelegate((
+                          context,
+                          index,
+                        ) {
+                          final item = saved[index];
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                CachedNetworkImage(
+                                  imageUrl: item.imageUrl,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      Container(color: Colors.grey[800]),
+                                  errorWidget: (context, url, error) =>
+                                      Container(color: Colors.grey[800]),
                                 ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                height: 120,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        Colors.black.withValues(alpha: 0.8),
-                                        Colors.transparent,
-                                      ],
+                                Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: HeartButtonWidget(
+                                    isSaved: true,
+                                    onTap: () async {
+                                      await viewModel.toggleSave(item.name);
+                                      if (!context.mounted) return;
+                                    },
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  left: 0,
+                                  right: 0,
+                                  height: 120,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                        colors: [
+                                          Colors.black.withValues(alpha: 0.8),
+                                          Colors.transparent,
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                bottom: 8,
-                                left: 8,
-                                right: 8,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item.name,
-                                      style: GoogleFonts.beVietnamPro(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
+                                Positioned(
+                                  bottom: 8,
+                                  left: 8,
+                                  right: 8,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.name,
+                                        style: GoogleFonts.beVietnamPro(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Icon(
-                                          CupertinoIcons.star_fill,
-                                          color: Color(0xFFFFAD35),
-                                          size: 12,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          item.rating,
-                                          style: GoogleFonts.beVietnamPro(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            CupertinoIcons.star_fill,
+                                            color: Color(0xFFFFAD35),
+                                            size: 12,
                                           ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          "(${item.reviewCount})",
-                                          style: GoogleFonts.beVietnamPro(
-                                            color: Colors.white.withValues(
-                                              alpha: 0.8,
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            item.rating,
+                                            style: GoogleFonts.beVietnamPro(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                            fontSize: 10,
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            "(${item.reviewCount})",
+                                            style: GoogleFonts.beVietnamPro(
+                                              color: Colors.white.withValues(
+                                                alpha: 0.8,
+                                              ),
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }, childCount: saved.length),
+                              ],
+                            ),
+                          );
+                        }, childCount: saved.length),
+                      ),
                     );
                   },
                 ),

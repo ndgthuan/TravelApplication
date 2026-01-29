@@ -24,6 +24,7 @@ class ExploreViewModel extends ChangeNotifier {
   List<String> _cities = [];
   String _selectedCity = '';
   Set<String> _savedIds = {}; // Lưu danh sách ID đã save
+  String? _errorMessage; // Thêm biến để kiểm tra lỗi
 
   //==========================================================================//
   //                        GETTERS                                           //
@@ -36,6 +37,8 @@ class ExploreViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   Set<String> get savedIds => _savedIds;
   String get searchQuery => _searchQuery;
+  String? get errorMessage => _errorMessage;
+  bool get hasError => _errorMessage != null;
 
   //==========================================================================//
   //                        ACTION METHODS                                    //
@@ -43,12 +46,17 @@ class ExploreViewModel extends ChangeNotifier {
   // Cập nhật loadData
   Future<void> loadData() async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
 
-    await refreshSavedDestinations(); // Load saved data from Firestore
-    _categories = await _repository.getCategories();
-    _cities = await _repository.getCities();
-    _destinations = await _repository.getDestinations();
+    try {
+      await refreshSavedDestinations();
+      _categories = await _repository.getCategories();
+      _cities = await _repository.getCities();
+      _destinations = await _repository.getDestinations();
+    } catch (e) {
+      _errorMessage = 'Không thể tải dữ liệu. Thử lại.';
+    }
 
     _isLoading = false;
     notifyListeners();
@@ -104,11 +112,19 @@ class ExploreViewModel extends ChangeNotifier {
   // Cập nhật _filterDestinations để kết hợp cả 2 filter
   Future<void> _filterDestinations() async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
-    _destinations = await _repository.getDestinationsByCategoryAndCity(
-      _selectedCategory,
-      _selectedCity,
-    );
+
+    // Bọc try/catch để bắt lỗi khi filter
+    try {
+      _destinations = await _repository.getDestinationsByCategoryAndCity(
+        _selectedCategory,
+        _selectedCity,
+      );
+    } catch (e) {
+      _errorMessage = 'Không thể lọc. Thử lại.';
+    }
+
     _isLoading = false;
     notifyListeners();
   }
@@ -123,20 +139,23 @@ class ExploreViewModel extends ChangeNotifier {
     final user = await _userRepository.getCurrentUser();
     if (user == null) return;
 
-    if (_savedIds.contains(name)) {
-      // Unsave
-      _savedIds.remove(name);
-      _savedFromFirestore.removeWhere((d) => d.name == name);
-      await _repository.unsaveDestination(user.uid, name);
-    } else {
-      // Save - tìm destination trong list
-      final destination = _destinations.firstWhere(
-        (d) => d.name == name,
-        orElse: () => _savedFromFirestore.firstWhere((d) => d.name == name),
-      );
-      _savedIds.add(name);
-      _savedFromFirestore.add(destination);
-      await _repository.saveDestination(user.uid, destination);
+    _errorMessage = null;
+    try {
+      if (_savedIds.contains(name)) {
+        _savedIds.remove(name);
+        _savedFromFirestore.removeWhere((d) => d.name == name);
+        await _repository.unsaveDestination(user.uid, name);
+      } else {
+        final destination = _destinations.firstWhere(
+          (d) => d.name == name,
+          orElse: () => _savedFromFirestore.firstWhere((d) => d.name == name),
+        );
+        _savedIds.add(name);
+        _savedFromFirestore.add(destination);
+        await _repository.saveDestination(user.uid, destination);
+      }
+    } catch (e) {
+      _errorMessage = 'Không thể lưu / bỏ lưu. Thử lại.';
     }
     notifyListeners();
   }
@@ -146,19 +165,26 @@ class ExploreViewModel extends ChangeNotifier {
     final user = await _userRepository.getCurrentUser();
     if (user == null) return;
 
-    _savedFromFirestore = await _repository.getSavedDestinations(user.uid);
-    _savedIds = _savedFromFirestore.map((d) => d.name).toSet();
+    _errorMessage = null;
+    try {
+      _savedFromFirestore = await _repository.getSavedDestinations(user.uid);
+      _savedIds = _savedFromFirestore.map((d) => d.name).toSet();
+    } catch (e) {
+      _errorMessage = 'Không thể tải danh sách đã lưu.';
+    }
     notifyListeners();
   }
 
   //==========================================================================//
   //                        PRIVATE HELPERS                                   //
   //==========================================================================//
+  // Tìm kiếm destination
   void search(String query) {
     _searchQuery = query.toLowerCase().trim();
     notifyListeners();
   }
 
+  // Ấn x để xoá các từ đã gõ
   void clearSearch() {
     _searchQuery = '';
     notifyListeners();
@@ -169,6 +195,11 @@ class ExploreViewModel extends ChangeNotifier {
     _selectedCategory = '';
     _selectedCity = '';
     _searchQuery = '';
+    notifyListeners();
+  }
+
+  void clearError() {
+    _errorMessage = null;
     notifyListeners();
   }
 }
