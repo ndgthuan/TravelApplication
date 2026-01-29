@@ -10,6 +10,7 @@ import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/shared/providers/saved_count_provider.dart';
 import 'package:travel_app/shared/widgets/heart_button_widget.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
+import 'package:travel_app/features/explore/utils/category_icons.dart';
 import 'package:travel_app/features/explore/widgets/category_button_widget.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -38,30 +39,25 @@ class _ExploreScreenState extends State<ExploreScreen> {
     });
   }
 
-  // Helper method để lấy icon theo category
-  IconData _getCategoryIcon(String category) {
-    switch (category) {
-      case 'Hotel':
-        return Icons.hotel;
-      case 'Restaurant':
-        return Icons.restaurant;
-      case 'Cafe':
-        return Icons.coffee;
-      case 'Attraction':
-        return Icons.location_on;
-      case 'Mall':
-        return Icons.local_mall_rounded;
-      case 'Market':
-        return Icons.maps_home_work_outlined;
-      default:
-        return Icons.apps;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // Dùng context.watch để lắng nghe thay đổi (giống HomeScreen)
     final viewModel = context.watch<ExploreViewModel>();
+
+    // Hiện lỗi từ ViewModel
+    if (viewModel.hasError && viewModel.errorMessage != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(viewModel.errorMessage!),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        viewModel.clearError();
+      });
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFF000000),
@@ -153,7 +149,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   children: viewModel.categories.map((category) {
                     return CategoryButtonWidget(
                       name: category.isEmpty ? 'Tất cả' : category,
-                      icon: _getCategoryIcon(category),
+                      icon: getCategoryIcon(category),
                       isSelected: viewModel.selectedCategory == category,
                       onTap: () => viewModel.selectCategory(category),
                     );
@@ -202,7 +198,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
             // Masonry Grid View
             Expanded(
               child: viewModel.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(0xFFFFAD35),
+                        ),
+                      ),
+                    )
                   : viewModel.unsavedDestinations.isEmpty
                   ? const Center(
                       child: Text(
@@ -210,147 +212,152 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         style: TextStyle(color: Colors.white),
                       ),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: GridView.custom(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        gridDelegate: SliverQuiltedGridDelegate(
-                          crossAxisCount: 4,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          repeatPattern: QuiltedGridRepeatPattern.inverted,
-                          pattern: const [
-                            QuiltedGridTile(5, 2),
-                            QuiltedGridTile(3, 2),
-                            QuiltedGridTile(2, 2),
-                          ],
-                        ),
-                        childrenDelegate: SliverChildBuilderDelegate((
-                          context,
-                          index,
-                        ) {
-                          final item = viewModel.unsavedDestinations[index];
+                  : RefreshIndicator(
+                      onRefresh: () => viewModel.loadData(),
+                      color: Color(0xFFFFAD35),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: GridView.custom(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          physics:
+                              const AlwaysScrollableScrollPhysics(), // Scroll ngược lên để refresh
+                          gridDelegate: SliverQuiltedGridDelegate(
+                            crossAxisCount: 4,
+                            mainAxisSpacing: 10,
+                            crossAxisSpacing: 10,
+                            repeatPattern: QuiltedGridRepeatPattern.inverted,
+                            pattern: const [
+                              QuiltedGridTile(5, 2),
+                              QuiltedGridTile(3, 2),
+                              QuiltedGridTile(2, 2),
+                            ],
+                          ),
+                          childrenDelegate: SliverChildBuilderDelegate((
+                            context,
+                            index,
+                          ) {
+                            final item = viewModel.unsavedDestinations[index];
 
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Stack(
-                              fit: StackFit.expand,
-                              children: [
-                                // Ảnh thật từ data
-                                CachedNetworkImage(
-                                  imageUrl: item.imageUrl,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      Container(color: Colors.grey[800]),
-                                  errorWidget: (context, url, error) =>
-                                      Container(color: Colors.grey[800]),
-                                ),
-
-                                // Heart Button
-                                Positioned(
-                                  top: 10,
-                                  right: 10,
-                                  child: HeartButtonWidget(
-                                    isSaved: viewModel.isSaved(item.name),
-                                    onTap: () async {
-                                      await viewModel.toggleSave(item.name);
-                                      if (!context.mounted) return;
-                                      if (viewModel.isSaved(item.name)) {
-                                        context
-                                            .read<SavedCountProvider>()
-                                            .increment();
-                                      }
-                                    },
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  // Ảnh thật từ data
+                                  CachedNetworkImage(
+                                    imageUrl: item.imageUrl,
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) =>
+                                        Container(color: Colors.grey[800]),
+                                    errorWidget: (context, url, error) =>
+                                        Container(color: Colors.grey[800]),
                                   ),
-                                ),
 
-                                // Gradient mờ
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  height: 120,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          Colors.black.withValues(alpha: 0.8),
-                                          Colors.transparent,
-                                        ],
+                                  // Heart Button
+                                  Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: HeartButtonWidget(
+                                      isSaved: viewModel.isSaved(item.name),
+                                      onTap: () async {
+                                        await viewModel.toggleSave(item.name);
+                                        if (!context.mounted) return;
+                                        if (viewModel.isSaved(item.name)) {
+                                          context
+                                              .read<SavedCountProvider>()
+                                              .increment();
+                                        }
+                                      },
+                                    ),
+                                  ),
+
+                                  // Gradient mờ
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    height: 120,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Colors.black.withValues(alpha: 0.8),
+                                            Colors.transparent,
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
 
-                                // Thông tin địa điểm
-                                Positioned(
-                                  bottom: 8,
-                                  left: 8,
-                                  right: 8,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        item.name,
-                                        style: GoogleFonts.beVietnamPro(
-                                          color: Colors.white,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          shadows: [
-                                            Shadow(
-                                              offset: Offset(0, 1),
-                                              blurRadius: 2.0,
-                                              color: Colors.black.withValues(
-                                                alpha: 0.5,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              CupertinoIcons.star_fill,
-                                              color: Color(0xFFFFAD35),
-                                              size: 12,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              item.rating,
-                                              style: GoogleFonts.beVietnamPro(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              "(${item.reviewCount})",
-                                              style: GoogleFonts.beVietnamPro(
-                                                color: Colors.white.withValues(
-                                                  alpha: 0.8,
+                                  // Thông tin địa điểm
+                                  Positioned(
+                                    bottom: 8,
+                                    left: 8,
+                                    right: 8,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item.name,
+                                          style: GoogleFonts.beVietnamPro(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            shadows: [
+                                              Shadow(
+                                                offset: Offset(0, 1),
+                                                blurRadius: 2.0,
+                                                color: Colors.black.withValues(
+                                                  alpha: 0.5,
                                                 ),
-                                                fontSize: 10,
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                      ),
-                                    ],
+                                        FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Row(
+                                            children: [
+                                              const Icon(
+                                                CupertinoIcons.star_fill,
+                                                color: Color(0xFFFFAD35),
+                                                size: 12,
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                item.rating,
+                                                style: GoogleFonts.beVietnamPro(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                "(${item.reviewCount})",
+                                                style: GoogleFonts.beVietnamPro(
+                                                  color: Colors.white
+                                                      .withValues(alpha: 0.8),
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }, childCount: viewModel.unsavedDestinations.length),
+                                ],
+                              ),
+                            );
+                          }, childCount: viewModel.unsavedDestinations.length),
+                        ),
                       ),
                     ),
             ),

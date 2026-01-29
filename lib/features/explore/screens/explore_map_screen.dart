@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:travel_app/features/explore/models/destination_model.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/features/explore/widgets/explore_map_saved_count_chip.dart';
+import 'package:travel_app/features/explore/widgets/map_info_window_widget.dart';
+import 'package:travel_app/features/explore/widgets/explore_map_search_overlay.dart';
+import 'package:travel_app/features/explore/widgets/explore_map_floating_actions.dart';
+import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 
 class ExploreMapScreen extends StatefulWidget {
   const ExploreMapScreen({super.key});
@@ -14,20 +18,81 @@ class ExploreMapScreen extends StatefulWidget {
 }
 
 class _ExploreMapScreenState extends State<ExploreMapScreen> {
-  bool isLoading = false;
-  bool _showInfoWindow = true;
-  final MapController _mapController = MapController();
+  final _mapController = MapController();
+  final Set<String> _hiddenInfoWindows = {}; // Track các info window đã đóng
+  final TextEditingController _searchController = TextEditingController();
+  List<DestinationModel> _searchResults = [];
+  bool _showSearchResults = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Đợi map render xong rồi fit bounds
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(milliseconds: 0), () {
+        _fitAllMarkers();
+      });
+    });
+  }
+
+  void _fitAllMarkers() {
+    final viewModel = context.read<ExploreViewModel>();
+    final savedDestinations = viewModel.savedDestinations;
+
+    if (savedDestinations.isEmpty) return;
+
+    final bounds = LatLngBounds.fromPoints(
+      savedDestinations.map((d) => LatLng(d.latitude, d.longitude)).toList(),
+    );
+
+    _mapController.fitCamera(
+      CameraFit.bounds(bounds: bounds, padding: EdgeInsets.all(50)),
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _searchDestinations(String query) {
+    final viewModel = context.read<ExploreViewModel>();
+    if (query.isEmpty) {
+      setState(() {
+        _searchResults = [];
+        _showSearchResults = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _searchResults = viewModel.savedDestinations
+          .where((d) => d.name.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      _showSearchResults = _searchResults.isNotEmpty;
+    });
+  }
+
+  void _flyToDestination(DestinationModel dest) {
+    setState(() {
+      _hiddenInfoWindows.remove(dest.name); // Hiện lại info window nếu đã ẩn
+      _searchController.clear();
+      _showSearchResults = false;
+    });
+    _mapController.move(LatLng(dest.latitude, dest.longitude), 17.0);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<ExploreViewModel>();
+    final savedDestinations = viewModel.savedDestinations;
     double currentZoom = 15.0;
     try {
       currentZoom = _mapController.camera.zoom;
     } catch (_) {
       // Map chưa render xong thì dùng giá trị mặc định
     }
-
-    double heightFactor = currentZoom >= 17.0 ? 3.6 : 4.0;
 
     double markerSize =
         50.0 * (currentZoom / 18.0); // Zoom càng nhỏ thì marker càng bé
@@ -50,14 +115,7 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                   setState(() {});
                 }
               },
-              onTap: (tapPosition, point) {
-                // Đóng Info Window khi bấm ra ngoài bản đồ
-                if (_showInfoWindow) {
-                  setState(() {
-                    _showInfoWindow = false;
-                  });
-                }
-              },
+              onTap: (tapPosition, point) {},
             ),
             children: [
               TileLayer(
@@ -70,138 +128,56 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
 
               MarkerLayer(
                 markers: [
-                  // 1. The Pin Marker
-                  Marker(
-                    point: LatLng(10.7725, 106.6980),
-                    width: markerSize,
-                    height: markerSize,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _showInfoWindow =
-                              !_showInfoWindow; // Toggle visibility
-                        });
-                      },
-                      child: const Icon(
-                        CupertinoIcons.heart_fill,
-                        color: Color(0xFFFFAD35),
-                        size: 30,
-                      ),
-                    ),
-                  ),
-
-                  // 2. The Info Window Marker (Only if visible)
-                  if (_showInfoWindow)
-                    Marker(
-                      point: LatLng(10.7725, 106.6980),
-                      width:
-                          markerSize *
-                          5, // Tăng chiều rộng để chứa ảnh và thông tin
-                      height: markerSize * heightFactor, // Tăng chiều cao
-                      alignment: Alignment.topCenter,
+                  // Tạo markers cho tất cả savedDestinations
+                  ...savedDestinations.map((dest) {
+                    return Marker(
+                      point: LatLng(dest.latitude, dest.longitude),
+                      width: 180, // Luôn đủ lớn chứa info window
+                      height: 200,
+                      alignment: Alignment.bottomCenter,
                       child: Transform.translate(
-                        offset: Offset(0, -markerSize * 0.8),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Xử lý khi bấm vào bảng thông tin (ví dụ: vào trang chi tiết)
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: const [
-                                BoxShadow(
-                                  blurRadius: 15,
-                                  color: Colors.black38,
-                                  offset: Offset(0, 5),
-                                ),
-                              ],
+                        // Chỉ có offset khi info window đang hiện
+                        offset: _hiddenInfoWindows.contains(dest.name)
+                            ? Offset.zero
+                            : Offset(0, -139),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            // Info Window (hiện nếu chưa bị đóng)
+                            if (!_hiddenInfoWindows.contains(dest.name))
+                              MapInfoWindowWidget(
+                                dest: dest,
+                                onClose: () {
+                                  setState(() {
+                                    _hiddenInfoWindows.add(dest.name);
+                                  });
+                                },
+                              ),
+                            // Heart icon với GestureDetector riêng
+                            GestureDetector(
+                              onTap: () {
+                                // Hiện lại info window nếu đang ẩn
+                                setState(() {
+                                  _hiddenInfoWindows.remove(dest.name);
+                                });
+                                // Fly tới destination
+                                _mapController.move(
+                                  LatLng(dest.latitude, dest.longitude),
+                                  17.0,
+                                );
+                              },
+                              child: Icon(
+                                CupertinoIcons.heart_fill,
+                                color: Color(0xFFFFAD35),
+                                size: 30,
+                              ),
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Ảnh địa điểm
-                                Expanded(
-                                  child: ClipRRect(
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(15),
-                                    ),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          "https://lh3.googleusercontent.com/p/AF1QipMcim0JXqpdWGyptHTkJe2JrcgHuhvFxMEGAK8u=w800-h600-k-no",
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                      placeholder: (context, url) =>
-                                          Container(color: Colors.grey[300]),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
-                                  ),
-                                ),
-
-                                // Thông tin bên dưới
-                                Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // Tên địa điểm
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          "Ben Thanh Market",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: GoogleFonts.beVietnamPro(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-
-                                      // Row đánh giá
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        alignment: Alignment.centerLeft,
-                                        child: Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                              size: 14,
-                                            ),
-                                            const SizedBox(width: 2),
-                                            Text(
-                                              "4.8",
-                                              style: GoogleFonts.beVietnamPro(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              "(12.5k reviews)",
-                                              style: GoogleFonts.beVietnamPro(
-                                                fontSize: 12,
-                                                color: Colors.grey[600],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          ],
                         ),
                       ),
-                    ),
+                    );
+                  }),
                 ],
               ),
               // Nguồn openstreetmap
@@ -212,97 +188,29 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40),
-            child: Column(
-              children: [
-                AppTextFieldWidget(
-                  hintText: 'Search destinations...',
-                  prefixIcon: Icons.search,
-                  suffixIcon: Icon(
-                    CupertinoIcons.xmark_circle,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
+          ExploreMapSearchOverlay(
+            searchController: _searchController,
+            searchResults: _searchResults,
+            showSearchResults: _showSearchResults,
+            onSearchChanged: _searchDestinations,
+            onDestinationSelected: _flyToDestination,
           ),
 
           Positioned(
             bottom: 5,
             right: 10,
-            child: Column(
-              children: [
-                // Nút tái cấu hình map
-                Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF2A2A2A),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Icon(Icons.my_location, color: Color(0xFFFFAD35)),
-                ),
-                const SizedBox(height: 10),
-
-                // Nút quay về trang My Saves
-                GestureDetector(
-                  onTapDown: (_) => setState(() => isLoading = true),
-                  onTapUp: (_) => setState(() => isLoading = false),
-                  onTapCancel: () => setState(() => isLoading = false),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: AnimatedScale(
-                    scale: isLoading ? 0.95 : 1.0,
-                    duration: const Duration(milliseconds: 100),
-                    curve: Curves.easeInOut,
-                    child: Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFF2A2A2A),
-                      ),
-                      child: Icon(
-                        CupertinoIcons.bookmark_fill,
-                        color: Color(0xFFFFAD35),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            child: ExploreMapFloatingActions(
+              onFitBounds: _fitAllMarkers,
+              onBookmarkTap: () => Navigator.pop(context),
+              canFitBounds: savedDestinations.isNotEmpty,
             ),
           ),
 
           Positioned(
             bottom: 10,
             left: 10,
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: Color(0xFF2A2A2A),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(right: 15, left: 10),
-                child: Row(
-                  children: [
-                    Icon(
-                      CupertinoIcons.location_fill,
-                      color: Color(0xFFFFAD35),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      '300 Saved Places',
-                      style: GoogleFonts.beVietnamPro(
-                        color: Color(0xFFFFAD35),
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            child: ExploreMapSavedCountChip(
+              savedCount: savedDestinations.length,
             ),
           ),
         ],
