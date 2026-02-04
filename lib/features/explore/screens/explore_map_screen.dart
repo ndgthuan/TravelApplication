@@ -27,8 +27,8 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
   @override
   void initState() {
     super.initState();
-    // Đợi map render xong rồi fit bounds
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ExploreViewModel>().loadCurrentLocation();
       Future.delayed(Duration(milliseconds: 0), () {
         _fitAllMarkers();
       });
@@ -39,7 +39,15 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
     final viewModel = context.read<ExploreViewModel>();
     final savedDestinations = viewModel.savedDestinations;
 
-    if (savedDestinations.isEmpty) return;
+    if (savedDestinations.isEmpty) {
+      if (viewModel.hasCurrentLocation) {
+        _mapController.move(
+          LatLng(viewModel.currentLocationLat!, viewModel.currentLocationLng!),
+          16.0,
+        );
+      }
+      return;
+    }
 
     final points = savedDestinations
         .map((d) => LatLng(d.latitude, d.longitude))
@@ -145,7 +153,34 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
 
               MarkerLayer(
                 markers: [
-                  // Tạo markers cho tất cả savedDestinations (bỏ qua lat/lng NaN/Infinity)
+                  // Marker vị trí hiện tại
+                  if (viewModel.hasCurrentLocation)
+                    Marker(
+                      point: LatLng(
+                        viewModel.currentLocationLat!,
+                        viewModel.currentLocationLng!,
+                      ),
+                      width: 40,
+                      height: 40,
+                      alignment: Alignment.bottomCenter,
+                      child: GestureDetector(
+                        onTap: () {
+                          _mapController.move(
+                            LatLng(
+                              viewModel.currentLocationLat!,
+                              viewModel.currentLocationLng!,
+                            ),
+                            17.0,
+                          );
+                        },
+                        child: Icon(
+                          CupertinoIcons.location_fill,
+                          color: Color(0xFF34C759),
+                          size: 36,
+                        ),
+                      ),
+                    ),
+                  // Markers saved destinations
                   ...savedDestinations
                       .where((d) => d.latitude.isFinite && d.longitude.isFinite)
                       .map((dest) {

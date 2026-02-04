@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:travel_app/domain/repositories/i_explore_repository.dart';
 import 'package:travel_app/domain/models/destination_model.dart';
 import 'package:travel_app/domain/repositories/i_user_repository.dart';
+import 'package:travel_app/domain/services/i_location_service.dart';
 
 class ExploreViewModel extends ChangeNotifier {
   //==========================================================================//
@@ -10,8 +11,13 @@ class ExploreViewModel extends ChangeNotifier {
   //==========================================================================//
   final IExploreRepository _repository;
   final IUserRepository _userRepository;
+  final ILocationService _locationService;
 
-  ExploreViewModel(this._repository, this._userRepository);
+  ExploreViewModel(
+    this._repository,
+    this._userRepository,
+    this._locationService,
+  );
 
   //==========================================================================//
   //                        STATE VARIABLES                                   //
@@ -26,6 +32,8 @@ class ExploreViewModel extends ChangeNotifier {
   String _selectedCity = '';
   Set<String> _savedIds = {}; // Lưu danh sách ID đã save
   String? _errorMessage; // Thêm biến để kiểm tra lỗi
+  double? _currentLocationLat;
+  double? _currentLocationLng;
 
   //==========================================================================//
   //                        GETTERS                                           //
@@ -40,10 +48,31 @@ class ExploreViewModel extends ChangeNotifier {
   String get searchQuery => _searchQuery;
   String? get errorMessage => _errorMessage;
   bool get hasError => _errorMessage != null;
+  double? get currentLocationLat => _currentLocationLat;
+  double? get currentLocationLng => _currentLocationLng;
+  bool get hasCurrentLocation =>
+      _currentLocationLat != null &&
+      _currentLocationLng != null &&
+      _currentLocationLat!.isFinite &&
+      _currentLocationLng!.isFinite;
 
   //==========================================================================//
   //                        ACTION METHODS                                    //
   //==========================================================================//
+
+  // Lấy vị trí hiện tại của thiết bị (cho Explore Map).
+  Future<void> loadCurrentLocation() async {
+    final pos = await _locationService.getCurrentPosition();
+    if (pos != null) {
+      _currentLocationLat = pos.latitude;
+      _currentLocationLng = pos.longitude;
+    } else {
+      _currentLocationLat = null;
+      _currentLocationLng = null;
+    }
+    notifyListeners();
+  }
+
   // Cập nhật loadData
   Future<void> loadData() async {
     _isLoading = true;

@@ -9,6 +9,7 @@ import 'package:travel_app/features/utilities/weather_forecast/service/weather_s
 import 'package:travel_app/domain/services/i_support_email_service.dart';
 import 'package:travel_app/features/support/services/support_email_service.dart';
 import 'package:travel_app/shared/services/geocoding_service.dart';
+import 'package:travel_app/shared/services/location_service.dart';
 import 'package:travel_app/features/utilities/world_clock/services/timezone_storage_service.dart';
 import 'package:travel_app/features/utilities/world_clock/services/timezone_util_service.dart';
 import 'package:travel_app/features/utilities/text_translation/services/image_translation_service.dart';
@@ -19,6 +20,7 @@ import 'package:travel_app/shared/services/cloudinary_service.dart';
 import 'package:travel_app/domain/services/i_storage_service.dart';
 import 'package:travel_app/shared/services/storage_service.dart';
 import 'package:travel_app/domain/services/i_geocoding_service.dart';
+import 'package:travel_app/domain/services/i_location_service.dart';
 import 'package:travel_app/domain/services/i_weather_service.dart';
 import 'package:travel_app/domain/services/i_weather_config_service.dart';
 import 'package:travel_app/domain/services/i_speech_tts_service.dart';
@@ -64,6 +66,7 @@ void setupDependencies() {
   //           SERVICES (Singleton - dùng chung cho nhiều nơi)                //
   //==========================================================================//
   getIt.registerLazySingleton<IGeocodingService>(() => GeocodingService());
+  getIt.registerLazySingleton<ILocationService>(() => LocationService());
   getIt.registerLazySingleton<IWeatherService>(() => WeatherService());
   getIt.registerLazySingleton<IWeatherConfigService>(
     () => WeatherConfigService(),
@@ -174,7 +177,10 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<ExploreViewModel>(
-    () =>
-        ExploreViewModel(getIt<IExploreRepository>(), getIt<IUserRepository>()),
+    () => ExploreViewModel(
+      getIt<IExploreRepository>(),
+      getIt<IUserRepository>(),
+      getIt<ILocationService>(),
+    ),
   );
 }

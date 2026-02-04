@@ -25,11 +25,8 @@ class CurrencyRepositoryImpl implements ICurrencyRepository {
   @override
   Future<ExchangeRateModel> fetchExchangeRates(String baseCurrency) async {
     try {
-      final apiKey = dotenv.env['CURRENCY_TOKEN'] ?? '';
       final response = await http.get(
-        Uri.parse(
-          'https://api.fxratesapi.com/latest?base=$baseCurrency&api_key=$apiKey',
-        ),
+        Uri.parse('https://api.fxratesapi.com/latest?base=$baseCurrency'),
       );
 
       if (response.statusCode != 200) {
@@ -61,7 +58,9 @@ class CurrencyRepositoryImpl implements ICurrencyRepository {
     required String targetCurrency,
   }) async {
     try {
-      final endDate = DateTime.now();
+      final endDate = DateTime.now().subtract(
+        Duration(days: 1),
+      ); // Sử dụng ngày hôm qua để tránh lỗi timezone
       final startDate = endDate.subtract(Duration(days: 6));
       final startStr = DateFormat('yyyy-MM-dd').format(startDate);
       final endStr = DateFormat('yyyy-MM-dd').format(endDate);
