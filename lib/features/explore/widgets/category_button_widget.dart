@@ -29,17 +29,15 @@ class CategoryButtonWidget extends StatelessWidget {
               width: 60,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isSelected ? const Color(0xFFFFAD35) : Colors.white,
+                color: isSelected
+                    ? const Color(0xFFFFAD35)
+                    : Colors.white.withValues(alpha: 0.3),
                 border: Border.all(
-                  color: isSelected ? const Color(0xFFFFAD35) : Colors.grey,
-                  width: 2,
+                  color: Colors.white.withValues(alpha: 0.2),
+                  width: 3,
                 ),
               ),
-              child: Icon(
-                icon,
-                color: isSelected ? Colors.white : Colors.black,
-                size: 28,
-              ),
+              child: Icon(icon, color: Colors.white, size: 28),
             ),
             const SizedBox(height: 8),
             Text(

@@ -20,15 +20,12 @@ class _HeartButtonWidgetState extends State<HeartButtonWidget> {
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.3),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.3),
+          width: 3,
+        ),
+        color: Colors.white.withValues(alpha: 0.2),
         shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
-            offset: Offset(0, 4),
-            blurRadius: 8,
-          ),
-        ],
       ),
       child: GestureDetector(
         onTapDown: (_) => setState(() => isPressed = true),
