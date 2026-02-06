@@ -4,7 +4,12 @@ import 'package:flutter/cupertino.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const AppBarWidget({super.key, required this.title});
+  final IconData icon;
+  const AppBarWidget({
+    super.key,
+    required this.title,
+    this.icon = CupertinoIcons.back,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () {
           Navigator.of(context).pop();
         },
-        icon: Icon(CupertinoIcons.back, color: Colors.white),
+        icon: Icon(icon, color: Colors.white),
       ),
       centerTitle: true,
       iconTheme: IconThemeData(color: Colors.white),
