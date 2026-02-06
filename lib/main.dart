@@ -146,7 +146,7 @@ void main() async {
           ChangeNotifierProvider(
             create: (_) => getIt<HomeViewModel>(),
           ), // Gọi HomeScreen parent state
-          ChangeNotifierProvider(
+          ChangeNotifierProvider( 
             create: (_) => getIt<ExploreViewModel>(),
           ), // Gọi ExploreScreen parent state
           ChangeNotifierProvider(
