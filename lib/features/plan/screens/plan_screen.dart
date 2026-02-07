@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/features/plan/screens/add_plan_screen.dart';
+import 'package:travel_app/features/plan/widgets/activity_plan_widget.dart';
 
 class PlanScreen extends StatefulWidget {
   const PlanScreen({super.key});
@@ -263,7 +264,17 @@ class _PlanScreenState extends State<PlanScreen> {
                                         color: Color(0xFFFFAD35),
                                         borderRadius: BorderRadius.circular(12),
                                         child: InkWell(
-                                          onTap: () {},
+                                          onTap: () {
+                                            Navigator.of(
+                                              context,
+                                              rootNavigator: true,
+                                            ).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ActivityPlanWidget(),
+                                              ),
+                                            );
+                                          },
                                           borderRadius: BorderRadius.circular(
                                             12,
                                           ),
