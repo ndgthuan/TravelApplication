@@ -8,6 +8,7 @@ class AppTextFieldWidget extends StatelessWidget {
   final String? labelText;
   final String? hintText;
   final TextEditingController? controller;
+  final double? labelFontSize;
   // Icons
   final IconData? prefixIcon;
   final Widget? suffixIcon;
@@ -44,6 +45,7 @@ class AppTextFieldWidget extends StatelessWidget {
     this.focusNode,
     this.showLabel = false,
     this.horizontalPadding = 20,
+    this.labelFontSize = 16,
   });
 
   @override
@@ -59,7 +61,7 @@ class AppTextFieldWidget extends StatelessWidget {
               labelText!,
               style: GoogleFonts.beVietnamPro(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: labelFontSize,
                 fontWeight: FontWeight.w500,
               ),
             ),

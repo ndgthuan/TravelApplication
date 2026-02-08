@@ -5,8 +5,8 @@ import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'package:travel_app/shared/widgets/app_button_widget.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
 
-class AddPlanScreen extends StatelessWidget {
-  const AddPlanScreen({super.key});
+class AddPlanSheet extends StatelessWidget {
+  const AddPlanSheet({super.key});
 
   @override
   Widget build(BuildContext context) {

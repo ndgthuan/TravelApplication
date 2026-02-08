@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
+import 'package:travel_app/features/plan/screens/add_activity_screen.dart';
 
 class ActivityPlanWidget extends StatefulWidget {
   const ActivityPlanWidget({super.key});
@@ -13,6 +18,104 @@ class ActivityPlanWidget extends StatefulWidget {
 
 class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
   final _mapController = MapController();
+
+  // 6 địa điểm Hà Nội
+  static const _routePoints = [
+    LatLng(21.022, 105.848), // 0 - Sân bay Nội Bài (đã đi)
+    LatLng(21.026, 105.852), // 1 - Khách sạn Metropole (đang đi)
+    LatLng(21.030, 105.855), // 2 - Phở Bát Đàn
+    LatLng(21.032, 105.851), // 3 - Văn Miếu
+    LatLng(21.034, 105.848), // 4 - Hồ Hoàn Kiếm
+    LatLng(21.036, 105.845), // 5 - Phố cổ
+  ];
+  static const _currentIndex = 1; // index đang hành động
+
+  /// Đường đi theo đường thật từ OpenRouteService (mỗi phần tử = 1 đoạn từ điểm i -> i+1)
+  List<List<LatLng>>? _routeSegments;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _fitMapToCurrentAndNext(),
+    );
+    _fetchRouteFromOpenRouteService();
+  }
+
+  /// Gọi OpenRouteService để lấy đường đi theo đường (không cắt qua sông/hồ).
+  /// Cần key miễn phí tại https://openrouteservice.org/dev/#/signup
+  /// Thêm vào .env: OPENROUTE_SERVICE_API_KEY=your_key
+  Future<void> _fetchRouteFromOpenRouteService() async {
+    final apiKey = dotenv.env['OPENROUTE_SERVICE_API_KEY']?.trim();
+    if (apiKey == null || apiKey.isEmpty) {
+      if (mounted) setState(() {});
+      return;
+    }
+    final segments = <List<LatLng>>[];
+    for (int i = 0; i < _routePoints.length - 1; i++) {
+      try {
+        final coords = [
+          [_routePoints[i].longitude, _routePoints[i].latitude],
+          [_routePoints[i + 1].longitude, _routePoints[i + 1].latitude],
+        ];
+        final res = await http.post(
+          Uri.parse(
+            'https://api.openrouteservice.org/v2/directions/driving-car/geojson',
+          ),
+          headers: {
+            'Authorization': apiKey,
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({'coordinates': coords}),
+        );
+        if (res.statusCode == 200) {
+          final data = jsonDecode(res.body) as Map<String, dynamic>;
+          final features = data['features'] as List<dynamic>?;
+          List<dynamic>? coordsList;
+          if (features != null && features.isNotEmpty) {
+            final geom =
+                (features.first as Map<String, dynamic>)['geometry']
+                    as Map<String, dynamic>?;
+            coordsList = geom?['coordinates'] as List<dynamic>?;
+          }
+          if (coordsList != null && coordsList.isNotEmpty) {
+            segments.add(
+              coordsList.map((e) => LatLng((e as List)[1], (e)[0])).toList(),
+            );
+            continue;
+          }
+        }
+      } catch (_) {}
+      segments.add([_routePoints[i], _routePoints[i + 1]]);
+    }
+    if (mounted) {
+      setState(() {
+        _routeSegments = segments;
+      });
+    }
+  }
+
+  void _fitMapToCurrentAndNext() {
+    if (!mounted) return;
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    // Padding dưới lớn = phần sheet che → 2 điểm nằm trên vùng map thấy được (trên panel)
+    final bottomPadding = screenHeight * 0.52;
+    if (_currentIndex + 1 < _routePoints.length) {
+      final bounds = LatLngBounds.fromPoints([
+        _routePoints[_currentIndex],
+        _routePoints[_currentIndex + 1],
+      ]);
+      _mapController.fitCamera(
+        CameraFit.bounds(
+          bounds: bounds,
+          padding: EdgeInsets.fromLTRB(50, 80, 50, bottomPadding),
+        ),
+      );
+    } else {
+      _mapController.move(_routePoints[_currentIndex], 17);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +126,10 @@ class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
           // Map làm nền
           FlutterMap(
             mapController: _mapController,
-            options: MapOptions(initialCenter: const LatLng(21.0285, 105.8542)),
+            options: MapOptions(
+              initialCenter: const LatLng(21.028, 105.853),
+              initialZoom: 10,
+            ),
             children: [
               TileLayer(
                 urlTemplate:
@@ -31,6 +137,53 @@ class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
                 subdomains: const ['a', 'b', 'c', 'd'],
                 userAgentPackageName: 'com.travel.app',
                 retinaMode: RetinaMode.isHighDensity(context),
+              ),
+              // Đường đi: đã đi = xanh, đang đi = cam, chưa đi = trắng mờ (theo đường thật nếu có ORS)
+              PolylineLayer(
+                polylines: [
+                  for (int i = 0; i < _routePoints.length - 1; i++)
+                    Polyline(
+                      points:
+                          _routeSegments != null &&
+                              i < _routeSegments!.length &&
+                              _routeSegments![i].isNotEmpty
+                          ? _routeSegments![i]
+                          : [_routePoints[i], _routePoints[i + 1]],
+                      color: i < _currentIndex
+                          ? Colors.green
+                          : i == _currentIndex
+                          ? const Color(0xFFFF6D00)
+                          : Colors.white.withValues(alpha: 0.3),
+                      strokeWidth: 5,
+                    ),
+                ],
+              ),
+              MarkerLayer(
+                markers: [
+                  for (int i = 0; i < _routePoints.length; i++)
+                    Marker(
+                      point: _routePoints[i],
+                      width: 28,
+                      height: 28,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: i < _currentIndex
+                              ? Colors.green
+                              : i == _currentIndex
+                              ? const Color(0xFFFF6D00)
+                              : Colors.grey.shade700,
+                        ),
+                        child: i < _currentIndex
+                            ? const Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 16,
+                              )
+                            : null,
+                      ),
+                    ),
+                ],
               ),
             ],
           ),
@@ -130,7 +283,17 @@ class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
                                 ),
 
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(
+                                      context,
+                                      rootNavigator: true,
+                                    ).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            AddActivityScreen(),
+                                      ),
+                                    );
+                                  },
                                   icon: Icon(
                                     CupertinoIcons.add,
                                     color: Colors.white,
@@ -488,10 +651,7 @@ class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 30,
-                                    ), // Các value cần gán
-
+                                    const SizedBox(height: 30),
                                     Container(
                                       height: 30,
                                       decoration: BoxDecoration(
