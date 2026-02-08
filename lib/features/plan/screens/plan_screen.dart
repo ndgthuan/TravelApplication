@@ -3,7 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/features/plan/screens/add_plan_screen.dart';
+import 'package:travel_app/features/plan/widgets/add_plan_sheet.dart';
 import 'package:travel_app/features/plan/widgets/activity_plan_widget.dart';
 
 class PlanScreen extends StatefulWidget {
@@ -413,10 +413,7 @@ class _PlanScreenState extends State<PlanScreen> {
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(20),
                   ),
-                  child: SizedBox(
-                    height: height * 0.9,
-                    child: const AddPlanScreen(),
-                  ),
+                  child: SizedBox(height: height * 0.9, child: AddPlanSheet()),
                 ),
               ),
             ),
