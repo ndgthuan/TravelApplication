@@ -36,9 +36,6 @@ class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _fitMapToCurrentAndNext(),
-    );
     _fetchRouteFromOpenRouteService();
   }
 
@@ -129,6 +126,11 @@ class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
             options: MapOptions(
               initialCenter: const LatLng(21.028, 105.853),
               initialZoom: 10,
+              onMapReady: () {
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  if (mounted) _fitMapToCurrentAndNext();
+                });
+              },
             ),
             children: [
               TileLayer(

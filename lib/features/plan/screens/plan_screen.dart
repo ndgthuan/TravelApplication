@@ -432,7 +432,7 @@ class _PlanScreenState extends State<PlanScreen> {
         width: 140,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('lib/assets/images/AddPlanImage.png'),
+            image: AssetImage('lib/assets/images/add_plan_image.png'),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(15),
