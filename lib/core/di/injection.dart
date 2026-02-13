@@ -189,6 +189,10 @@ void setupDependencies() {
   );
 
   getIt.registerFactory<PlanViewModel>(
-    () => PlanViewModel(getIt<IPlanRepository>()),
+    () => PlanViewModel(
+      getIt<IPlanRepository>(),
+      getIt<IUserRepository>(),
+      getIt<ICloudinaryService>(),
+    ),
   );
 }

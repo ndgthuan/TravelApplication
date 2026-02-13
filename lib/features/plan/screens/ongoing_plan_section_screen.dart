@@ -6,14 +6,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
 
-class AddActivityScreen extends StatefulWidget {
-  const AddActivityScreen({super.key});
+class OngoingPlanSectionScreen extends StatefulWidget {
+  const OngoingPlanSectionScreen({super.key});
 
   @override
-  State<AddActivityScreen> createState() => _AddActivityScreenState();
+  State<OngoingPlanSectionScreen> createState() =>
+      _OngoingPlanSectionScreenState();
 }
 
-class _AddActivityScreenState extends State<AddActivityScreen> {
+class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
   final _mapController = MapController();
   TimeOfDay _time = const TimeOfDay(hour: 18, minute: 30);
   DateTime _date = DateTime(2023, 10, 12);

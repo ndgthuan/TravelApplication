@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/account/viewmodels/account_view_model.dart';
 import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
+import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
 import 'package:travel_app/features/account/widgets/setting_card_widget.dart';
 import 'package:travel_app/features/account/widgets/account_stat_card_widget.dart';
 import 'package:travel_app/features/account/widgets/utilities_grid_widget.dart';
@@ -59,6 +60,7 @@ class _AccountScreenState extends State<AccountScreen> {
     var _ = context.locale;
     final viewModel = context.watch<AccountViewModel>();
     final exploreViewModel = context.watch<ExploreViewModel>();
+    final planViewModel = context.watch<PlanViewModel>();
     // Build
     return Scaffold(
       backgroundColor: Color(0xFF000000),
@@ -178,7 +180,9 @@ class _AccountScreenState extends State<AccountScreen> {
                   Expanded(
                     child: AccountStatCardWidget(
                       title: 'navigation.plan'.tr(),
-                      number: 0,
+                      number:
+                          planViewModel.ongoingPlans.length +
+                          planViewModel.upcomingPlans.length,
                       icon: CupertinoIcons.doc_fill,
                     ),
                   ),

@@ -1,6 +1,5 @@
 // Thông tin cửa sổ các vật thể trong trang map
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travel_app/domain/models/destination_model.dart';

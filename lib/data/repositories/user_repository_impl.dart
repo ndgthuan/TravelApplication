@@ -38,4 +38,15 @@ class UserRepositoryImpl implements IUserRepository {
 
     await _firestore.collection('users').doc(user.uid).update(data);
   }
+
+  //==========================================================================//
+  //                            LẤY TẤT CẢ USERS                              //
+  //==========================================================================//
+  @override
+  Future<List<UserModel>> getAllUsers() async {
+    final snapshot = await _firestore.collection('users').get();
+    return snapshot.docs.map((doc) {
+      return UserModel.fromJson(doc.data(), doc.id);
+    }).toList();
+  }
 }

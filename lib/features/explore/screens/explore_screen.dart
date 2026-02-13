@@ -8,6 +8,7 @@ import 'package:travel_app/features/explore/screens/save_screen.dart';
 import 'package:travel_app/features/explore/widgets/city_filter_bottom_sheet.dart';
 import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/shared/providers/saved_count_provider.dart';
+import 'package:travel_app/shared/widgets/app_header_widget.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
 import 'package:travel_app/features/explore/utils/category_helper.dart';
 import 'package:travel_app/features/explore/widgets/category_button_widget.dart';
@@ -68,56 +69,41 @@ class _ExploreScreenState extends State<ExploreScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header - Khám phá
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  child: Text(
-                    "explore.title".tr(),
-                    style: GoogleFonts.beVietnamPro(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTapDown: (_) => setState(() => isLoading = true),
-                  onTapUp: (_) => setState(() => isLoading = false),
-                  onTapCancel: () => setState(() => isLoading = false),
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).push(
-                      MaterialPageRoute(builder: (context) => SaveScreen()),
-                    );
-                  },
-                  child: AnimatedScale(
-                    scale: isLoading ? 0.95 : 1.0,
-                    duration: const Duration(milliseconds: 100),
-                    curve: Curves.easeInOut,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Badge(
-                        label: Text(
-                          '${context.watch<SavedCountProvider>().unseenCount}',
-                          style: GoogleFonts.beVietnamPro(fontSize: 15),
-                        ),
-                        isLabelVisible:
-                            context.watch<SavedCountProvider>().unseenCount > 0,
-                        backgroundColor: Color(0XFFFFAD35),
-                        child: Icon(
-                          CupertinoIcons.bookmark_fill,
-                          color: Colors.white,
-                          size: 35,
-                        ),
+            AppHeaderWidget(
+              title: "explore.title".tr(),
+              trailing: GestureDetector(
+                onTapDown: (_) => setState(() => isLoading = true),
+                onTapUp: (_) => setState(() => isLoading = false),
+                onTapCancel: () => setState(() => isLoading = false),
+                onTap: () {
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(MaterialPageRoute(builder: (context) => SaveScreen()));
+                },
+                child: AnimatedScale(
+                  scale: isLoading ? 0.95 : 1.0,
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.easeInOut,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Badge(
+                      label: Text(
+                        '${context.watch<SavedCountProvider>().unseenCount}',
+                        style: GoogleFonts.beVietnamPro(fontSize: 15),
+                      ),
+                      isLabelVisible:
+                          context.watch<SavedCountProvider>().unseenCount > 0,
+                      backgroundColor: Color(0XFFFFAD35),
+                      child: Icon(
+                        CupertinoIcons.bookmark_fill,
+                        color: Colors.white,
+                        size: 35,
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
 
             // Search Field

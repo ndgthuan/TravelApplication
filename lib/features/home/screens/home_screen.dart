@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
 import 'package:travel_app/features/home/widgets/slide_card_widget.dart';
 import 'package:travel_app/features/home/widgets/scroll_card_widget.dart';
-import 'package:travel_app/features/home/widgets/gradient_divider_widget.dart';
-import 'package:travel_app/features/home/widgets/title_widget.dart';
+import 'package:travel_app/shared/widgets/header_title_widget.dart';
 import 'package:travel_app/shared/providers/saved_count_provider.dart';
+import 'package:travel_app/shared/widgets/app_header_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -46,45 +46,35 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Chào mừng
-                  TitleWidget(titleText: "general.welcome".tr(), fontSize: 32),
-                  // Vẽ logo
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 20,
-                    ),
-                    child: Container(
-                      width: 85,
-                      height: 85,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF1E1E1E), Color(0xFF1A1A1A)],
-                        ),
+              AppHeaderWidget(
+                title: "general.welcome".tr(),
+                trailing: Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Container(
+                    width: 85,
+                    height: 85,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Color(0xFF1E1E1E), Color(0xFF1A1A1A)],
                       ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          'lib/assets/images/dark_logo.png',
-                          width: 170,
-                          height: 200,
-                          fit: BoxFit.cover,
-                        ),
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'lib/assets/images/dark_logo.png',
+                        width: 170,
+                        height: 200,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
 
-              GradientDividerWidget(),
-
               // Địa điểm nổi bật
-              TitleWidget(
+              HeaderTitleWidget(
                 titleText: 'home.popular_destination'.tr(),
                 fontSize: 20,
               ),
@@ -112,12 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                       },
                     ),
-              const SizedBox(height: 30),
-
-              GradientDividerWidget(),
+              const SizedBox(height: 10),
 
               // Có thể bạn sẽ thích
-              TitleWidget(titleText: 'home.you_might_like'.tr(), fontSize: 20),
+              HeaderTitleWidget(
+                titleText: 'home.you_might_like'.tr(),
+                fontSize: 20,
+              ),
 
               ListView.builder(
                 shrinkWrap: true,

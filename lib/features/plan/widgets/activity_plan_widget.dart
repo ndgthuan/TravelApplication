@@ -7,10 +7,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:travel_app/features/plan/screens/add_activity_screen.dart';
+import 'package:travel_app/domain/models/plan_model.dart';
+import 'package:travel_app/features/plan/screens/ongoing_plan_section_screen.dart';
 
 class ActivityPlanWidget extends StatefulWidget {
-  const ActivityPlanWidget({super.key});
+  final PlanModel plan;
+  const ActivityPlanWidget({super.key, required this.plan});
 
   @override
   State<ActivityPlanWidget> createState() => _ActivityPlanWidgetState();
@@ -292,7 +294,7 @@ class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
                                     ).push(
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            AddActivityScreen(),
+                                            OngoingPlanSectionScreen(),
                                       ),
                                     );
                                   },
