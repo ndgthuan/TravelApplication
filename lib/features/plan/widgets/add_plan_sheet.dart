@@ -1,18 +1,152 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/domain/models/plan_model.dart';
+import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
 import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'package:travel_app/shared/widgets/app_button_widget.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
+import 'package:travel_app/features/plan/widgets/cover_image_picker_widget.dart';
+import 'package:travel_app/features/plan/widgets/member_selector_widget.dart';
+import 'package:travel_app/features/plan/widgets/date_range_picker_sheet.dart';
 
-class AddPlanSheet extends StatelessWidget {
+class AddPlanSheet extends StatefulWidget {
   const AddPlanSheet({super.key});
+
+  @override
+  State<AddPlanSheet> createState() => _AddPlanSheetState();
+}
+
+class _AddPlanSheetState extends State<AddPlanSheet> {
+  final _destinationController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _budgetController = TextEditingController();
+  final _dateController = TextEditingController();
+
+  DateTime? _startDate;
+  DateTime? _endDate;
+  bool _isCreating = false;
+
+  // Ảnh bìa
+  String? _coverImageUrl;
+
+  // Danh sách member (email + avatarUrl)
+  final List<PlanMember> _members = [];
+
+  @override
+  void dispose() {
+    _destinationController.dispose();
+    _titleController.dispose();
+    _budgetController.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickDateRange() async {
+    final picked = await showModalBottomSheet<DateTimeRange>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: DateRangePickerSheet(
+          initialStart: _startDate,
+          initialEnd: _endDate,
+        ),
+      ),
+    );
+    if (picked != null) {
+      setState(() {
+        _startDate = picked.start;
+        _endDate = picked.end;
+        _dateController.text = _dateRangeDisplay;
+      });
+    }
+  }
+
+  String get _dateRangeDisplay {
+    if (_startDate == null || _endDate == null) return '';
+    const months = [
+      'Th1',
+      'Th2',
+      'Th3',
+      'Th4',
+      'Th5',
+      'Th6',
+      'Th7',
+      'Th8',
+      'Th9',
+      'Th10',
+      'Th11',
+      'Th12',
+    ];
+    return '${_startDate!.day} ${months[_startDate!.month - 1]} - ${_endDate!.day} ${months[_endDate!.month - 1]}';
+  }
+
+  // Xử lý format tiền khi nhập
+  void _onBudgetChanged(String value) {
+    final formatted = PlanViewModel.formatMoney(value);
+    if (formatted != value) {
+      _budgetController.value = TextEditingValue(
+        text: formatted,
+        selection: TextSelection.collapsed(offset: formatted.length),
+      );
+    }
+  }
+
+  Future<void> _handleCreatePlan() async {
+    if (_titleController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('plan.error_empty_title'.tr())));
+      return;
+    }
+    if (_startDate == null || _endDate == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('plan.error_empty_date'.tr())));
+      return;
+    }
+
+    setState(() => _isCreating = true);
+
+    final plan = PlanModel(
+      id: '',
+      title: _titleController.text.trim(),
+      startDate: _startDate!,
+      endDate: _endDate!,
+      imageUrl: _coverImageUrl ?? '',
+      destination: _destinationController.text.trim(),
+      budget:
+          double.tryParse(_budgetController.text.trim().replaceAll('.', '')) ??
+          0,
+      members: _members,
+    );
+
+    final vm = context.read<PlanViewModel>();
+    final created = await vm.createPlan(plan);
+
+    if (mounted) {
+      setState(() => _isCreating = false);
+      if (created != null) {
+        Navigator.of(context).pop();
+      } else if (vm.error != null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(vm.error!)));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: 'Add plan screen',
+        title: 'plan.add_plan_title'.tr(),
         icon: CupertinoIcons.xmark,
       ),
       backgroundColor: Colors.black,
@@ -26,147 +160,100 @@ class AddPlanSheet extends StatelessWidget {
                 children: [
                   const SizedBox(height: 20),
                   AppTextFieldWidget(
-                    labelText: 'Điểm đến',
+                    labelText: 'plan.destination'.tr(),
                     showLabel: true,
-                    hintText: 'Nhập điểm đến (VD: Đà Lạt...)',
+                    hintText: 'plan.destination_hint'.tr(),
+                    controller: _destinationController,
                   ),
                   const SizedBox(height: 20),
                   AppTextFieldWidget(
-                    labelText: 'Tên chuyến đi',
+                    labelText: 'plan.trip_name'.tr(),
                     showLabel: true,
-                    hintText: 'VD: Vi vu mùa hè',
+                    hintText: 'plan.trip_name_hint'.tr(),
+                    controller: _titleController,
                   ),
                   const SizedBox(height: 20),
-                  AppTextFieldWidget(
-                    labelText: 'Thời gian',
-                    showLabel: true,
-                    suffixIcon: Icon(
-                      CupertinoIcons.calendar,
-                      color: Color(0xFFFFAD35),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  AppTextFieldWidget(
-                    labelText: 'Ngân sách dự tính',
-                    showLabel: true,
-                    hintText: 'Nhập số tiền (VD: 500.000, 1.000.000)',
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      'Đồng hành cùng',
-                      style: GoogleFonts.beVietnamPro(
-                        color: Colors.white,
-                        fontSize: 16,
+                  // Field thời gian
+                  GestureDetector(
+                    onTap: _pickDateRange,
+                    child: AbsorbPointer(
+                      child: AppTextFieldWidget(
+                        labelText: 'plan.time_range'.tr(),
+                        showLabel: true,
+                        controller: _dateController,
+                        readOnly: true,
+                        hintText: 'plan.time_range_hint'.tr(),
+                        suffixIcon: Icon(
+                          CupertinoIcons.calendar,
+                          color: Color(0xFFFFAD35),
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      children: [
-                        // Nút Add
-                        GestureDetector(
-                          onTap: () {
-                            // TODO: mở màn chọn bạn bè / thêm đồng hành
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFFAD35),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              'Add',
-                              style: GoogleFonts.beVietnamPro(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        // 2 avatar stack chồng lên nhau
-                        SizedBox(
-                          width: 60,
-                          height: 44,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 0,
-                                child: Container(
-                                  width: 44,
-                                  height: 44,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Color(0xFFFFAD35),
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.white.withValues(
-                                      alpha: 0.2,
-                                    ),
-                                    child: CircleAvatar(
-                                      radius: 18,
-                                      backgroundImage: NetworkImage(
-                                        'https://i.pravatar.cc/100?img=1',
-                                      ),
-                                    ),
-                                  ),
+                  const SizedBox(height: 20),
+                  AppTextFieldWidget(
+                    labelText: 'plan.budget'.tr(),
+                    showLabel: true,
+                    hintText: 'plan.budget_hint'.tr(),
+                    controller: _budgetController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    onChanged: _onBudgetChanged,
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Ảnh bìa — widget riêng
+                  CoverImagePickerWidget(
+                    coverImageUrl: _coverImageUrl,
+                    onImageChanged: (url) {
+                      setState(() => _coverImageUrl = url);
+                    },
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Đồng hành — widget riêng
+                  MemberSelectorWidget(
+                    members: _members,
+                    onAddPressed: () {
+                      MemberSelectorWidget.showSearchSheet(
+                        context: context,
+                        currentMembers: _members,
+                        onConfirm: (selectedUsers) {
+                          setState(() {
+                            _members.clear();
+                            for (final user in selectedUsers) {
+                              _members.add(
+                                PlanMember(
+                                  email: user.email,
+                                  avatarUrl: user.avatarUrl ?? '',
                                 ),
-                              ),
-                              Positioned(
-                                left: 16,
-                                child: Container(
-                                  width: 44,
-                                  height: 44,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Color(0xFFFFAD35),
-                                      width: 1.5,
-                                    ),
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.white.withValues(
-                                      alpha: 0.2,
-                                    ),
-                                    child: CircleAvatar(
-                                      radius: 18,
-                                      backgroundImage: NetworkImage(
-                                        'https://i.pravatar.cc/100?img=2',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                              );
+                            }
+                          });
+                        },
+                      );
+                    },
+                    onRemoveMember: (index) {
+                      setState(() => _members.removeAt(index));
+                    },
                   ),
                   const SizedBox(height: 24),
                 ],
               ),
             ),
           ),
-          // Nút Lên kế hoạch ngay cố định dưới
+          // Nút Lên kế hoạch ngay
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: AppButtonWidget(
-              buttonText: 'Lên kế hoạch ngay',
-              onTap: () {},
-            ),
+            child: _isCreating
+                ? const Center(
+                    child: CircularProgressIndicator(color: Color(0xFFFFAD35)),
+                  )
+                : AppButtonWidget(
+                    buttonText: 'plan.create_plan'.tr(),
+                    onTap: _handleCreatePlan,
+                  ),
           ),
         ],
       ),

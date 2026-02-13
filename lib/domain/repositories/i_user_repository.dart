@@ -9,4 +9,7 @@ abstract class IUserRepository {
 
   // Cập nhất thông tin user
   Future<void> updateUser(Map<String, dynamic> data);
+
+  // Lấy tất cả users (cho member search)
+  Future<List<UserModel>> getAllUsers();
 }

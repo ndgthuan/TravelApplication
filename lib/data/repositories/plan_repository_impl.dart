@@ -13,19 +13,19 @@ class PlanRepositoryImpl implements IPlanRepository {
   }
 
   @override
-  Future<PlanModel?> getOngoingPlan(String? userId) async {
-    if (userId == null || userId.isEmpty) return null;
+  Future<List<PlanModel>> getOngoingPlans(String? userId) async {
+    if (userId == null || userId.isEmpty) return [];
     final now = DateTime.now();
     final snapshot = await _planCreatedRef(userId)
         .where('startDate', isLessThanOrEqualTo: now.toIso8601String())
         .where('endDate', isGreaterThanOrEqualTo: now.toIso8601String())
-        .limit(1)
         .get();
 
-    if (snapshot.docs.isEmpty) return null;
-    final data = snapshot.docs.first.data() as Map<String, dynamic>;
-    data['id'] = snapshot.docs.first.id;
-    return PlanModel.fromJson(data);
+    return snapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      return PlanModel.fromJson(data);
+    }).toList();
   }
 
   @override
@@ -36,6 +36,18 @@ class PlanRepositoryImpl implements IPlanRepository {
         .where('startDate', isGreaterThan: now.toIso8601String())
         .orderBy('startDate')
         .get();
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      data['id'] = doc.id;
+      return PlanModel.fromJson(data);
+    }).toList();
+  }
+
+  @override
+  Future<List<PlanModel>> getAllPlans(String? userId) async {
+    if (userId == null || userId.isEmpty) return [];
+    final snapshot = await _planCreatedRef(userId).orderBy('startDate').get();
 
     return snapshot.docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;

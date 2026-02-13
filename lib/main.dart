@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:travel_app/core/di/injection.dart';
 import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
+import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
 import 'package:travel_app/features/utilities/currency_exchange/viewmodels/currency_exchange_view_model.dart';
 import 'package:travel_app/features/utilities/text_translation/viewmodels/text_translation_view_model.dart';
 import 'package:travel_app/features/utilities/weather_forecast/viewmodels/weather_forecast_view_model.dart';
@@ -146,12 +147,15 @@ void main() async {
           ChangeNotifierProvider(
             create: (_) => getIt<HomeViewModel>(),
           ), // Gọi HomeScreen parent state
-          ChangeNotifierProvider( 
+          ChangeNotifierProvider(
             create: (_) => getIt<ExploreViewModel>(),
           ), // Gọi ExploreScreen parent state
           ChangeNotifierProvider(
             create: (_) => SavedCountProvider(),
-          ), // Gọi hiệu ứng add to cart
+          ), // Gọi biến đếm sớ khi tim một mục nào đấy
+          ChangeNotifierProvider(
+            create: (_) => getIt<PlanViewModel>(),
+          ), // Gọi Plan parent state
         ],
         child: MyApp(),
       ),
