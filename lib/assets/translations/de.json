@@ -176,7 +176,7 @@
     "same_time": "Gleiche Zeit",
     "today_offset": "Heute, {offset} Std"
   }
-  ,"ocr": { "error": "Text konnte nicht erkannt werden" },
+  ,"image_translation": { "error": "Text konnte nicht erkannt werden" },
   "explore": {
     "title": "Entdecken",
     "search_hint": "Reiseziele suchen...",

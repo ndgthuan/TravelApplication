@@ -196,22 +196,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ? 'general.loading'.tr()
                     : 'account.save_changes'.tr(),
                 onTap: () async {
-                  final viewModel = context.read<ChangePasswordViewModel>();
-                  final success = await viewModel.changePassword(
+                  final vm = context.read<ChangePasswordViewModel>();
+                  final messenger = ScaffoldMessenger.of(context);
+                  final navigator = Navigator.of(context);
+
+                  final success = await vm.changePassword(
                     currentPassword: currentPasswordController.text,
                     newPassword: newPasswordController.text,
                     reenterPassword: reenterPasswordController.text,
                   );
 
                   if (success && mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
+                    messenger.showSnackBar(
                       SnackBar(
                         content: Text('general.success'.tr()),
                         backgroundColor: Color(0xFFFFAD35),
                         duration: Duration(seconds: 1),
                       ),
                     );
-                    Navigator.pop(context);
+                    navigator.pop();
                   }
                 },
               ),

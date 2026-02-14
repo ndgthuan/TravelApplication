@@ -177,7 +177,7 @@
     "same_time": "同じ時刻",
     "today_offset": "今日、{offset}時間"
   }
-  ,"ocr": { "error": "画像からテキストを認識できませんでした" },
+  ,"image_translation": { "error": "画像からテキストを認識できませんでした" },
   "explore": {
     "title": "探索",
     "search_hint": "目的地を検索...",

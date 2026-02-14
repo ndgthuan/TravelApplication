@@ -11,7 +11,8 @@ class WeatherService implements IWeatherService {
   WeatherService({String? baseUrl})
     : _baseUrl = baseUrl ?? 'https://api.open-meteo.com/v1';
 
-  /// Lấy dự báo thời tiết theo toạ độ
+  // Lấy dự báo thời tiết theo toạ độ
+  @override
   Future<Map<String, dynamic>?> getForecast({
     required double latitude,
     required double longitude,

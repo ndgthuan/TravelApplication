@@ -176,7 +176,7 @@
     "same_time": "相同时间",
     "today_offset": "今天，{offset}小时"
   }
-  ,"ocr": { "error": "无法识别图片中的文字" },
+  ,"image_translation": { "error": "无法识别图片中的文字" },
   "explore": {
     "title": "探索",
     "search_hint": "搜索目的地...",

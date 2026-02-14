@@ -14,7 +14,7 @@ class LanguageModel {
     );
   }
 
-  /// Convert to Map để tương thích với code cũ (nếu cần)
+  // Convert to Map để tương thích với code cũ (nếu cần)
   Map<String, dynamic> toMap() {
     return {'code': code, 'name': name, 'flag': flag};
   }

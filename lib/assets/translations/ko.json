@@ -176,7 +176,7 @@
     "same_time": "같은 시간",
     "today_offset": "오늘, {offset}시간"
   }
-  ,"ocr": { "error": "이미지에서 텍스트를 인식할 수 없습니다" },
+  ,"image_translation": { "error": "이미지에서 텍스트를 인식할 수 없습니다" },
   "explore": {
     "title": "탐색",
     "search_hint": "목적지 검색...",

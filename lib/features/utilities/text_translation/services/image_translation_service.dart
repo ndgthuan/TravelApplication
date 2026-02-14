@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:developer' as dev;
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +11,7 @@ class ImageTranslationService implements IImageTranslationService {
   static const String _baseUrl = 'http://localhost:5000';
   final _imagePicker = ImagePicker();
 
+  @override
   Future<File?> pickImage() async {
     final pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
@@ -20,12 +22,13 @@ class ImageTranslationService implements IImageTranslationService {
     return File(pickedFile.path);
   }
 
+  @override
   Future<Uint8List?> translateImage(File imageFile, String targetLang) async {
     try {
       final bytes = await imageFile.readAsBytes();
       final base64Image = base64Encode(bytes);
 
-      print('translateImage: Sending request...');
+      dev.log('translateImage: Sending request...');
 
       final response = await http
           .post(
@@ -38,14 +41,14 @@ class ImageTranslationService implements IImageTranslationService {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['success'] == true && data['image'] != null) {
-          print('translateImage: Success!');
+          dev.log('translateImage: Success!');
           return base64Decode(data['image']);
         }
       }
-      print('translateImage: Response error: ${response.statusCode}');
+      dev.log('translateImage: Response error: ${response.statusCode}');
       return null;
     } catch (e) {
-      print('translateImage: Error - $e');
+      dev.log('translateImage: Error - $e');
       return null;
     }
   }

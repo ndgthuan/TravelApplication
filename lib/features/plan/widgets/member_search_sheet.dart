@@ -102,7 +102,7 @@ class _MemberSearchSheetState extends State<MemberSearchSheet> {
               ],
             ),
           ),
-          // Search bar
+          // Thanh search bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: TextField(
@@ -129,7 +129,7 @@ class _MemberSearchSheetState extends State<MemberSearchSheet> {
               ),
             ),
           ),
-          // User list
+          // Danh sách các thành viên trong phân mục search
           Expanded(
             child: _filteredUsers.isEmpty
                 ? Center(

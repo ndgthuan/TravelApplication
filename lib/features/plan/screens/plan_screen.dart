@@ -1,5 +1,4 @@
-﻿import 'dart:ui';
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +37,6 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
     var _ = context.locale;
-    // Bắt đầu gọi backend
     final viewModel = context.watch<PlanViewModel>();
     return Scaffold(
       backgroundColor: Colors.black,
@@ -75,7 +73,7 @@ class _PlanScreenState extends State<PlanScreen> {
                       ),
                     ),
 
-                    // Error banner
+                    // Error handling banner
                     if (viewModel.error != null)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -113,7 +111,7 @@ class _PlanScreenState extends State<PlanScreen> {
                           },
                         ),
                       ),
-                      // Dot indicator (chỉ hiện khi > 1 plan)
+                      // Nút trang chỉ xuất hiện khi ongoing trong cùng khoảng thời điểm > 1
                       if (viewModel.ongoingPlans.length > 1)
                         Padding(
                           padding: const EdgeInsets.only(top: 8),

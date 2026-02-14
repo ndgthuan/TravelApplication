@@ -12,7 +12,8 @@ class GeocodingService implements IGeocodingService {
   GeocodingService({String? baseUrl})
     : _baseUrl = baseUrl ?? 'https://geocoding-api.open-meteo.com/v1';
 
-  /// Tìm kiếm thành phố theo tên
+  // Tìm kiếm thành phố theo tên
+  @override
   Future<List<Map<String, dynamic>>> searchCities(String query) async {
     if (query.isEmpty) return [];
 

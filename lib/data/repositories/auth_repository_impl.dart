@@ -185,13 +185,13 @@ class AuthRepositoryImpl implements IAuthRepository {
   //==========================================================================//
   //                            PRIVATE HELPER METHOD                         //
   //==========================================================================//
-  /// Lấy UserModel từ Firestore
+  // Lấy UserModel từ Firestore
   Future<UserModel> _getUserFromFirestore(String uid) async {
     final doc = await _firestore.collection('users').doc(uid).get();
     return UserModel.fromJson(doc.data() ?? {}, uid);
   }
 
-  /// Lưu user mới vào Firestore
+  // Lưu user mới vào Firestore
   Future<void> _saveUserToFirestore({
     required String uid, // Lưu cái uid khác
     required String name, // Lưu tên
@@ -206,7 +206,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     });
   }
 
-  /// Đảm bảo user tồn tại trong Firestore (cho Social Login)
+  // Đảm bảo user tồn tại trong Firestore (cho Social Login)
   Future<void> _ensureUserInFirestore(UserCredential userCredential) async {
     final user = userCredential.user!;
     final doc = await _firestore.collection('users').doc(user.uid).get();
@@ -222,7 +222,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     }
   }
 
-  /// Map Firebase error code sang message
+  // Map Firebase error code sang message
   String _mapAuthError(String code) {
     switch (code) {
       case 'weak-password':

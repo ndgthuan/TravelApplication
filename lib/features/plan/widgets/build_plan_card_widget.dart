@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:travel_app/features/plan/widgets/add_plan_sheet.dart';
+import 'package:travel_app/features/plan/widgets/plan_created_form_sheet.dart';
 
 class BuildPlanCardWidget extends StatelessWidget {
   const BuildPlanCardWidget({super.key});
@@ -75,7 +75,7 @@ void _showAddPlanModal(BuildContext context) {
       );
       return Stack(
         children: [
-          // Phần blur + tối phía trên (tap để đóng)
+          // Phần blur tối
           GestureDetector(
             onTap: () => Navigator.of(context).pop(),
             child: AnimatedOpacity(
@@ -99,7 +99,10 @@ void _showAddPlanModal(BuildContext context) {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(20),
                 ),
-                child: SizedBox(height: height * 0.9, child: AddPlanSheet()),
+                child: SizedBox(
+                  height: height * 0.9,
+                  child: PlanCreatedFormSheet(),
+                ),
               ),
             ),
           ),

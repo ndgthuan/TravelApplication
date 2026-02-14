@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/domain/models/plan_model.dart';
@@ -117,7 +118,7 @@ class UpcomingPlanCardWidget extends StatelessWidget {
 
                   // Date
                   Text(
-                    plan.dateRangeText,
+                    plan.dateRangeText(context.locale.toString()),
                     style: GoogleFonts.beVietnamPro(
                       color: Colors.white70,
                       fontSize: 12,

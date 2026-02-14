@@ -176,7 +176,7 @@
     "same_time": "Même heure",
     "today_offset": "Aujourd'hui, {offset} h"
   }
-  ,"ocr": { "error": "Impossible de reconnaître le texte" },
+  ,"image_translation": { "error": "Impossible de reconnaître le texte" },
   "explore": {
     "title": "Explorer",
     "search_hint": "Rechercher des destinations...",

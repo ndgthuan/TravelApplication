@@ -128,12 +128,12 @@ class LoginViewModel extends ChangeNotifier {
     await _authRepository.sendPasswordResetEmail(email: email);
   }
 
-  /// Lấy credentials đã lưu (email, password) để pre-fill form
+  // Lấy credentials đã lưu (email, password) để pre-fill form
   Future<Map<String, String?>> getSavedCredentials() async {
     return _storageService.getCredentials();
   }
 
-  /// Lưu credentials khi user chọn Remember me
+  // Lưu credentials khi user chọn Remember me
   Future<void> saveCredentials({
     required String email,
     required String password,
@@ -146,7 +146,7 @@ class LoginViewModel extends ChangeNotifier {
     );
   }
 
-  /// Xóa credentials khi logout hoặc không chọn Remember me
+  // Xóa credentials khi logout hoặc không chọn Remember me
   Future<void> clearCredentials() async {
     await _storageService.clearCredentials();
   }

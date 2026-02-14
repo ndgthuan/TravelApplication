@@ -102,6 +102,9 @@ dependencies:
   # Vị trí thiết bị
   geolocator: ^13.0.2
 
+  # Calendar
+  intl: ^0.20.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

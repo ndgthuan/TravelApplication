@@ -212,8 +212,9 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                                 GestureDetector(
                                   onTap: () {
                                     if (!dest.latitude.isFinite ||
-                                        !dest.longitude.isFinite)
+                                        !dest.longitude.isFinite) {
                                       return;
+                                    }
                                     setState(() {
                                       _hiddenInfoWindows.remove(dest.name);
                                     });

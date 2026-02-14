@@ -35,7 +35,7 @@ class ContactSupportViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Reset toàn bộ state về initial khi thoát ra vào lại
+  // Reset toàn bộ state về initial khi thoát ra vào lại
   void reset() {
     _state = ContactSupportState.initial;
     _errorMessage = null;

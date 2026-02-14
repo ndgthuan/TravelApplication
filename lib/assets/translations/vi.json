@@ -176,7 +176,7 @@
     "same_time": "Cùng giờ",
     "today_offset": "Hôm nay, {offset} giờ"
   }
-  ,"ocr": { "error": "Không thể nhận diện văn bản từ ảnh" },
+  ,"image_translation": { "error": "Không thể nhận diện văn bản từ ảnh" },
   "explore": {
     "title": "Khám phá",
     "search_hint": "Tìm kiếm địa điểm...",

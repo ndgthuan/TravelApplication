@@ -1,6 +1,5 @@
 ﻿// TimezoneStorageService - Chỉ lo việc lưu/đọc timezones từ SharedPreferences
 // Tách riêng từ TimezoneService cũ để tuân thủ Single Responsibility Principle
-
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_app/domain/services/i_timezone_storage_service.dart';
@@ -17,7 +16,8 @@ class TimezoneStorageService implements ITimezoneStorageService {
     'longitude': 105.8542,
   };
 
-  /// Lấy danh sách timezone đã lưu
+  // Lấy danh sách timezone đã lưu
+  @override
   Future<List<Map<String, dynamic>>> getSavedTimezones() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString(_storageKey);
@@ -31,14 +31,16 @@ class TimezoneStorageService implements ITimezoneStorageService {
     return [Map.from(_defaultTimezone)];
   }
 
-  /// Lưu danh sách timezone
+  // Lưu danh sách timezone
+  @override
   Future<void> saveTimezones(List<Map<String, dynamic>> timezones) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = json.encode(timezones);
     await prefs.setString(_storageKey, jsonString);
   }
 
-  /// Thêm timezone mới (kiểm tra trùng)
+  // Thêm timezone mới (kiểm tra trùng)
+  @override
   Future<bool> addTimezone(Map<String, dynamic> timezone) async {
     final timezones = await getSavedTimezones();
 
@@ -56,7 +58,8 @@ class TimezoneStorageService implements ITimezoneStorageService {
     return false;
   }
 
-  /// Xóa timezone theo index
+  // Xóa timezone theo index
+  @override
   Future<void> removeTimezone(int index) async {
     final timezones = await getSavedTimezones();
     if (index >= 0 && index < timezones.length) {

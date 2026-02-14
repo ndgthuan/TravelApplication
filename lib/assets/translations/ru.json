@@ -176,7 +176,7 @@
     "same_time": "То же время",
     "today_offset": "Сегодня, {offset} ч"
   }
-  ,"ocr": { "error": "Не удалось распознать текст" },
+  ,"image_translation": { "error": "Не удалось распознать текст" },
   "explore": {
     "title": "Обзор",
     "search_hint": "Поиск направлений...",
