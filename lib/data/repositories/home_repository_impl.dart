@@ -150,7 +150,7 @@ class HomeRepositoryImpl implements IHomeRepository {
     return _cachedApiData!;
   }
 
-  /// Private method để fetch và cache data từ API
+  // Private method để fetch và cache data từ API
   Future<void> _fetchAndCacheApiData() async {
     try {
       final response = await http.get(Uri.parse(_apiUrl));

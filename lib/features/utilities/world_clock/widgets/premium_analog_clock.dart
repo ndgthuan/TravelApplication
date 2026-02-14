@@ -2,19 +2,19 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-/// A premium analog clock widget with modern, elegant design.
-/// Customizable colors and timezone offset support.
+// A premium analog clock widget with modern, elegant design.
+// Customizable colors and timezone offset support.
 class PremiumAnalogClock extends StatefulWidget {
-  /// The primary color for hands and markers
+  // The primary color for hands and markers
   final Color accentColor;
 
-  /// Background color of the clock dial
+  // Background color of the clock dial
   final Color dialColor;
 
-  /// Timezone offset in hours (e.g., +7 for Vietnam, -5 for EST)
+  // Timezone offset in hours (e.g., +7 for Vietnam, -5 for EST)
   final int timezoneOffset;
 
-  /// Whether to show the second hand
+  // Whether to show the second hand
   final bool showSecondHand;
 
   const PremiumAnalogClock({

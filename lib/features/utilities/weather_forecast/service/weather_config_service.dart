@@ -9,9 +9,11 @@ class WeatherConfigService implements IWeatherConfigService {
   Map<String, dynamic>? _weatherConfigs;
 
   // Getter để biết config đã load chưa
+  @override
   bool get isLoaded => _weatherConfigs != null;
 
   // Load config từ JSON file
+  @override
   Future<void> loadConfigs() async {
     if (_weatherConfigs != null) return; // Đã load rồi thì bỏ qua
 
@@ -22,6 +24,7 @@ class WeatherConfigService implements IWeatherConfigService {
   }
 
   // Lấy URL icon theo weather code
+  @override
   String getWeatherIconUrl(int code, bool isDay) {
     if (_weatherConfigs == null) return '';
 
@@ -39,6 +42,7 @@ class WeatherConfigService implements IWeatherConfigService {
   }
 
   // Lấy text mô tả thời tiết theo weather code và ngôn ngữ
+  @override
   String getWeatherText(int code, String langCode) {
     if (_weatherConfigs == null) return '';
 

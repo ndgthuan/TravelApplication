@@ -27,25 +27,29 @@ class TimezoneUtilService implements ITimezoneUtilService {
     'UTC': 0,
   };
 
-  /// Lấy offset (giờ) từ timezone name
+  // Lấy offset (giờ) từ timezone name
+  @override
   int getTimezoneOffset(String timezone) {
     return _timezoneOffsets[timezone] ?? 0;
   }
 
-  /// Lấy thời gian hiện tại theo timezone
+  // Lấy thời gian hiện tại theo timezone
+  @override
   DateTime getCurrentTimeForTimezone(String timezone) {
     final offset = getTimezoneOffset(timezone);
     return DateTime.now().toUtc().add(Duration(hours: offset));
   }
 
-  /// Format thời gian theo định dạng HH:mm
+  // Format thời gian theo định dạng HH:mm
+  @override
   String formatTime(DateTime dateTime) {
     final hour = dateTime.hour.toString().padLeft(2, '0');
     final minute = dateTime.minute.toString().padLeft(2, '0');
     return '$hour:$minute';
   }
 
-  /// Tạo timezone object
+  // Tạo timezone object
+  @override
   Map<String, dynamic> createTimezone({
     required String city,
     required String country,

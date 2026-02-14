@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 // Thông tin người dùng - email + avatar
 class PlanMember {
   final String email;
@@ -40,22 +42,9 @@ class PlanModel {
     return now.difference(startDate).inDays + 1;
   }
 
-  String get dateRangeText {
-    const months = [
-      'Th1',
-      'Th2',
-      'Th3',
-      'Th4',
-      'Th5',
-      'Th6',
-      'Th7',
-      'Th8',
-      'Th9',
-      'Th10',
-      'Th11',
-      'Th12',
-    ];
-    return '${startDate.day} ${months[startDate.month - 1]} - ${endDate.day} ${months[endDate.month - 1]}';
+  String dateRangeText([String locale = 'en']) {
+    final fmt = DateFormat.MMMd(locale);
+    return '${fmt.format(startDate)} - ${fmt.format(endDate)}';
   }
 
   factory PlanModel.fromJson(Map<String, dynamic> json) {

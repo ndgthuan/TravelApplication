@@ -494,7 +494,6 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
               height: 52,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: lưu điểm đến và pop
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(

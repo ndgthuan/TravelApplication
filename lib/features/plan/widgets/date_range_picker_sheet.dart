@@ -1,12 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
 
-// Bottom sheet custom calendar de chon date range.
-// Ngay da co trip se co cham tron vang (0xFFFFAD35) phia duoi.
+// Bottom sheet custom calendar để chọn date range.
+// Những ngày nào được chọn sẽ có chấm tròn dưới ngày
 class DateRangePickerSheet extends StatefulWidget {
   final DateTime? initialStart;
   final DateTime? initialEnd;
@@ -138,7 +137,7 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
     final locale = context.locale.toString();
     // Generate Mon-Sun weekday abbreviations in current locale
     final weekdays = List.generate(7, (i) {
-      // DateTime weekday: 1=Mon, 7=Sun → Jan 5 2026 is a Monday
+      // DateTime weekday: 1=Mon, 7=Sun -> Jan 5 2026 is a Monday
       final day = DateTime(2026, 1, 5 + i);
       return DateFormat.E(locale).format(day);
     });
@@ -274,7 +273,7 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
                 fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
               ),
             ),
-            // Cham tron vang neu ngay da co trip
+            // Chấm tròn màu vàng khi đã có trip
             if (isBooked)
               Container(
                 width: 5,

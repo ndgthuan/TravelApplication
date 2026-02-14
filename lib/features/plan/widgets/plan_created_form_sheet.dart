@@ -12,14 +12,14 @@ import 'package:travel_app/features/plan/widgets/cover_image_picker_widget.dart'
 import 'package:travel_app/features/plan/widgets/member_selector_widget.dart';
 import 'package:travel_app/features/plan/widgets/date_range_picker_sheet.dart';
 
-class AddPlanSheet extends StatefulWidget {
-  const AddPlanSheet({super.key});
+class PlanCreatedFormSheet extends StatefulWidget {
+  const PlanCreatedFormSheet({super.key});
 
   @override
-  State<AddPlanSheet> createState() => _AddPlanSheetState();
+  State<PlanCreatedFormSheet> createState() => _PlanCreatedFormSheetState();
 }
 
-class _AddPlanSheetState extends State<AddPlanSheet> {
+class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
   final _destinationController = TextEditingController();
   final _titleController = TextEditingController();
   final _budgetController = TextEditingController();
@@ -32,7 +32,7 @@ class _AddPlanSheetState extends State<AddPlanSheet> {
   // Ảnh bìa
   String? _coverImageUrl;
 
-  // Danh sách member (email + avatarUrl)
+  // Danh sách member bao gồm email và avatarUrl
   final List<PlanMember> _members = [];
 
   @override
@@ -70,21 +70,9 @@ class _AddPlanSheetState extends State<AddPlanSheet> {
 
   String get _dateRangeDisplay {
     if (_startDate == null || _endDate == null) return '';
-    const months = [
-      'Th1',
-      'Th2',
-      'Th3',
-      'Th4',
-      'Th5',
-      'Th6',
-      'Th7',
-      'Th8',
-      'Th9',
-      'Th10',
-      'Th11',
-      'Th12',
-    ];
-    return '${_startDate!.day} ${months[_startDate!.month - 1]} - ${_endDate!.day} ${months[_endDate!.month - 1]}';
+    final locale = context.locale.toString();
+    final fmt = DateFormat.MMMd(locale);
+    return '${fmt.format(_startDate!)} - ${fmt.format(_endDate!)}';
   }
 
   // Xử lý format tiền khi nhập
@@ -98,6 +86,7 @@ class _AddPlanSheetState extends State<AddPlanSheet> {
     }
   }
 
+  // Error handling
   Future<void> _handleCreatePlan() async {
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(
@@ -202,7 +191,7 @@ class _AddPlanSheetState extends State<AddPlanSheet> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Ảnh bìa — widget riêng
+                  // Ảnh bìa
                   CoverImagePickerWidget(
                     coverImageUrl: _coverImageUrl,
                     onImageChanged: (url) {
@@ -212,7 +201,7 @@ class _AddPlanSheetState extends State<AddPlanSheet> {
 
                   const SizedBox(height: 20),
 
-                  // Đồng hành — widget riêng
+                  // Mục đồng hành để chọn thêm thành viên
                   MemberSelectorWidget(
                     members: _members,
                     onAddPressed: () {

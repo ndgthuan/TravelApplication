@@ -273,7 +273,7 @@ class TextTranslationViewModel extends ChangeNotifier {
       );
       _translatedImageBytes = result;
     } catch (e) {
-      _errorMessage = 'image_translation.error';
+      _errorMessage = 'image_translation.error'.tr();
     } finally {
       _isTranslatingImage = false;
       notifyListeners();

@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
 
-// Widget chọn ảnh bìa từ gallery → upload lên Cloudinary
+// Widget chọn ảnh bìa từ gallery
 class CoverImagePickerWidget extends StatefulWidget {
   final String? coverImageUrl;
   final ValueChanged<String?> onImageChanged;
@@ -28,6 +28,9 @@ class _CoverImagePickerWidgetState extends State<CoverImagePickerWidget> {
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
+    final vm = context.read<PlanViewModel>();
+    final messenger = ScaffoldMessenger.of(context);
+
     final picked = await picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 80,
@@ -36,7 +39,6 @@ class _CoverImagePickerWidgetState extends State<CoverImagePickerWidget> {
 
     setState(() => _isUploading = true);
 
-    final vm = context.read<PlanViewModel>();
     final url = await vm.uploadCoverImage(File(picked.path));
 
     if (mounted) {
@@ -44,9 +46,9 @@ class _CoverImagePickerWidgetState extends State<CoverImagePickerWidget> {
       if (url != null) {
         widget.onImageChanged(url);
       } else {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('plan.upload_failed'.tr())));
+        messenger.showSnackBar(
+          SnackBar(content: Text('plan.upload_failed'.tr())),
+        );
       }
     }
   }

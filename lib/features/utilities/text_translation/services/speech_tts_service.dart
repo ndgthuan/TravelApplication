@@ -10,9 +10,11 @@ class SpeechTtsService implements ISpeechTtsService {
   final FlutterTts _flutterTts = FlutterTts();
 
   // Khởi tạo
+  @override
   Future<bool> initialize() => _speech.initialize();
 
   // Nghe âm thanh để chuyển thành văn bản
+  @override
   void listen({required Function(String) onResult, required String localeId}) {
     _speech.listen(
       onResult: (result) => onResult(result.recognizedWords),
@@ -20,9 +22,11 @@ class SpeechTtsService implements ISpeechTtsService {
     );
   }
 
+  @override
   void stopListening() => _speech.stop();
 
   // Chuyển đổi văn bản thành giọng nói
+  @override
   Future<void> speak(String text, String languageCode) async {
     if (text.isEmpty) return;
     await _flutterTts.setLanguage(languageCode);
@@ -30,6 +34,7 @@ class SpeechTtsService implements ISpeechTtsService {
   }
 
   // Clipboard
+  @override
   void copyToClipboard(String text) {
     if (text.isEmpty) return;
     Clipboard.setData(ClipboardData(text: text));

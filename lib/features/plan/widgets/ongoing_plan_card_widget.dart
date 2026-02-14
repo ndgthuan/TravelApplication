@@ -85,7 +85,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          plan.dateRangeText,
+                          plan.dateRangeText(context.locale.toString()),
                           style: GoogleFonts.beVietnamPro(
                             color: Colors.white70,
                             fontSize: 14,

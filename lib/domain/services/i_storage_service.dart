@@ -1,7 +1,7 @@
 // Interface cho Secure Storage service
 // Dùng để lưu/đọc credentials an toàn
 abstract class IStorageService {
-  /// Lưu thông tin đăng nhập
+  // Lưu thông tin đăng nhập
   Future<void> saveCredentials({
     required String email,
     required String password,
