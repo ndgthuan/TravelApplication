@@ -11,6 +11,7 @@ class AppButtonWidget extends StatefulWidget {
   final AppButtonStyle style;
   final Color? outlineColor;
   final bool isLoading; // Loading state
+  final double height;
 
   const AppButtonWidget({
     super.key,
@@ -19,6 +20,7 @@ class AppButtonWidget extends StatefulWidget {
     this.style = AppButtonStyle.filled,
     this.outlineColor,
     this.isLoading = false,
+    this.height = 65,
   });
 
   @override
@@ -58,11 +60,11 @@ class _AppButtonWidgetState extends State<AppButtonWidget> {
   // Style 1: Filled (màu cam đặc)
   Widget _buildFilledButton() {
     return Container(
-      height: 65,
+      height: widget.height,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: widget.isLoading ? Color(0xFFFFAD35) : const Color(0xFFFFAD35),
-        borderRadius: BorderRadius.circular(20),
+        color: Color(0xFFFF6D00),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Center(
         child: widget.isLoading
@@ -87,7 +89,7 @@ class _AppButtonWidgetState extends State<AppButtonWidget> {
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(color: widget.isLoading ? Colors.grey : color),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Center(
         child: widget.isLoading

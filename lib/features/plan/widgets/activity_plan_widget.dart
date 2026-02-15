@@ -294,7 +294,12 @@ class _ActivityPlanWidgetState extends State<ActivityPlanWidget> {
                                     ).push(
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            OngoingPlanSectionScreen(),
+                                            OngoingPlanSectionScreen(
+                                          planId: widget.plan.id,
+                                          destination: widget.plan.destination,
+                                          planStartDate: widget.plan.startDate,
+                                          planEndDate: widget.plan.endDate,
+                                        ),
                                       ),
                                     );
                                   },

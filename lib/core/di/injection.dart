@@ -58,6 +58,7 @@ import 'package:travel_app/features/utilities/weather_forecast/viewmodels/weathe
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
 import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
+import 'package:travel_app/features/plan/viewmodels/ongoing_plan_section_view_model.dart';
 
 // Tạo global instance của GetIt
 final GetIt getIt = GetIt.instance;
@@ -193,6 +194,14 @@ void setupDependencies() {
       getIt<IPlanRepository>(),
       getIt<IUserRepository>(),
       getIt<ICloudinaryService>(),
+    ),
+  );
+
+  getIt.registerFactory<OngoingPlanSectionViewModel>(
+    () => OngoingPlanSectionViewModel(
+      getIt<IPlanRepository>(),
+      getIt<IUserRepository>(),
+      getIt<IGeocodingService>(),
     ),
   );
 }

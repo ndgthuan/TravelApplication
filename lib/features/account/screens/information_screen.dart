@@ -39,14 +39,14 @@ class _InformationScreenState extends State<InformationScreen> {
     super.dispose();
   }
 
-  // Gọi phương thức gán
+  /// Gán dữ liệu từ ViewModel vào form sau khi load (trong post-frame callback).
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModel = context.read<InformationViewModel>();
       await viewModel.loadUserData();
-      // Cập nhật controllers từ viewModel
+      if (!mounted) return;
       nameController.text = viewModel.name;
       emailController.text = viewModel.email;
       phoneController.text = viewModel.phone;
@@ -57,11 +57,11 @@ class _InformationScreenState extends State<InformationScreen> {
 
   bool _isValidImageUrl(String? url) => url != null && url.trim().isNotEmpty;
 
-  // Tạo method chọn ảnh từ gallery
+  /// Chọn ảnh từ gallery và cập nhật state.
   Future<void> _pickImage() async {
     final viewModel = context.read<InformationViewModel>();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
+    if (!mounted) return;
     if (image != null) {
       setState(() => _selectedImage = File(image.path));
       await viewModel.uploadAvatar(File(image.path));

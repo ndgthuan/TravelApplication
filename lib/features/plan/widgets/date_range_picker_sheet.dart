@@ -36,9 +36,9 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
     });
   }
 
-  //===================================================================//
-  //                           SELECTION LOGIC                         //
-  //===================================================================//
+  //==========================================================================//
+  //                           SELECTION LOGIC                              //
+  //==========================================================================//
   void _onDayTap(DateTime day) {
     setState(() {
       if (_rangeStart == null || _rangeEnd != null) {
@@ -62,9 +62,9 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
       !day.isBefore(_rangeStart!) &&
       !day.isAfter(_rangeEnd!);
 
-  //=================================================================//
-  //                              BUILD                              //
-  //=================================================================//
+  //==========================================================================//
+  //                              BUILD                                    //
+  //==========================================================================//
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<PlanViewModel>();
@@ -94,9 +94,9 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
     );
   }
 
-  //=================================================================//
-  //                        UI COMPONENTS                            //
-  //=================================================================//
+  //==========================================================================//
+  //                        UI COMPONENTS                                  //
+  //==========================================================================//
   Widget _buildDragHandle() => Container(
     width: 40,
     height: 4,
@@ -214,9 +214,9 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
       ),
     ),
   );
-  //===============================================================//
-  //                          DAYS GRID                            //
-  //===============================================================//
+  //==========================================================================//
+  //                          DAYS GRID                                  //
+  //==========================================================================//
 
   Widget _buildDaysGrid(PlanViewModel vm) {
     final firstDay = DateTime(_focusedMonth.year, _focusedMonth.month, 1);
@@ -291,9 +291,9 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
       ),
     );
   }
-  //=================================================================//
-  //                        STYLE HELPERS                            //
-  //=================================================================//
+  //==========================================================================//
+  //                        STYLE HELPERS                                  //
+  //==========================================================================//
 
   Color? _dayCellColor(bool isStart, bool isEnd, bool inRange) {
     if (isStart || isEnd) return _accent;
