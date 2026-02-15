@@ -37,6 +37,7 @@ class _PlanScreenState extends State<PlanScreen> {
   @override
   Widget build(BuildContext context) {
     var _ = context.locale;
+    // Bắt đầu gọi backend
     final viewModel = context.watch<PlanViewModel>();
     return Scaffold(
       backgroundColor: Colors.black,
@@ -73,7 +74,7 @@ class _PlanScreenState extends State<PlanScreen> {
                       ),
                     ),
 
-                    // Error handling banner
+                    // Error banner
                     if (viewModel.error != null)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -111,7 +112,7 @@ class _PlanScreenState extends State<PlanScreen> {
                           },
                         ),
                       ),
-                      // Nút trang chỉ xuất hiện khi ongoing trong cùng khoảng thời điểm > 1
+                      // Dot indicator (chỉ hiện khi > 1 plan)
                       if (viewModel.ongoingPlans.length > 1)
                         Padding(
                           padding: const EdgeInsets.only(top: 8),

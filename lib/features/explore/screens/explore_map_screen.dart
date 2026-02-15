@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:travel_app/domain/models/destination_model.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/shared/widgets/app_dark_map_widget.dart';
 import 'package:travel_app/features/explore/widgets/explore_map_saved_count_chip.dart';
 import 'package:travel_app/features/explore/widgets/map_info_window_widget.dart';
 import 'package:travel_app/features/explore/widgets/explore_map_search_overlay.dart';
@@ -30,6 +31,7 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ExploreViewModel>().loadCurrentLocation();
       Future.delayed(Duration(milliseconds: 0), () {
+        if (!mounted) return;
         _fitAllMarkers();
       });
     });
@@ -112,48 +114,21 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<ExploreViewModel>();
     final savedDestinations = viewModel.savedDestinations;
-    double currentZoom = 15.0;
-    try {
-      currentZoom = _mapController.camera.zoom;
-    } catch (_) {
-      // Map chưa render xong thì dùng giá trị mặc định
-    }
-
-    double markerSize =
-        50.0 * (currentZoom / 18.0); // Zoom càng nhỏ thì marker càng bé
-    markerSize = markerSize.clamp(5.0, 80.0);
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          FlutterMap(
-            mapController: _mapController, // Gán controller vào đây
-            options: MapOptions(
-              initialCenter: LatLng(
-                10.7769,
-                106.7009,
-              ), // Tọa độ mặc định (ví dụ: Chợ Bến Thành)
-              initialZoom: 15.0, // Độ zoom ban đầu
-              // Lắng nghe zoom để scale marker
-              onPositionChanged: (camera, hasGesture) {
-                if (hasGesture) {
-                  setState(() {});
-                }
-              },
-              onTap: (tapPosition, point) {},
-            ),
+          AppDarkMapWidget(
+            mapController: _mapController,
+            initialCenter: const LatLng(10.7769, 106.7009),
+            initialZoom: 15.0,
+            onPositionChanged: (camera, hasGesture) {
+              if (hasGesture) setState(() {});
+            },
+            onTap: (tapPosition, point) {},
             children: [
-              TileLayer(
-                urlTemplate:
-                    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-                subdomains: const ['a', 'b', 'c', 'd'],
-                userAgentPackageName: 'com.travel.app', // Tên package ứng dụng
-                retinaMode: RetinaMode.isHighDensity(context),
-              ),
-
               MarkerLayer(
                 markers: [
-                  // Marker vị trí hiện tại
                   if (viewModel.hasCurrentLocation)
                     Marker(
                       point: LatLng(
@@ -180,17 +155,15 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                         ),
                       ),
                     ),
-                  // Markers saved destinations
                   ...savedDestinations
                       .where((d) => d.latitude.isFinite && d.longitude.isFinite)
                       .map((dest) {
                         return Marker(
                           point: LatLng(dest.latitude, dest.longitude),
-                          width: 180, // Luôn đủ lớn chứa info window
+                          width: 180,
                           height: 200,
                           alignment: Alignment.bottomCenter,
                           child: Transform.translate(
-                            // Chỉ có offset khi info window đang hiện
                             offset: _hiddenInfoWindows.contains(dest.name)
                                 ? Offset.zero
                                 : Offset(0, -139),
@@ -198,7 +171,6 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                // Info Window (hiện nếu chưa bị đóng)
                                 if (!_hiddenInfoWindows.contains(dest.name))
                                   MapInfoWindowWidget(
                                     dest: dest,
@@ -208,7 +180,6 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                                       });
                                     },
                                   ),
-                                // Heart icon với GestureDetector riêng
                                 GestureDetector(
                                   onTap: () {
                                     if (!dest.latitude.isFinite ||
@@ -236,7 +207,6 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                       }),
                 ],
               ),
-              // Nguồn openstreetmap
               RichAttributionWidget(
                 attributions: [
                   TextSourceAttribution('OpenStreetMap, CartoDB', onTap: () {}),
