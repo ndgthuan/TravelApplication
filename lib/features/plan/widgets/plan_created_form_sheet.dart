@@ -1,4 +1,4 @@
-// Màn hình hiển thị form để điền thông tin tạo plan mới hoặc chỉnh sửa plan
+﻿// Màn hình hiển thị form để điền thông tin tạo plan mới hoặc chỉnh sửa plan
 // Logic xử lý được quản lý bởi PlanViewModel, UI chỉ hiển thị và gọi ViewModel
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -225,7 +225,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                         hintText: 'plan.time_range_hint'.tr(),
                         suffixIcon: Icon(
                           CupertinoIcons.calendar,
-                          color: Color(0xFFFFAD35),
+                          color: Color(0xFFFF6D00),
                         ),
                       ),
                     ),
@@ -289,7 +289,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
             child: _isCreating
                 ? const Center(
-                    child: CircularProgressIndicator(color: Color(0xFFFFAD35)),
+                    child: CircularProgressIndicator(color: Color(0xFFFF6D00)),
                   )
                 : AppButtonWidget(
                     buttonText: _isEditMode

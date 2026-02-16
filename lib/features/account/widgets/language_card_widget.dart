@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_flags/country_flags.dart';
@@ -34,7 +34,7 @@ class _LanguageCardWidgetState extends State<LanguageCardWidget> {
             decoration: BoxDecoration(
               color: Color(0xFF1C1C1D),
               border: widget.isSelected
-                  ? Border.all(color: Color(0xFFFFAD35), width: 2)
+                  ? Border.all(color: Color(0xFFFF6D00), width: 2)
                   : null,
               borderRadius: BorderRadius.circular(10),
             ),

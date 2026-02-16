@@ -1,4 +1,4 @@
-// Sheet này dùng để search vào để hiện member được search trong số users
+﻿// Sheet này dùng để search vào để hiện member được search trong số users
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +93,7 @@ class _MemberSearchSheetState extends State<MemberSearchSheet> {
                   child: Text(
                     '${'plan.done'.tr()} (${_selected.length})',
                     style: GoogleFonts.beVietnamPro(
-                      color: Color(0xFFFFAD35),
+                      color: Color(0xFFFF6D00),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -184,7 +184,7 @@ class _MemberSearchSheetState extends State<MemberSearchSheet> {
                         trailing: isSelected
                             ? Icon(
                                 CupertinoIcons.checkmark_circle_fill,
-                                color: Color(0xFFFFAD35),
+                                color: Color(0xFFFF6D00),
                               )
                             : Icon(
                                 CupertinoIcons.circle,

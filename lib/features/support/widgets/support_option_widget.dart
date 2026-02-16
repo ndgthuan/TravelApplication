@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -41,7 +41,7 @@ class _SupportOptionWidgetState extends State<SupportOptionWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Icon của hỗ trợ
-                        Icon(widget.icon, color: Color(0xFFFFAD35), size: 30),
+                        Icon(widget.icon, color: Color(0xFFFF6D00), size: 30),
                         const SizedBox(width: 10),
                         // Tiêu đề của hỗ trợ
                         Expanded(

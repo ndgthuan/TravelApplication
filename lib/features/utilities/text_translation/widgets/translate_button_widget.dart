@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -27,7 +27,7 @@ class _TranslateButtonWidgetState extends State<TranslateButtonWidget> {
       child: Container(
         height: 80,
         decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFFFFAD35)),
+          border: Border.all(color: Color(0xFFFF6D00)),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
@@ -49,7 +49,7 @@ class _TranslateButtonWidgetState extends State<TranslateButtonWidget> {
                   ),
                 ),
 
-                Icon(CupertinoIcons.chevron_down, color: Color(0xFFFFAD35)),
+                Icon(CupertinoIcons.chevron_down, color: Color(0xFFFF6D00)),
               ],
             ),
           ),

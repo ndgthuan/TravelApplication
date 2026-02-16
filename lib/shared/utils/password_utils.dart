@@ -39,7 +39,7 @@ Color getPasswordStrength(int strength) {
   if (strength <= 3) return Colors.redAccent;
   if (strength <= 5) return Colors.orange.shade800;
   if (strength <= 6) return Colors.yellow;
-  return Color(0xFFFFAD33);
+  return Color(0xFFFF6D00);
 }
 
 // Trả về text dựa trên độ mạnh của password

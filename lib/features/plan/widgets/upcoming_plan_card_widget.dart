@@ -1,4 +1,4 @@
-// Widget hiển thị upcoming plan card, đây là plan được tạo trước ở tương lai
+﻿// Widget hiển thị upcoming plan card, đây là plan được tạo trước ở tương lai
 // Khi đến thời điểm bắt đầu, upcoming card sẽ tự động chuyển thành ongoing card
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -88,7 +88,7 @@ class UpcomingPlanCardWidget extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      color: Color(0xFFFFAD35),
+                                      color: Color(0xFFFF6D00),
                                       width: 1.5,
                                     ),
                                   ),

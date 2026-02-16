@@ -1,4 +1,4 @@
-// Vẽ các trạng thái của nút bấm ở mapScreen
+﻿// Vẽ các trạng thái của nút bấm ở mapScreen
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -37,7 +37,7 @@ class _ExploreMapFloatingActionsState extends State<ExploreMapFloatingActions> {
             child: Icon(
               Icons.my_location,
               color: widget.canFitBounds
-                  ? const Color(0xFFFFAD35)
+                  ? const Color(0xFFFF6D00)
                   : Colors.grey[600],
             ),
           ),
@@ -54,7 +54,7 @@ class _ExploreMapFloatingActionsState extends State<ExploreMapFloatingActions> {
             ),
             child: const Icon(
               CupertinoIcons.bookmark_fill,
-              color: Color(0xFFFFAD35),
+              color: Color(0xFFFF6D00),
             ),
           ),
         ),

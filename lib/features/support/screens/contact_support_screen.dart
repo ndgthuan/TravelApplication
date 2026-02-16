@@ -70,7 +70,7 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
               child: viewModel.isSending
                   ? Center(
                       child: CircularProgressIndicator(
-                        color: Color(0xFFFFAD35),
+                        color: Color(0xFFFF6D00),
                       ),
                     )
                   : Column(
@@ -100,7 +100,7 @@ class _ContactSupportScreenState extends State<ContactSupportScreen> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text('account.send_success'.tr()),
-                                  backgroundColor: Color(0xFFFFAD35),
+                                  backgroundColor: Color(0xFFFF6D00),
                                   duration: Duration(seconds: 1),
                                 ),
                               );

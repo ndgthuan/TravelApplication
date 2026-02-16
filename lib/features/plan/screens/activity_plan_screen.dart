@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +91,7 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
       return const Scaffold(
         backgroundColor: Color(0xFF000000),
         body: Center(
-          child: CircularProgressIndicator(color: Color(0xFFFFAD35)),
+          child: CircularProgressIndicator(color: Color(0xFFFF6D00)),
         ),
       );
     }
@@ -207,7 +207,7 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
                 child: Icon(
                   Icons.my_location,
                   color: vm.routePoints.isNotEmpty
-                      ? const Color(0xFFFFAD35)
+                      ? const Color(0xFFFF6D00)
                       : Colors.grey.shade600,
                   size: 28,
                 ),
@@ -236,7 +236,7 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(Icons.edit, color: Color(0xFFFFAD35)),
+                leading: const Icon(Icons.edit, color: Color(0xFFFF6D00)),
                 title: Text(
                   'Chỉnh sửa chuyến đi',
                   style: GoogleFonts.beVietnamPro(color: Colors.white),
@@ -247,7 +247,7 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.people, color: Color(0xFFFFAD35)),
+                leading: const Icon(Icons.people, color: Color(0xFFFF6D00)),
                 title: Text(
                   'Quản lý quyền',
                   style: GoogleFonts.beVietnamPro(color: Colors.white),

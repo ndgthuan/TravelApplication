@@ -1,4 +1,4 @@
-// Các thẻ destination card tái sử dụng
+﻿// Các thẻ destination card tái sử dụng
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,7 +89,7 @@ class ExploreDestinationCard extends StatelessWidget {
                     children: [
                       const Icon(
                         CupertinoIcons.star_fill,
-                        color: Color(0xFFFFAD35),
+                        color: Color(0xFFFF6D00),
                         size: 12,
                       ),
                       const SizedBox(width: 4),

@@ -1,4 +1,4 @@
-// Widget thẻ tạo plan mới, dùng để tạo các plan
+﻿// Widget thẻ tạo plan mới, dùng để tạo các plan
 // Bao gồm ongoing plan và upcoming plan
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
@@ -35,7 +35,7 @@ class NewPlanCardWidget extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Color(0xFF1E1E1D),
               ),
-              child: const Icon(Icons.add, color: Color(0xFFFFAD35), size: 30),
+              child: const Icon(Icons.add, color: Color(0xFFFF6D00), size: 30),
             ),
             Align(
               alignment: Alignment.bottomCenter,

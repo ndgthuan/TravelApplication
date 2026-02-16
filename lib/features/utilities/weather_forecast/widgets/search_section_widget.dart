@@ -27,14 +27,14 @@ class SearchSectionWidget extends StatelessWidget {
         TextFormField(
           controller: controller,
           onChanged: onSearchChanged,
-          cursorColor: Color(0xFFFFAD35),
+          cursorColor: Color(0xFFFF6D00),
           style: GoogleFonts.beVietnamPro(color: Colors.white),
           decoration: InputDecoration(
             prefixIcon: Icon(CupertinoIcons.search, color: Colors.grey),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: Color(0xFFFFAD35), width: 1.5),
+              borderSide: BorderSide(color: Color(0xFFFF6D00), width: 1.5),
             ),
             hintText: 'weather.search_hint'.tr(),
             hintStyle: GoogleFonts.beVietnamPro(
@@ -53,7 +53,7 @@ class SearchSectionWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: Color(0xFF1C1C1D),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Color(0xFFFFAD35), width: 1),
+              border: Border.all(color: Color(0xFFFF6D00), width: 1),
             ),
             child: ListView.builder(
               shrinkWrap: true,
@@ -61,7 +61,7 @@ class SearchSectionWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 final location = searchResults[index];
                 return ListTile(
-                  leading: Icon(CupertinoIcons.location_fill, color: Color(0xFFFFAD35)),
+                  leading: Icon(CupertinoIcons.location_fill, color: Color(0xFFFF6D00)),
                   title: Text(
                     location['city'] ?? location['name'] ?? '',
                     style: GoogleFonts.beVietnamPro(color: Colors.white),
@@ -81,7 +81,7 @@ class SearchSectionWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(10),
             child: CircularProgressIndicator(
-              color: Color(0xFFFFAD35),
+              color: Color(0xFFFF6D00),
               strokeWidth: 2,
             ),
           ),

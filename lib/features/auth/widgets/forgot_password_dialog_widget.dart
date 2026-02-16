@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -53,7 +53,7 @@ class _ForgotPasswordDialogWidgetState
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
+                borderSide: BorderSide(color: Color(0xFFFF6D00), width: 1.5),
               ),
               labelText: "auth.reset_email_instruction".tr(),
               labelStyle: GoogleFonts.beVietnamPro(
@@ -84,7 +84,7 @@ class _ForgotPasswordDialogWidgetState
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFAD35),
+                    color: Color(0xFFFF6D00),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(

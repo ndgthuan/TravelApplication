@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class HeartButtonWidget extends StatefulWidget {
@@ -29,7 +29,7 @@ class _HeartButtonWidgetState extends State<HeartButtonWidget> {
         onTap: widget.onTap,
         child: Icon(
           widget.isSaved ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-          color: widget.isSaved ? Color(0xFFFFAD35) : Colors.white,
+          color: widget.isSaved ? Color(0xFFFF6D00) : Colors.white,
           size: 24,
         ),
       ),

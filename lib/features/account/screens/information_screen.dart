@@ -1,4 +1,4 @@
-import 'package:provider/provider.dart';
+﻿import 'package:provider/provider.dart';
 import 'package:travel_app/features/account/viewmodels/information_view_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +90,7 @@ class _InformationScreenState extends State<InformationScreen> {
                       height: 150,
                       width: 150,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFFFAD35)),
+                        border: Border.all(color: Color(0xFFFF6D00)),
                         shape: BoxShape.circle,
                         // Thay gradient bằng image
                         image: _selectedImage != null
@@ -137,7 +137,7 @@ class _InformationScreenState extends State<InformationScreen> {
                           height: 35,
                           width: 35,
                           decoration: BoxDecoration(
-                            color: Color(0xFFFFAD35),
+                            color: Color(0xFFFF6D00),
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.black, width: 2),
                           ),
@@ -160,7 +160,7 @@ class _InformationScreenState extends State<InformationScreen> {
                           ),
                           child: Center(
                             child: CircularProgressIndicator(
-                              color: Color(0xFFFFAD35),
+                              color: Color(0xFFFF6D00),
                             ),
                           ),
                         ),

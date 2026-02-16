@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +43,7 @@ class _PlanScreenState extends State<PlanScreen> {
       backgroundColor: Colors.black,
       body: viewModel.isLoading
           ? const Center(
-              child: CircularProgressIndicator(color: Color(0xFFFFAD35)),
+              child: CircularProgressIndicator(color: Color(0xFFFF6D00)),
             )
           : SingleChildScrollView(
               child: Padding(
@@ -129,7 +129,7 @@ class _PlanScreenState extends State<PlanScreen> {
                                 height: 8,
                                 decoration: BoxDecoration(
                                   color: _currentPage == i
-                                      ? const Color(0xFFFFAD35)
+                                      ? const Color(0xFFFF6D00)
                                       : Colors.white24,
                                   borderRadius: BorderRadius.circular(4),
                                 ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -131,7 +131,7 @@ class _TextTranslationScreenState extends State<TextTranslationScreen> {
                       child: Icon(
                         CupertinoIcons.arrow_right_arrow_left,
                         color: viewModel.canSwapLanguages
-                            ? Color(0xFFFFAD35)
+                            ? Color(0xFFFF6D00)
                             : Colors.grey[600],
                       ),
                     ),

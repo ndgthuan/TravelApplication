@@ -1,4 +1,4 @@
-// Thông tin cửa sổ các vật thể trong trang map
+﻿// Thông tin cửa sổ các vật thể trong trang map
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -83,7 +83,7 @@ class MapInfoWindowWidget extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.star, color: Colors.amber, size: 12),
+                          const Icon(Icons.star, color: Color(0xFFFF8F00), size: 12),
                           const SizedBox(width: 2),
                           Text(
                             dest.rating,
@@ -109,7 +109,7 @@ class MapInfoWindowWidget extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFAD35),
+                color: const Color(0xFFFF6D00),
                 shape: BoxShape.circle,
                 boxShadow: [BoxShadow(blurRadius: 4, color: Colors.black26)],
               ),

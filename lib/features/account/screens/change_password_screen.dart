@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +63,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Icon chiếc khiên bảo vệ
-              Icon(CupertinoIcons.shield, color: Color(0xFFFFAD35), size: 250),
+              Icon(CupertinoIcons.shield, color: Color(0xFFFF6D00), size: 250),
               const SizedBox(height: 10),
 
               Text(
@@ -210,7 +210,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     messenger.showSnackBar(
                       SnackBar(
                         content: Text('general.success'.tr()),
-                        backgroundColor: Color(0xFFFFAD35),
+                        backgroundColor: Color(0xFFFF6D00),
                         duration: Duration(seconds: 1),
                       ),
                     );

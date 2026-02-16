@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
-  static const _accent = Color(0xFFFFAD35);
+  static const _accent = Color(0xFFFF6D00);
   static const _bg = Color(0xFF1E1E1E);
 
   @override

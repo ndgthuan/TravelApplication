@@ -1,4 +1,4 @@
-import 'package:easy_localization/easy_localization.dart';
+﻿import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,7 +33,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Color(0xFF1C1C1D),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Color(0xFFFFAD35), width: 1.2),
+        border: Border.all(color: Color(0xFFFF6D00), width: 1.2),
       ),
       child: Stack(
         children: [
@@ -55,7 +55,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
                   children: [
                     Icon(
                       CupertinoIcons.location_fill,
-                      color: Color(0xFFFFAD35),
+                      color: Color(0xFFFF6D00),
                       size: 18,
                     ),
                     Expanded(
@@ -83,7 +83,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'ProductSans',
                           fontWeight: FontWeight.w700,
-                          color: Color(0xFFFFAD35),
+                          color: Color(0xFFFF6D00),
                           fontSize: 100,
                           height: 1,
                         ),
@@ -95,7 +95,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'ProductSans',
                             fontWeight: FontWeight.w400,
-                            color: Color(0xFFFFAD35),
+                            color: Color(0xFFFF6D00),
                             fontSize: 22,
                           ),
                         ),
@@ -121,7 +121,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: Color(0xFFFFAD35), width: 1),
+                      top: BorderSide(color: Color(0xFFFF6D00), width: 1),
                     ),
                   ),
                   child: Row(
@@ -132,13 +132,13 @@ class CurrentWeatherCardWidget extends StatelessWidget {
                         'weather.humidity'.tr(),
                         '$humidity%',
                       ),
-                      Container(width: 1, height: 43, color: Color(0xFFFFAD35)),
+                      Container(width: 1, height: 43, color: Color(0xFFFF6D00)),
                       _buildWeatherDetail(
                         CupertinoIcons.wind,
                         'weather.wind'.tr(),
                         '$windSpeed km/h',
                       ),
-                      Container(width: 1, height: 43, color: Color(0xFFFFAD35)),
+                      Container(width: 1, height: 43, color: Color(0xFFFF6D00)),
                       _buildWeatherDetail(
                         CupertinoIcons.sun_max,
                         'weather.uv_index'.tr(),
@@ -162,7 +162,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
     if (url.trim().isEmpty) {
       return Icon(
         CupertinoIcons.cloud_sun_fill,
-        color: Color(0xFFFFAD35),
+        color: Color(0xFFFF6D00),
         size: 80,
       );
     }
@@ -173,7 +173,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
       fit: BoxFit.contain,
       errorBuilder: (context, error, stackTrace) => Icon(
         CupertinoIcons.cloud_sun_fill,
-        color: Color(0xFFFFAD35),
+        color: Color(0xFFFF6D00),
         size: 80,
       ),
     );
@@ -182,7 +182,7 @@ class CurrentWeatherCardWidget extends StatelessWidget {
   Widget _buildWeatherDetail(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, color: Color(0xFFFFAD35), size: 33),
+        Icon(icon, color: Color(0xFFFF6D00), size: 33),
         SizedBox(width: 8),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

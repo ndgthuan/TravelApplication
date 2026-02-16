@@ -1,4 +1,4 @@
-// Widget hiển thị ongoing plan card
+﻿// Widget hiển thị ongoing plan card
 // Khi plan đang diễn ra, upcoming plan card sẽ tự động chuyển thành ongoing plan card
 // Ongoing plan card hiển thị đầy đủ ngày, thông tin và progress bar
 import 'package:cached_network_image/cached_network_image.dart';
@@ -118,7 +118,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                                   widthFactor: progress,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFFFAD35),
+                                      color: Color(0xFFFF6D00),
                                       borderRadius: BorderRadius.circular(3),
                                     ),
                                   ),
@@ -167,7 +167,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             border: Border.all(
-                                              color: Color(0xFFFFAD35),
+                                              color: Color(0xFFFF6D00),
                                               width: 1.5,
                                             ),
                                           ),
@@ -193,7 +193,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                             const Spacer(),
                             // Phần mục xem chi tiết ấn vào để chuyển sang activity plan screen
                             Material(
-                              color: Color(0xFFFFAD35),
+                              color: Color(0xFFFF6D00),
                               borderRadius: BorderRadius.circular(12),
                               child: InkWell(
                                 onTap: () {

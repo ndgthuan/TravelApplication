@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -75,7 +75,7 @@ class _LanguagePickerBottomSheetState extends State<LanguagePickerBottomSheet> {
                 child: viewModel.isLoadingLanguages
                     ? Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFFFFAD35),
+                          color: Color(0xFFFF6D00),
                         ),
                       )
                     : filteredLanguages.isEmpty
@@ -105,14 +105,14 @@ class _LanguagePickerBottomSheetState extends State<LanguagePickerBottomSheet> {
                               lang.name,
                               style: GoogleFonts.beVietnamPro(
                                 color: isSelected
-                                    ? Color(0xFFFFAD35)
+                                    ? Color(0xFFFF6D00)
                                     : Colors.white,
                               ),
                             ),
                             trailing: isSelected
                                 ? Icon(
                                     CupertinoIcons.checkmark_circle,
-                                    color: Color(0xFFFFAD35),
+                                    color: Color(0xFFFF6D00),
                                   )
                                 : null,
                             onTap: () {

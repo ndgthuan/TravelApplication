@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -55,7 +55,7 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
       backgroundColor: Colors.black,
       appBar: AppBarWidget(title: 'currency.title'.tr()),
       body: viewModel.isLoading
-          ? Center(child: CircularProgressIndicator(color: Color(0xFFFFAD35)))
+          ? Center(child: CircularProgressIndicator(color: Color(0xFFFF6D00)))
           : SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(20),
@@ -92,7 +92,7 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
                       child: Container(
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Color(0xFFFFAD35),
+                          color: Color(0xFFFF6D00),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(

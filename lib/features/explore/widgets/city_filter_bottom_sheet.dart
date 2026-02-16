@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -131,14 +131,14 @@ class _CityFilterBottomSheetState extends State<CityFilterBottomSheet> {
                               ? Icons.radio_button_checked
                               : Icons.radio_button_off,
                           color: isSelected
-                              ? const Color(0xFFFFAD35)
+                              ? const Color(0xFFFF6D00)
                               : Colors.grey,
                         ),
                         title: Text(
                           displayName,
                           style: GoogleFonts.beVietnamPro(
                             color: isSelected
-                                ? const Color(0xFFFFAD35)
+                                ? const Color(0xFFFF6D00)
                                 : Colors.white,
                             fontWeight: isSelected
                                 ? FontWeight.bold
@@ -146,7 +146,7 @@ class _CityFilterBottomSheetState extends State<CityFilterBottomSheet> {
                           ),
                         ),
                         trailing: isSelected
-                            ? const Icon(Icons.check, color: Color(0xFFFFAD35))
+                            ? const Icon(Icons.check, color: Color(0xFFFF6D00))
                             : null,
                       );
                     },

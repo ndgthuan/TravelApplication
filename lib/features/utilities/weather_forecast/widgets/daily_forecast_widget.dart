@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,7 +14,7 @@ class DailyForecastWidget extends StatelessWidget {
     if (url.isEmpty) {
       return Icon(
         CupertinoIcons.cloud_sun_fill,
-        color: Color(0xFFFFAD35),
+        color: Color(0xFFFF6D00),
         size: 40,
       );
     }
@@ -37,7 +37,7 @@ class DailyForecastWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Color(0xFF1C1C1D),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Color(0xFFFFAD35), width: 1.2),
+        border: Border.all(color: Color(0xFFFF6D00), width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,7 @@ class DailyForecastWidget extends StatelessWidget {
                       child: Text(
                         item['day'],
                         style: GoogleFonts.beVietnamPro(
-                          color: isToday ? Color(0xFFFFAD35) : Colors.white,
+                          color: isToday ? Color(0xFFFF6D00) : Colors.white,
                           fontSize: 14,
                           fontWeight: isToday
                               ? FontWeight.bold
@@ -101,7 +101,7 @@ class DailyForecastWidget extends StatelessWidget {
                         Text(
                           item['high'],
                           style: GoogleFonts.beVietnamPro(
-                            color: Color(0xFFFFAD35),
+                            color: Color(0xFFFF6D00),
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),

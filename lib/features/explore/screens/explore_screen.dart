@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -86,7 +86,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       ),
                       isLabelVisible:
                           context.watch<SavedCountProvider>().unseenCount > 0,
-                      backgroundColor: Color(0XFFFFAD35),
+                      backgroundColor: Color(0xFFFF6D00),
                       child: Icon(
                         CupertinoIcons.bookmark_fill,
                         color: Colors.white,
@@ -179,7 +179,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ? Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFFFFAD35),
+                          Color(0xFFFF6D00),
                         ),
                       ),
                     )
@@ -192,7 +192,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     )
                   : RefreshIndicator(
                       onRefresh: () => viewModel.loadData(),
-                      color: Color(0xFFFFAD35),
+                      color: Color(0xFFFF6D00),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: GridView.custom(

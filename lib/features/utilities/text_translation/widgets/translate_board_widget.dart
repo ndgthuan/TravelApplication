@@ -75,7 +75,7 @@ class _TranslateBoardWidgetState extends State<TranslateBoardWidget> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(color: Color(0xFFFFAD35)),
+                    borderSide: BorderSide(color: Color(0xFFFF6D00)),
                   ),
                   hintText: widget.boardText,
                   hintStyle: GoogleFonts.beVietnamPro(
@@ -92,7 +92,7 @@ class _TranslateBoardWidgetState extends State<TranslateBoardWidget> {
                 top: 10,
                 child: GestureDetector(
                   onTap: widget.onClearTap,
-                  child: Icon(Icons.close, color: Color(0xFFFFAD35), size: 20),
+                  child: Icon(Icons.close, color: Color(0xFFFF6D00), size: 20),
                 ),
               ),
 
@@ -104,12 +104,12 @@ class _TranslateBoardWidgetState extends State<TranslateBoardWidget> {
                 children: [
                   GestureDetector(
                     onTap: widget.onFormerIconTap,
-                    child: Icon(widget.formerIcon, color: Color(0xFFFFAD35)),
+                    child: Icon(widget.formerIcon, color: Color(0xFFFF6D00)),
                   ),
                   const SizedBox(width: 20),
                   GestureDetector(
                     onTap: widget.onLatterIconTap,
-                    child: Icon(widget.latterIcon, color: Color(0xFFFFAD35)),
+                    child: Icon(widget.latterIcon, color: Color(0xFFFF6D00)),
                   ),
                 ],
               ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 350,
                       child: Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xFFFFAD35),
+                          color: Color(0xFFFF6D00),
                         ),
                       ),
                     )

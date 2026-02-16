@@ -1,4 +1,4 @@
-// Dùng để build các thẻ map
+﻿// Dùng để build các thẻ map
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -76,7 +76,7 @@ class ExploreMapSearchOverlay extends StatelessWidget {
                       dense: true,
                       leading: const Icon(
                         CupertinoIcons.location_fill,
-                        color: Color(0xFFFFAD35),
+                        color: Color(0xFFFF6D00),
                         size: 20,
                       ),
                       title: Text(

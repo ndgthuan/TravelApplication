@@ -86,7 +86,7 @@ class LoginFormWidget extends StatelessWidget {
                         isCheck
                             ? CupertinoIcons.checkmark_square_fill
                             : CupertinoIcons.square,
-                        color: Color(0xFFFFAD35),
+                        color: Color(0xFFFF6D00),
                       ),
                     ),
                     const SizedBox(width: 5),
@@ -106,7 +106,7 @@ class LoginFormWidget extends StatelessWidget {
                 onPressed: onForgotPassword,
                 style: TextButton.styleFrom(
                   foregroundColor: const Color(
-                    0xFFFFAD33,
+                    0xFFFF6D00,
                   ), // Màu hiệu ứng khi bấm vào
                 ),
                 child: Text(

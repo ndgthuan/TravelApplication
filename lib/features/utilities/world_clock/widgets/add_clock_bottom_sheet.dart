@@ -65,7 +65,7 @@ class AddClockBottomSheet extends StatelessWidget {
                             width: 20,
                             height: 20,
                             child: CircularProgressIndicator(
-                              color: Color(0xFFFFAD35),
+                              color: Color(0xFFFF6D00),
                               strokeWidth: 2,
                             ),
                           ),
@@ -99,7 +99,7 @@ class AddClockBottomSheet extends StatelessWidget {
                       return ListTile(
                         leading: Icon(
                           CupertinoIcons.location_fill,
-                          color: Color(0xFFFFAD35),
+                          color: Color(0xFFFF6D00),
                         ),
                         title: Text(
                           '${tz['city']}, ${tz['country']}',

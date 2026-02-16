@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -17,7 +17,7 @@ Widget _buildIcon(BuildContext context, String? iconUrl) {
   if (url.isEmpty) {
     return Icon(
       CupertinoIcons.cloud_sun_fill,
-      color: Color(0xFFFFAD35),
+      color: Color(0xFFFF6D00),
       size: 40,
     );
   }
@@ -38,7 +38,7 @@ class _HourlyForecastWidgetState extends State<HourlyForecastWidget> {
       decoration: BoxDecoration(
         color: Color(0xFF1C1C1D),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Color(0xFFFFAD35), width: 1.2),
+        border: Border.all(color: Color(0xFFFF6D00), width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +65,7 @@ class _HourlyForecastWidgetState extends State<HourlyForecastWidget> {
                   width: 70,
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                   decoration: BoxDecoration(
-                    color: isNow ? Color(0xFFFFAD35) : Color(0xFF2C2C2D),
+                    color: isNow ? Color(0xFFFF6D00) : Color(0xFF2C2C2D),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Column(

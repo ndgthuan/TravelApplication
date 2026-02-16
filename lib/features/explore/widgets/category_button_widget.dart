@@ -1,4 +1,4 @@
-// Tạo widget riêng cho mỗi nút danh mục, có thể bấm được
+﻿// Tạo widget riêng cho mỗi nút danh mục, có thể bấm được
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -30,7 +30,7 @@ class CategoryButtonWidget extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isSelected
-                    ? const Color(0xFFFFAD35)
+                    ? const Color(0xFFFF6D00)
                     : Colors.white.withValues(alpha: 0.3),
                 border: Border.all(
                   color: Colors.white.withValues(alpha: 0.2),
@@ -43,7 +43,7 @@ class CategoryButtonWidget extends StatelessWidget {
             Text(
               name,
               style: GoogleFonts.beVietnamPro(
-                color: isSelected ? const Color(0xFFFFAD35) : Colors.white,
+                color: isSelected ? const Color(0xFFFF6D00) : Colors.white,
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),

@@ -1,4 +1,4 @@
-// Widget dùng để hiện thị các người sử dụng dùng để add các thành viên vào plan trong lúc tạo plan sheet
+﻿// Widget dùng để hiện thị các người sử dụng dùng để add các thành viên vào plan trong lúc tạo plan sheet
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class MemberSelectorWidget extends StatelessWidget {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFAD35),
+                    color: Color(0xFFFF6D00),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -76,7 +76,7 @@ class MemberSelectorWidget extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Color(0xFFFFAD35),
+                                  color: Color(0xFFFF6D00),
                                   width: 1.5,
                                 ),
                               ),

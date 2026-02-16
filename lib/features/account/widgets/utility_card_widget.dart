@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UtilityCardWidget extends StatefulWidget {
@@ -31,7 +31,7 @@ class _UtilityCardWidgetState extends State<UtilityCardWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Icon của tiện ích đó
-              Icon(widget.icon, color: Color(0xFFFFAD35), size: 30),
+              Icon(widget.icon, color: Color(0xFFFF6D00), size: 30),
               const SizedBox(height: 5),
 
               // Tên của hoạt động

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/features/explore/screens/explore_map_screen.dart';
@@ -172,7 +172,7 @@ class _SaveScreenState extends State<SaveScreen> {
                     // Có data
                     return RefreshIndicator(
                       onRefresh: () => viewModel.refreshSavedDestinations(),
-                      color: Color(0xFFFFAD35),
+                      color: Color(0xFFFF6D00),
                       child: GridView.custom(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         physics: const AlwaysScrollableScrollPhysics(),
@@ -226,7 +226,7 @@ class _SaveScreenState extends State<SaveScreen> {
                       ),
                       child: Icon(
                         CupertinoIcons.map_fill,
-                        color: Color(0xFFFFAD35),
+                        color: Color(0xFFFF6D00),
                       ),
                     ),
                   ),

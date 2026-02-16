@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:travel_app/domain/models/home_destination_model.dart';
@@ -87,7 +87,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                                 color: const Color(0xFF2A2A2A),
                                 child: const Center(
                                   child: CircularProgressIndicator(
-                                    color: Color(0xFFFFAD35),
+                                    color: Color(0xFFFF6D00),
                                     strokeWidth: 2,
                                   ),
                                 ),
@@ -163,7 +163,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                                 children: [
                                   Icon(
                                     CupertinoIcons.star_fill,
-                                    color: Color(0xFFFFAD35),
+                                    color: Color(0xFFFF6D00),
                                     size: 15,
                                   ),
                                   Text(
@@ -254,7 +254,7 @@ class _SlideCardWidgetState extends State<SlideCardWidget> {
                 width: _currentPage == index ? 24 : 8,
                 decoration: BoxDecoration(
                   color: _currentPage == index
-                      ? Color(0xFFFFAD35)
+                      ? Color(0xFFFF6D00)
                       : Colors.grey,
                   borderRadius: BorderRadius.circular(4),
                 ),
