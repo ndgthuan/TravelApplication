@@ -18,7 +18,6 @@ class CurrencyExchangeScreen extends StatefulWidget {
 
 class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
   final _amountController = TextEditingController(text: '10');
-  bool _isSwapPressed = false;
   late VoidCallback _amountListener;
 
   @override
@@ -89,27 +88,17 @@ class _CurrencyExchangeScreenState extends State<CurrencyExchangeScreen> {
 
                     // Swap button
                     GestureDetector(
-                      onTapDown: (_) => setState(() => _isSwapPressed = true),
-                      onTapUp: (_) {
-                        setState(() => _isSwapPressed = false);
-                        viewModel.swapCurrencies();
-                      },
-                      onTapCancel: () => setState(() => _isSwapPressed = false),
-                      child: AnimatedScale(
-                        scale: _isSwapPressed ? 0.9 : 1.0,
-                        duration: Duration(milliseconds: 100),
-                        curve: Curves.easeInOut,
-                        child: Container(
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFFAD35),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            CupertinoIcons.arrow_up_arrow_down,
-                            color: Colors.black,
-                            size: 24,
-                          ),
+                      onTap: () => viewModel.swapCurrencies(),
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFFAD35),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          CupertinoIcons.arrow_up_arrow_down,
+                          color: Colors.black,
+                          size: 24,
                         ),
                       ),
                     ),

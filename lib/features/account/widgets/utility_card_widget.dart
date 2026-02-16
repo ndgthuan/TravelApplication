@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UtilityCardWidget extends StatefulWidget {
@@ -17,19 +17,11 @@ class UtilityCardWidget extends StatefulWidget {
 }
 
 class _UtilityCardWidgetState extends State<UtilityCardWidget> {
-  bool _isClick = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => setState(() => _isClick = true),
-      onTapUp: (_) => setState(() => _isClick = false),
-      onTapCancel: () => setState(() => _isClick = false),
       onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: _isClick ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeInOut,
-        child: Container(
+      child: Container(
           height: 90,
           decoration: BoxDecoration(
             color: Color(0xFF1E1E1E),
@@ -53,7 +45,6 @@ class _UtilityCardWidgetState extends State<UtilityCardWidget> {
             ],
           ),
         ),
-      ),
     );
   }
 }

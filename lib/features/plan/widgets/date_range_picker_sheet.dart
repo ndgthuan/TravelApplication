@@ -37,7 +37,7 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
   }
 
   //==========================================================================//
-  //                           SELECTION LOGIC                              //
+  //                           SELECTION LOGIC                                //
   //==========================================================================//
   void _onDayTap(DateTime day) {
     setState(() {
@@ -292,7 +292,7 @@ class _DateRangePickerSheetState extends State<DateRangePickerSheet> {
     );
   }
   //==========================================================================//
-  //                        STYLE HELPERS                                  //
+  //                        STYLE HELPERS                                     //
   //==========================================================================//
 
   Color? _dayCellColor(bool isStart, bool isEnd, bool inRange) {

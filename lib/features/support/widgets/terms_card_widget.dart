@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../account/widgets/simple_divider_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +19,6 @@ class TermsCardWidget extends StatefulWidget {
 }
 
 class _TermsCardWidgetState extends State<TermsCardWidget> {
-  bool _isClick = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -64,15 +63,8 @@ class _TermsCardWidgetState extends State<TermsCardWidget> {
               ),
               const SizedBox(height: 15),
               GestureDetector(
-                onTapDown: (_) => setState(() => _isClick = true),
-                onTapUp: (_) => setState(() => _isClick = false),
-                onTapCancel: () => setState(() => _isClick = false),
                 onTap: widget.onTap,
-                child: AnimatedScale(
-                  scale: _isClick ? 0.95 : 1.0,
-                  duration: const Duration(milliseconds: 100),
-                  curve: Curves.easeInOut,
-                  child: Container(
+                child: Container(
                     height: 60,
                     decoration: BoxDecoration(
                       color: Colors.grey[600],
@@ -91,7 +83,6 @@ class _TermsCardWidgetState extends State<TermsCardWidget> {
                     ),
                   ),
                 ),
-              ),
               const SizedBox(height: 10),
             ],
           ),

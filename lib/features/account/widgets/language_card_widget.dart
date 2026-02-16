@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:country_flags/country_flags.dart';
@@ -23,21 +23,13 @@ class LanguageCardWidget extends StatefulWidget {
 }
 
 class _LanguageCardWidgetState extends State<LanguageCardWidget> {
-  bool isClick = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: GestureDetector(
-        onTapDown: (_) => setState(() => isClick = true),
-        onTapUp: (_) => setState(() => isClick = false),
-        onTapCancel: () => setState(() => isClick = false),
         onTap: widget.onTap,
-        child: AnimatedScale(
-          scale: isClick ? 0.95 : 1.0,
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeInOut,
-          child: Container(
+        child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
               color: Color(0xFF1C1C1D),
@@ -92,7 +84,6 @@ class _LanguageCardWidgetState extends State<LanguageCardWidget> {
                 ],
               ),
             ),
-          ),
         ),
       ),
     );

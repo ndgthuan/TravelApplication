@@ -1,16 +1,32 @@
 import 'package:intl/intl.dart';
 
-// Thông tin người dùng - email + avatar
+// Thông tin người dùng - email + avatar + quyền trong plan (owner / editor / spectator)
 class PlanMember {
   final String email;
   final String avatarUrl;
-  PlanMember({required this.email, required this.avatarUrl});
+  final String role; // 'owner' | 'editor' | 'spectator'. Người tạo = owner, thêm vào mặc định = spectator.
+
+  PlanMember({
+    required this.email,
+    required this.avatarUrl,
+    this.role = 'spectator',
+  });
 
   factory PlanMember.fromJson(Map<String, dynamic> json) => PlanMember(
     email: json['email'] as String? ?? '',
     avatarUrl: json['avatarUrl'] as String? ?? '',
+    role: json['role'] as String? ?? 'spectator',
   );
-  Map<String, dynamic> toJson() => {'email': email, 'avatarUrl': avatarUrl};
+  Map<String, dynamic> toJson() =>
+      {'email': email, 'avatarUrl': avatarUrl, 'role': role};
+
+  PlanMember copyWith({String? email, String? avatarUrl, String? role}) {
+    return PlanMember(
+      email: email ?? this.email,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      role: role ?? this.role,
+    );
+  }
 }
 
 class PlanModel {

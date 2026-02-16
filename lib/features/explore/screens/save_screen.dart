@@ -22,7 +22,6 @@ class SaveScreen extends StatefulWidget {
 }
 
 class _SaveScreenState extends State<SaveScreen> {
-  bool isLoading = false;
   final _searchController = TextEditingController();
 
   @override
@@ -211,9 +210,6 @@ class _SaveScreenState extends State<SaveScreen> {
                   bottom: 5,
                   right: 10,
                   child: GestureDetector(
-                    onTapDown: (_) => setState(() => isLoading = true),
-                    onTapUp: (_) => setState(() => isLoading = false),
-                    onTapCancel: () => setState(() => isLoading = false),
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(
                         MaterialPageRoute(
@@ -221,21 +217,16 @@ class _SaveScreenState extends State<SaveScreen> {
                         ),
                       );
                     },
-                    child: AnimatedScale(
-                      scale: isLoading ? 0.95 : 1.0,
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.easeInOut,
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFF2A2A2A),
-                        ),
-                        child: Icon(
-                          CupertinoIcons.map_fill,
-                          color: Color(0xFFFFAD35),
-                        ),
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFF2A2A2A),
+                      ),
+                      child: Icon(
+                        CupertinoIcons.map_fill,
+                        color: Color(0xFFFFAD35),
                       ),
                     ),
                   ),

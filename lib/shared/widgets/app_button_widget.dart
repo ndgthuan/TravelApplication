@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // Các style cho button
@@ -28,31 +28,15 @@ class AppButtonWidget extends StatefulWidget {
 }
 
 class _AppButtonWidgetState extends State<AppButtonWidget> {
-  bool _isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
-        onTapDown: widget.isLoading
-            ? null
-            : (_) => setState(() => _isPressed = true),
-        onTapUp: widget.isLoading
-            ? null
-            : (_) => setState(() => _isPressed = false),
-        onTapCancel: widget.isLoading
-            ? null
-            : () => setState(() => _isPressed = false),
         onTap: widget.isLoading ? null : widget.onTap,
-        child: AnimatedScale(
-          scale: _isPressed ? 0.95 : 1.0,
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeInOut,
-          child: widget.style == AppButtonStyle.filled
-              ? _buildFilledButton()
-              : _buildOutlinedButton(),
-        ),
+        child: widget.style == AppButtonStyle.filled
+            ? _buildFilledButton()
+            : _buildOutlinedButton(),
       ),
     );
   }

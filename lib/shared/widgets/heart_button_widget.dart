@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class HeartButtonWidget extends StatefulWidget {
@@ -12,8 +12,6 @@ class HeartButtonWidget extends StatefulWidget {
 }
 
 class _HeartButtonWidgetState extends State<HeartButtonWidget> {
-  bool isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,19 +26,11 @@ class _HeartButtonWidgetState extends State<HeartButtonWidget> {
         shape: BoxShape.circle,
       ),
       child: GestureDetector(
-        onTapDown: (_) => setState(() => isPressed = true),
-        onTapUp: (_) => setState(() => isPressed = false),
-        onTapCancel: () => setState(() => isPressed = false),
         onTap: widget.onTap,
-        child: AnimatedScale(
-          scale: isPressed ? 0.9 : 1.0,
-          duration: Duration(milliseconds: 100),
-          curve: Curves.easeInOut,
-          child: Icon(
-            widget.isSaved ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-            color: widget.isSaved ? Color(0xFFFFAD35) : Colors.white,
-            size: 24,
-          ),
+        child: Icon(
+          widget.isSaved ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+          color: widget.isSaved ? Color(0xFFFFAD35) : Colors.white,
+          size: 24,
         ),
       ),
     );

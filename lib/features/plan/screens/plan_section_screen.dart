@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_app/domain/models/plan_activity_model.dart';
 import 'package:travel_app/features/plan/constants/activity_types_constants.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_section_view_model.dart';
 import 'package:travel_app/features/plan/widgets/activity_date_picker_sheet.dart';
 import 'package:travel_app/features/plan/widgets/activity_location_map_widget.dart';
-import 'package:travel_app/features/plan/widgets/activity_time_date_row_widget.dart';
+import 'package:travel_app/features/plan/widgets/activity_time_date_row.dart';
 import 'package:travel_app/features/plan/widgets/activity_time_picker_sheet.dart';
-import 'package:travel_app/features/plan/widgets/build_activity_type_chip.dart';
+import 'package:travel_app/features/plan/widgets/activity_type_chip_widget.dart';
 import 'package:travel_app/shared/widgets/app_bar_widget.dart';
 import 'package:travel_app/shared/widgets/app_button_widget.dart';
 import 'package:travel_app/shared/widgets/app_text_field_widget.dart';
@@ -20,16 +21,16 @@ class OngoingPlanSectionScreen extends StatefulWidget {
     this.destination,
     this.planStartDate,
     this.planEndDate,
+    this.initialActivity,
   });
 
   final String? planId;
-
-  // Điểm đến của plan dùng để giới hạn vị trí trong nước
   final String? destination;
-
-  // Giới hạn khoảng chọn ngày khi tạo plan
   final DateTime? planStartDate;
   final DateTime? planEndDate;
+
+  // Mở màn ở chế độ sửa pre-fill ở chế độ này
+  final PlanActivityModel? initialActivity;
 
   @override
   State<OngoingPlanSectionScreen> createState() =>
@@ -46,11 +47,25 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        final vm = context.read<PlanSectionViewModel>();
-        vm.setPlanId(widget.planId);
-        vm.setDestination(widget.destination);
-        vm.setPlanDateRange(widget.planStartDate, widget.planEndDate);
+      if (!mounted) return;
+      final vm = context.read<PlanSectionViewModel>();
+      vm.setPlanId(widget.planId);
+      vm.setDestination(widget.destination);
+      vm.setPlanDateRange(widget.planStartDate, widget.planEndDate);
+      vm.clearPlaceSearch(); // Xoá kết quả khi mở lại màn
+      if (widget.initialActivity != null) {
+        final a = widget.initialActivity!;
+        vm.setEditingActivity(a);
+        _activityNameController.text = a.name;
+        _locationSearchController.text = a.addressText ?? '';
+        if (kActivityTypes.any((e) => e.type == a.type)) {
+          vm.setActivityType(a.type);
+        } else {
+          vm.setActivityType('other');
+          _customActivityTypeController.text = a.type;
+        }
+      } else {
+        vm.clearEditing();
       }
     });
   }
@@ -74,9 +89,9 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
     if (activity != null) {
       Navigator.of(context).pop(activity);
     } else if (viewModel.errorMessage != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(viewModel.errorMessage!)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(viewModel.errorMessage!)));
       viewModel.clearError();
     }
   }
@@ -85,7 +100,9 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<PlanSectionViewModel>();
     return Scaffold(
-      appBar: AppBarWidget(title: 'Thêm điểm đến'),
+      appBar: AppBarWidget(
+        title: viewModel.isEditing ? 'Sửa điểm đến' : 'Thêm điểm đến',
+      ),
       backgroundColor: Color(0xFF000000),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +141,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
                       separatorBuilder: (_, __) => const SizedBox(width: 8),
                       itemBuilder: (context, index) {
                         final item = kActivityTypes[index];
-                        return BuildActivityTypeChip(
+                        return ActivityTypeChipWidget(
                           label: item.label,
                           type: item.type,
                           isSelected: viewModel.activityType == item.type,
@@ -155,7 +172,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  ActivityTimeDateRowWidget(
+                  ActivityTimeDateRow(
                     time: viewModel.time,
                     date: viewModel.date,
                     onTapTime: () => showActivityTimePickerSheet(

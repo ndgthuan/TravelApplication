@@ -29,19 +29,24 @@ class PlanSectionViewModel extends ChangeNotifier {
   String? _countryCode;
   DateTime? _planStartDate;
   DateTime? _planEndDate;
-  String _activityType = 'sightseeing';
+  String _activityType = 'eating';
   LatLng _pinPosition = const LatLng(21.0285, 105.8542);
   TimeOfDay _time = const TimeOfDay(hour: 18, minute: 30);
   DateTime _date = DateTime(2023, 10, 12);
   bool _isSaving = false;
   bool _isSearchingLocation = false;
   List<Map<String, dynamic>> _placeSearchResults = [];
+  bool _ignoreNextSearch =
+      false; // Bỏ qua lần search do gán text sau khi chọn địa điểm
   String? _errorMessage;
+  String? _editingActivityId;
 
   //==========================================================================//
   //                        GETTERS                                           //
   //==========================================================================//
   String? get planId => _planId;
+  bool get isEditing =>
+      _editingActivityId != null && _editingActivityId!.isNotEmpty;
   String? get destination => _destination;
   String? get countryCode => _countryCode;
   DateTime? get planStartDate => _planStartDate;
@@ -120,8 +125,44 @@ class PlanSectionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Pre-fill form để sửa activity
+  void setEditingActivity(PlanActivityModel? activity) {
+    if (activity == null || activity.id.isEmpty) {
+      _editingActivityId = null;
+      notifyListeners();
+      return;
+    }
+    _editingActivityId = activity.id;
+    _activityType = activity.type == 'other' ? 'other' : activity.type;
+    _date = DateTime(
+      activity.time.year,
+      activity.time.month,
+      activity.time.day,
+    );
+    _time = TimeOfDay(hour: activity.time.hour, minute: activity.time.minute);
+    _pinPosition = LatLng(activity.latitude, activity.longitude);
+    notifyListeners();
+  }
+
+  void clearEditing() {
+    _editingActivityId = null;
+    notifyListeners();
+  }
+
+  // Xoá kết quả search cũ sau khi thoát hoặc là add activities ra khỏi activity_plan_screen
+  void clearPlaceSearch() {
+    _placeSearchResults = [];
+    _isSearchingLocation = false;
+    _ignoreNextSearch = false;
+    notifyListeners();
+  }
+
   // Tìm địa điểm cụ thể (Nominatim)
   Future<void> searchPlaces(String query) async {
+    if (_ignoreNextSearch) {
+      _ignoreNextSearch = false;
+      return;
+    }
     final q = query.trim();
     if (q.isEmpty) {
       _placeSearchResults = [];
@@ -144,7 +185,7 @@ class PlanSectionViewModel extends ChangeNotifier {
     }
   }
 
-  // Chọn một kết quả từ search để cập nhật pin, xoá, list trả về toạ độ và tên địa chỉ
+  // Chọn một kết quả từ search để cập nhật pin, xoá list, trả về toạ độ và tên địa chỉ
   ({LatLng latLng, String displayName})? selectPlaceResult(int index) {
     if (index < 0 || index >= _placeSearchResults.length) return null;
     final item = _placeSearchResults[index];
@@ -154,6 +195,9 @@ class PlanSectionViewModel extends ChangeNotifier {
     final displayName = item['displayName'] as String? ?? '';
     _pinPosition = point;
     _placeSearchResults = [];
+    _isSearchingLocation = false;
+    _ignoreNextSearch =
+        true; // Gán displayName vào ô search sẽ trigger listener -> bỏ qua lần search đó
     notifyListeners();
     return (latLng: point, displayName: displayName);
   }
@@ -199,7 +243,7 @@ class PlanSectionViewModel extends ChangeNotifier {
       final typeValue = _resolveActivityType(customActivityTypeText);
 
       final activity = PlanActivityModel(
-        id: '',
+        id: _editingActivityId ?? '',
         planId: planId,
         name: name,
         type: typeValue.isEmpty ? 'other' : typeValue,
@@ -209,11 +253,13 @@ class PlanSectionViewModel extends ChangeNotifier {
         addressText: addressText.trim().isEmpty ? null : addressText.trim(),
       );
 
-      final saved = await _planRepository.saveActivity(
-        userId,
-        planId,
-        activity,
-      );
+      final PlanActivityModel saved;
+      if (_editingActivityId != null && _editingActivityId!.isNotEmpty) {
+        saved = await _planRepository.updateActivity(userId, planId, activity);
+        _editingActivityId = null;
+      } else {
+        saved = await _planRepository.saveActivity(userId, planId, activity);
+      }
       _isSaving = false;
       notifyListeners();
       return saved;

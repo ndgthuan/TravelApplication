@@ -22,7 +22,6 @@ class InformationScreen extends StatefulWidget {
 class _InformationScreenState extends State<InformationScreen> {
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
-  bool isClick = false;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
@@ -39,7 +38,7 @@ class _InformationScreenState extends State<InformationScreen> {
     super.dispose();
   }
 
-  /// Gán dữ liệu từ ViewModel vào form sau khi load (trong post-frame callback).
+  // Gán dữ liệu từ ViewModel vào form sau khi load (trong post-frame callback).
   @override
   void initState() {
     super.initState();
@@ -57,7 +56,7 @@ class _InformationScreenState extends State<InformationScreen> {
 
   bool _isValidImageUrl(String? url) => url != null && url.trim().isNotEmpty;
 
-  /// Chọn ảnh từ gallery và cập nhật state.
+  // Chọn ảnh từ gallery và cập nhật state.
   Future<void> _pickImage() async {
     final viewModel = context.read<InformationViewModel>();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -133,27 +132,19 @@ class _InformationScreenState extends State<InformationScreen> {
                       bottom: 0,
                       right: 0,
                       child: GestureDetector(
-                        onTapDown: (_) => setState(() => isClick = true),
-                        onTapUp: (_) => setState(() => isClick = false),
-                        onTapCancel: () => setState(() => isClick = false),
                         onTap: _pickImage,
-                        child: AnimatedScale(
-                          scale: isClick ? 0.95 : 1.0,
-                          duration: const Duration(milliseconds: 100),
-                          curve: Curves.easeInOut,
-                          child: Container(
-                            height: 35,
-                            width: 35,
-                            decoration: BoxDecoration(
-                              color: Color(0xFFFFAD35),
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.black, width: 2),
-                            ),
-                            child: const Icon(
-                              CupertinoIcons.pen,
-                              size: 18,
-                              color: Colors.black,
-                            ),
+                        child: Container(
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFFFAD35),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 2),
+                          ),
+                          child: const Icon(
+                            CupertinoIcons.pen,
+                            size: 18,
+                            color: Colors.black,
                           ),
                         ),
                       ),

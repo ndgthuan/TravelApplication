@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,7 +19,6 @@ class ForgotPasswordDialogWidget extends StatefulWidget {
 
 class _ForgotPasswordDialogWidgetState
     extends State<ForgotPasswordDialogWidget> {
-  bool _isResetPasswordPress = false;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -70,9 +69,6 @@ class _ForgotPasswordDialogWidgetState
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 1),
             child: GestureDetector(
-              onTapDown: (_) => setState(() => _isResetPasswordPress = true),
-              onTapUp: (_) => setState(() => _isResetPasswordPress = false),
-              onTapCancel: () => setState(() => _isResetPasswordPress = false),
               onTap: () async {
                 if (widget.controller.text.isNotEmpty) {
                   await widget.onSendResetEmail(
@@ -84,11 +80,7 @@ class _ForgotPasswordDialogWidgetState
                   }
                 }
               },
-              child: AnimatedScale(
-                scale: _isResetPasswordPress ? 0.9 : 1.0,
-                duration: const Duration(milliseconds: 150),
-                curve: Curves.easeInOut,
-                child: Container(
+              child: Container(
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
@@ -105,7 +97,6 @@ class _ForgotPasswordDialogWidgetState
                     ),
                   ),
                 ),
-              ),
             ),
           ),
         ],

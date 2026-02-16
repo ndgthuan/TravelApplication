@@ -1,9 +1,14 @@
+// Widget hiển thị upcoming plan card, đây là plan được tạo trước ở tương lai
+// Khi đến thời điểm bắt đầu, upcoming card sẽ tự động chuyển thành ongoing card
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/core/di/injection.dart';
 import 'package:travel_app/domain/models/plan_model.dart';
-import 'package:travel_app/features/plan/widgets/activity_plan_widget.dart';
+import 'package:travel_app/features/plan/viewmodels/activity_plan_view_model.dart';
+import 'package:travel_app/features/plan/screens/activity_plan_screen.dart';
 
 class UpcomingPlanCardWidget extends StatelessWidget {
   final PlanModel plan;
@@ -16,7 +21,16 @@ class UpcomingPlanCardWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context, rootNavigator: true).push(
-          MaterialPageRoute(builder: (_) => ActivityPlanWidget(plan: plan)),
+          MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (_) {
+                final vm = getIt<ActivityPlanViewModel>(param1: plan);
+                vm.loadPlan();
+                return vm;
+              },
+              child: ActivityPlanScreen(plan: plan),
+            ),
+          ),
         );
       },
       child: Container(
@@ -102,7 +116,7 @@ class UpcomingPlanCardWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
+                  // Thông tin về tên đã được đặt trước đó ở trong new_plan_card_widget
                   Text(
                     plan.title,
                     style: GoogleFonts.beVietnamPro(
@@ -116,7 +130,7 @@ class UpcomingPlanCardWidget extends StatelessWidget {
 
                   SizedBox(height: 4),
 
-                  // Date
+                  // Khoảng thời gian dặt ngày
                   Text(
                     plan.dateRangeText(context.locale.toString()),
                     style: GoogleFonts.beVietnamPro(

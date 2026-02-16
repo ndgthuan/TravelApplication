@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-// Hàng hai ô để trả về giờ và ngày, tap mở bottom sheet tương ứng
-class ActivityTimeDateRowWidget extends StatelessWidget {
-  const ActivityTimeDateRowWidget({
+// Hàng hai ô để chọn giờ và ngày, dùng trong form activity.
+class ActivityTimeDateRow extends StatelessWidget {
+  const ActivityTimeDateRow({
     super.key,
     required this.time,
     required this.date,
@@ -32,9 +32,9 @@ class ActivityTimeDateRowWidget extends StatelessWidget {
                   vertical: 14,
                 ),
                 decoration: BoxDecoration(
-                  color: Color(0xFF1C1C1D),
+                  color: const Color(0xFF1C1C1D),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xFF333333)),
+                  border: Border.all(color: const Color(0xFF333333)),
                 ),
                 child: Row(
                   children: [
@@ -46,7 +46,7 @@ class ActivityTimeDateRowWidget extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Icon(
+                    const Icon(
                       CupertinoIcons.chevron_down,
                       color: Colors.white54,
                       size: 20,
@@ -66,9 +66,9 @@ class ActivityTimeDateRowWidget extends StatelessWidget {
                   vertical: 14,
                 ),
                 decoration: BoxDecoration(
-                  color: Color(0xFF1C1C1D),
+                  color: const Color(0xFF1C1C1D),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0xFF333333)),
+                  border: Border.all(color: const Color(0xFF333333)),
                 ),
                 child: Row(
                   children: [
@@ -80,7 +80,7 @@ class ActivityTimeDateRowWidget extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Icon(
+                    const Icon(
                       CupertinoIcons.chevron_down,
                       color: Colors.white54,
                       size: 20,

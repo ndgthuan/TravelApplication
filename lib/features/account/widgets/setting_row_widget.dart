@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SettingRowWidget extends StatefulWidget {
@@ -17,20 +17,12 @@ class SettingRowWidget extends StatefulWidget {
 }
 
 class _SettingRowWidgetState extends State<SettingRowWidget> {
-  bool _isClick = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => setState(() => _isClick = true),
-      onTapUp: (_) => setState(() => _isClick = false),
-      onTapCancel: () => setState(() => _isClick = false),
       onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: _isClick ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeInOut,
-        child: SizedBox(
-          child: Row(
+      child: SizedBox(
+        child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
@@ -52,7 +44,6 @@ class _SettingRowWidgetState extends State<SettingRowWidget> {
               // Icon mũi tên
               Icon(Icons.keyboard_arrow_right_outlined, color: Colors.grey),
             ],
-          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+// Sheet này dùng để search vào để hiện member được search trong số users
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/domain/models/user_model.dart';
 
-// Bottom sheet tìm kiếm và chọn member từ danh sách users
 class MemberSearchSheet extends StatefulWidget {
   final List<UserModel> availableUsers;
   final Set<String> selectedEmails;

@@ -1,11 +1,13 @@
+// Widget thẻ tạo plan mới, dùng để tạo các plan
+// Bao gồm ongoing plan và upcoming plan
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/features/plan/widgets/plan_created_form_sheet.dart';
 
-class BuildPlanCardWidget extends StatelessWidget {
-  const BuildPlanCardWidget({super.key});
+class NewPlanCardWidget extends StatelessWidget {
+  const NewPlanCardWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +17,13 @@ class BuildPlanCardWidget extends StatelessWidget {
       child: Container(
         width: 140,
         decoration: BoxDecoration(
-          image: DecorationImage(
+          image: const DecorationImage(
             image: AssetImage('lib/assets/images/add_plan_image.png'),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,11 +31,11 @@ class BuildPlanCardWidget extends StatelessWidget {
             Container(
               width: 33,
               height: 33,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Color(0xFF1E1E1D),
               ),
-              child: Icon(Icons.add, color: Color(0xFFFFAD35), size: 30),
+              child: const Icon(Icons.add, color: Color(0xFFFFAD35), size: 30),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -57,7 +59,7 @@ class BuildPlanCardWidget extends StatelessWidget {
 //=====================================================================//
 //                          HELPER FUNCTION                            //
 //=====================================================================//
-// Helper gọi add plan sheet
+// Helper gọi add plan sheet để tạo các mục để điền thông tin plan mới
 void _showAddPlanModal(BuildContext context) {
   final height = MediaQuery.sizeOf(context).height;
   showGeneralDialog(
@@ -87,7 +89,7 @@ void _showAddPlanModal(BuildContext context) {
               ),
             ),
           ),
-          // Sheet 80% từ dưới lên
+          // Sheet 90% từ dưới lên
           Align(
             alignment: Alignment.bottomCenter,
             child: SlideTransition(
@@ -101,7 +103,7 @@ void _showAddPlanModal(BuildContext context) {
                 ),
                 child: SizedBox(
                   height: height * 0.9,
-                  child: PlanCreatedFormSheet(),
+                  child: const PlanCreatedFormSheet(),
                 ),
               ),
             ),

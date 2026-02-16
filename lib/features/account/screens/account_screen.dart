@@ -22,7 +22,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  bool _isClick = false;
   bool isDarkMode = true;
 
   @override
@@ -92,16 +91,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   right: 5,
                   top: 165,
                   child: GestureDetector(
-                    onTapDown: (_) => setState(() => _isClick = true),
-                    onTapUp: (_) => setState(() => _isClick = false),
-                    onTapCancel: () => setState(() => _isClick = false),
                     onTap: _changeBackgroundImage,
-                    child: AnimatedScale(
-                      scale: _isClick ? 0.95 : 1.0,
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.easeInOut,
-                      child: Icon(Icons.edit, color: Color(0xFFFFAD35)),
-                    ),
+                    child: Icon(Icons.edit, color: Color(0xFFFFAD35)),
                   ),
                 ),
                 // Avatar

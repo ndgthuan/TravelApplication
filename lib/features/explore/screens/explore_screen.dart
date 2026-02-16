@@ -22,7 +22,6 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
-  bool isLoading = false;
   final _searchController = TextEditingController();
 
   @override
@@ -72,22 +71,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
             AppHeaderWidget(
               title: "explore.title".tr(),
               trailing: GestureDetector(
-                onTapDown: (_) => setState(() => isLoading = true),
-                onTapUp: (_) => setState(() => isLoading = false),
-                onTapCancel: () => setState(() => isLoading = false),
                 onTap: () {
                   Navigator.of(
                     context,
                     rootNavigator: true,
                   ).push(MaterialPageRoute(builder: (context) => SaveScreen()));
                 },
-                child: AnimatedScale(
-                  scale: isLoading ? 0.95 : 1.0,
-                  duration: const Duration(milliseconds: 100),
-                  curve: Curves.easeInOut,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Badge(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Badge(
                       label: Text(
                         '${context.watch<SavedCountProvider>().unseenCount}',
                         style: GoogleFonts.beVietnamPro(fontSize: 15),
@@ -103,7 +95,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                   ),
                 ),
-              ),
             ),
 
             // Search Field

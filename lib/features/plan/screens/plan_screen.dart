@@ -1,10 +1,10 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:travel_app/domain/models/plan_model.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
-import 'package:travel_app/features/plan/widgets/build_plan_card_widget.dart';
+import 'package:travel_app/features/plan/widgets/new_plan_card_widget.dart';
 import 'package:travel_app/features/plan/widgets/ongoing_plan_card_widget.dart';
 import 'package:travel_app/features/plan/widgets/upcoming_plan_card_widget.dart';
 import 'package:travel_app/shared/widgets/app_header_widget.dart';
@@ -172,7 +172,7 @@ class _PlanScreenState extends State<PlanScreen> {
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         children: [
                           // Card tạo plan mới
-                          BuildPlanCardWidget(),
+                          NewPlanCardWidget(),
                           SizedBox(width: 10),
                           // Các upcoming plans từ ViewModel
                           for (final plan in viewModel.upcomingPlans) ...[

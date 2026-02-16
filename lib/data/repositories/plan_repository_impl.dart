@@ -71,7 +71,24 @@ class PlanRepositoryImpl implements IPlanRepository {
   }
 
   @override
+  Future<void> updatePlan(String? userId, PlanModel plan) async {
+    if (userId == null || userId.isEmpty || plan.id.isEmpty) return;
+    final data = plan.toJson();
+    data.remove('id');
+    await _planCreatedRef(userId).doc(plan.id).set(data, SetOptions(merge: true));
+  }
+
+  @override
   Future<void> deletePlan(String? userId, String planId) async {
+    if (userId == null || userId.isEmpty) return;
+    final activityRef = _activityCreatedRef(userId, planId);
+    final snapshot = await activityRef.get();
+    // Xóa toàn bộ activity trong subcollection trước (Firestore không tự xóa subcollection khi xóa document).
+    final batch = _firestore.batch();
+    for (final doc in snapshot.docs) {
+      batch.delete(doc.reference);
+    }
+    if (snapshot.docs.isNotEmpty) await batch.commit();
     await _planCreatedRef(userId).doc(planId).delete();
   }
 
@@ -85,7 +102,7 @@ class PlanRepositoryImpl implements IPlanRepository {
       throw StateError('userId required to save activity');
     }
     final data = activity.toJson();
-    data.remove('id'); // id do Firestore gán qua doc ref
+    data.remove('id');
     final ref = await _activityCreatedRef(userId, planId).add(data);
     return PlanActivityModel(
       id: ref.id,
@@ -96,10 +113,38 @@ class PlanRepositoryImpl implements IPlanRepository {
       latitude: activity.latitude,
       longitude: activity.longitude,
       addressText: activity.addressText,
+      isCheckedIn: activity.isCheckedIn,
     );
   }
 
-  // Lấy các activity đã được tạo để gọi trong viewmodel
+  @override
+  Future<PlanActivityModel> updateActivity(
+    String? userId,
+    String planId,
+    PlanActivityModel activity,
+  ) async {
+    if (userId == null || userId.isEmpty) {
+      throw StateError('userId required to update activity');
+    }
+    if (activity.id.isEmpty) {
+      throw StateError('activity.id required to update');
+    }
+    final data = activity.toJson();
+    data.remove('id');
+    await _activityCreatedRef(userId, planId).doc(activity.id).set(data);
+    return activity;
+  }
+
+  @override
+  Future<void> deleteActivity(
+    String? userId,
+    String planId,
+    String activityId,
+  ) async {
+    if (userId == null || userId.isEmpty) return;
+    await _activityCreatedRef(userId, planId).doc(activityId).delete();
+  }
+
   @override
   Future<List<PlanActivityModel>> getActivities(
     String? userId,
