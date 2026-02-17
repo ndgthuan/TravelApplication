@@ -40,7 +40,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
       backgroundColor: Color(0xFF000000),
       appBar: AppBarWidget(title: 'world_clock.title'.tr()),
       body: viewModel.isLoading
-          ? Center(child: CircularProgressIndicator(color: Color(0xFFFFAD35)))
+          ? Center(child: CircularProgressIndicator(color: Color(0xFFFF6D00)))
           : Stack(
               children: [
                 // Danh sách timezone đã lưu

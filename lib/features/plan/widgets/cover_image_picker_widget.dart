@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +79,7 @@ class _CoverImagePickerWidgetState extends State<CoverImagePickerWidget> {
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: widget.coverImageUrl != null
-                      ? Color(0xFFFFAD35)
+                      ? Color(0xFFFF6D00)
                       : Color(0xFF333333),
                 ),
                 image: widget.coverImageUrl != null
@@ -94,7 +94,7 @@ class _CoverImagePickerWidgetState extends State<CoverImagePickerWidget> {
               child: _isUploading
                   ? Center(
                       child: CircularProgressIndicator(
-                        color: Color(0xFFFFAD35),
+                        color: Color(0xFFFF6D00),
                       ),
                     )
                   : widget.coverImageUrl == null

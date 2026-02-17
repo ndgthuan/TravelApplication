@@ -69,7 +69,7 @@ class _PasswordFieldWidgetState extends State<PasswordFieldWidget> {
             onChanged: widget.onChanged,
             style: GoogleFonts.beVietnamPro(color: Colors.white),
             obscureText: isShowing,
-            cursorColor: const Color(0xFFFFAD35),
+            cursorColor: const Color(0xFFFF6D00),
             decoration: InputDecoration(
               // Label hoặc hint
               labelText: widget.showTitle ? null : widget.labelText,
@@ -90,7 +90,7 @@ class _PasswordFieldWidgetState extends State<PasswordFieldWidget> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
-                  color: Color(0xFFFFAD33),
+                  color: Color(0xFFFF6D00),
                   width: 1.5,
                 ),
               ),

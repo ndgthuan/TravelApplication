@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:travel_app/features/explore/screens/explore_map_screen.dart';
@@ -22,7 +22,6 @@ class SaveScreen extends StatefulWidget {
 }
 
 class _SaveScreenState extends State<SaveScreen> {
-  bool isLoading = false;
   final _searchController = TextEditingController();
 
   @override
@@ -173,7 +172,7 @@ class _SaveScreenState extends State<SaveScreen> {
                     // Có data
                     return RefreshIndicator(
                       onRefresh: () => viewModel.refreshSavedDestinations(),
-                      color: Color(0xFFFFAD35),
+                      color: Color(0xFFFF6D00),
                       child: GridView.custom(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         physics: const AlwaysScrollableScrollPhysics(),
@@ -211,9 +210,6 @@ class _SaveScreenState extends State<SaveScreen> {
                   bottom: 5,
                   right: 10,
                   child: GestureDetector(
-                    onTapDown: (_) => setState(() => isLoading = true),
-                    onTapUp: (_) => setState(() => isLoading = false),
-                    onTapCancel: () => setState(() => isLoading = false),
                     onTap: () {
                       Navigator.of(context, rootNavigator: true).push(
                         MaterialPageRoute(
@@ -221,21 +217,16 @@ class _SaveScreenState extends State<SaveScreen> {
                         ),
                       );
                     },
-                    child: AnimatedScale(
-                      scale: isLoading ? 0.95 : 1.0,
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.easeInOut,
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFF2A2A2A),
-                        ),
-                        child: Icon(
-                          CupertinoIcons.map_fill,
-                          color: Color(0xFFFFAD35),
-                        ),
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFF2A2A2A),
+                      ),
+                      child: Icon(
+                        CupertinoIcons.map_fill,
+                        color: Color(0xFFFF6D00),
                       ),
                     ),
                   ),

@@ -6,6 +6,7 @@ abstract class IPlanRepository {
   Future<List<PlanModel>> getUpcomingPlans(String? userId);
   Future<List<PlanModel>> getAllPlans(String? userId);
   Future<PlanModel> createPlan(String? userId, PlanModel plan);
+  Future<void> updatePlan(String? userId, PlanModel plan);
   Future<void> deletePlan(String? userId, String planId);
 
   // Collection: users/{userId}/plan_created/{planId}/activity_created
@@ -13,6 +14,16 @@ abstract class IPlanRepository {
     String? userId,
     String planId,
     PlanActivityModel activity,
+  );
+  Future<PlanActivityModel> updateActivity(
+    String? userId,
+    String planId,
+    PlanActivityModel activity,
+  );
+  Future<void> deleteActivity(
+    String? userId,
+    String planId,
+    String activityId,
   );
   Future<List<PlanActivityModel>> getActivities(String? userId, String planId);
 }

@@ -20,47 +20,37 @@ class TranslateButtonWidget extends StatefulWidget {
 }
 
 class _TranslateButtonWidgetState extends State<TranslateButtonWidget> {
-  bool _isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapUp: (_) => setState(() => _isPressed = false),
-      onTapCancel: () => setState(() => _isPressed = false),
       onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: _isPressed ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeInOut,
-        child: Container(
-          height: 80,
-          decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFFFAD35)),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Text bên trong nút
-                  Flexible(
-                    child: Text(
-                      '${widget.flag} ${widget.languageName}',
-                      style: GoogleFonts.beVietnamPro(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+      child: Container(
+        height: 80,
+        decoration: BoxDecoration(
+          border: Border.all(color: Color(0xFFFF6D00)),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Text bên trong nút
+                Flexible(
+                  child: Text(
+                    '${widget.flag} ${widget.languageName}',
+                    style: GoogleFonts.beVietnamPro(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
+                    overflow: TextOverflow.ellipsis,
                   ),
+                ),
 
-                  Icon(CupertinoIcons.chevron_down, color: Color(0xFFFFAD35)),
-                ],
-              ),
+                Icon(CupertinoIcons.chevron_down, color: Color(0xFFFF6D00)),
+              ],
             ),
           ),
         ),

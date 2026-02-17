@@ -1,3 +1,5 @@
+﻿// Màn hình hiển thị form để điền thông tin tạo plan mới hoặc chỉnh sửa plan
+// Logic xử lý được quản lý bởi PlanViewModel, UI chỉ hiển thị và gọi ViewModel
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +15,9 @@ import 'package:travel_app/features/plan/widgets/member_selector_widget.dart';
 import 'package:travel_app/features/plan/widgets/date_range_picker_sheet.dart';
 
 class PlanCreatedFormSheet extends StatefulWidget {
-  const PlanCreatedFormSheet({super.key});
+  final PlanModel? initialPlan;
+
+  const PlanCreatedFormSheet({super.key, this.initialPlan});
 
   @override
   State<PlanCreatedFormSheet> createState() => _PlanCreatedFormSheetState();
@@ -34,6 +38,45 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
 
   // Danh sách member bao gồm email và avatarUrl
   final List<PlanMember> _members = [];
+
+  bool get _isEditMode => widget.initialPlan != null;
+  bool _editPrefillDone = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final p = widget.initialPlan;
+    if (p != null) {
+      _titleController.text = p.title;
+      _destinationController.text = p.destination;
+      _budgetController.text = p.budget > 0
+          ? PlanViewModel.formatMoney(p.budget.toStringAsFixed(0))
+          : '';
+      _startDate = p.startDate;
+      _endDate = p.endDate;
+      _coverImageUrl = p.imageUrl.isNotEmpty ? p.imageUrl : null;
+      _members.addAll(p.members);
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isEditMode &&
+        !_editPrefillDone &&
+        _startDate != null &&
+        _endDate != null) {
+      _editPrefillDone = true;
+      _dateController.text = _dateRangeDisplay;
+    }
+  }
+
+  String get _dateRangeDisplay {
+    if (_startDate == null || _endDate == null) return '';
+    final locale = context.locale.toString();
+    final fmt = DateFormat.MMMd(locale);
+    return '${fmt.format(_startDate!)} - ${fmt.format(_endDate!)}';
+  }
 
   @override
   void dispose() {
@@ -68,13 +111,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
     }
   }
 
-  String get _dateRangeDisplay {
-    if (_startDate == null || _endDate == null) return '';
-    final locale = context.locale.toString();
-    final fmt = DateFormat.MMMd(locale);
-    return '${fmt.format(_startDate!)} - ${fmt.format(_endDate!)}';
-  }
-
   // Xử lý format tiền khi nhập
   void _onBudgetChanged(String value) {
     final formatted = PlanViewModel.formatMoney(value);
@@ -86,8 +122,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
     }
   }
 
-  // Error handling
-  Future<void> _handleCreatePlan() async {
+  Future<void> _handleSave() async {
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(
         context,
@@ -104,7 +139,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
     setState(() => _isCreating = true);
 
     final plan = PlanModel(
-      id: '',
+      id: widget.initialPlan?.id ?? '',
       title: _titleController.text.trim(),
       startDate: _startDate!,
       endDate: _endDate!,
@@ -113,20 +148,33 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
       budget:
           double.tryParse(_budgetController.text.trim().replaceAll('.', '')) ??
           0,
-      members: _members,
+      members: List.from(_members),
     );
 
     final vm = context.read<PlanViewModel>();
-    final created = await vm.createPlan(plan);
-
-    if (mounted) {
-      setState(() => _isCreating = false);
-      if (created != null) {
-        Navigator.of(context).pop();
-      } else if (vm.error != null) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(vm.error!)));
+    if (_isEditMode) {
+      final updated = await vm.updatePlan(plan);
+      if (mounted) {
+        setState(() => _isCreating = false);
+        if (updated != null) {
+          Navigator.of(context).pop(updated);
+        } else if (vm.error != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(vm.error!)));
+        }
+      }
+    } else {
+      final created = await vm.createPlan(plan);
+      if (mounted) {
+        setState(() => _isCreating = false);
+        if (created != null) {
+          Navigator.of(context).pop();
+        } else if (vm.error != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(vm.error!)));
+        }
       }
     }
   }
@@ -134,8 +182,9 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // AppBar để hiển tên của phần appbar
       appBar: AppBarWidget(
-        title: 'plan.add_plan_title'.tr(),
+        title: _isEditMode ? 'Chỉnh sửa chuyến đi' : 'plan.add_plan_title'.tr(),
         icon: CupertinoIcons.xmark,
       ),
       backgroundColor: Colors.black,
@@ -148,6 +197,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
+                  // Mục nội dung tên điểm đến
                   AppTextFieldWidget(
                     labelText: 'plan.destination'.tr(),
                     showLabel: true,
@@ -155,6 +205,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                     controller: _destinationController,
                   ),
                   const SizedBox(height: 20),
+                  // Mục nội dung của tên chuyến đi
                   AppTextFieldWidget(
                     labelText: 'plan.trip_name'.tr(),
                     showLabel: true,
@@ -162,7 +213,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                     controller: _titleController,
                   ),
                   const SizedBox(height: 20),
-                  // Field thời gian
+                  // Field này là field dùng để chỉnh thời gian
                   GestureDetector(
                     onTap: _pickDateRange,
                     child: AbsorbPointer(
@@ -174,12 +225,13 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                         hintText: 'plan.time_range_hint'.tr(),
                         suffixIcon: Icon(
                           CupertinoIcons.calendar,
-                          color: Color(0xFFFFAD35),
+                          color: Color(0xFFFF6D00),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
+                  // Mục nội dung để nhập vào số tiền dự kiến cho chuyến đi
                   AppTextFieldWidget(
                     labelText: 'plan.budget'.tr(),
                     showLabel: true,
@@ -237,11 +289,13 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
             child: _isCreating
                 ? const Center(
-                    child: CircularProgressIndicator(color: Color(0xFFFFAD35)),
+                    child: CircularProgressIndicator(color: Color(0xFFFF6D00)),
                   )
                 : AppButtonWidget(
-                    buttonText: 'plan.create_plan'.tr(),
-                    onTap: _handleCreatePlan,
+                    buttonText: _isEditMode
+                        ? 'Lưu thay đổi'
+                        : 'plan.create_plan'.tr(),
+                    onTap: _handleSave,
                   ),
           ),
         ],

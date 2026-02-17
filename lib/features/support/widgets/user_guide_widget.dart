@@ -62,7 +62,7 @@ class _UserGuideWidgetState extends State<UserGuideWidget> {
                       child: Icon(
                         CupertinoIcons.chevron_down,
                         color: _isExpanded
-                            ? Color(0xFFFFAD35)
+                            ? Color(0xFFFF6D00)
                             : Colors.grey[600],
                       ),
                     ),

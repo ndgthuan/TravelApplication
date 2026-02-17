@@ -1,4 +1,4 @@
-// Vẽ các trạng thái của nút bấm ở mapScreen
+﻿// Vẽ các trạng thái của nút bấm ở mapScreen
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -20,8 +20,6 @@ class ExploreMapFloatingActions extends StatefulWidget {
 }
 
 class _ExploreMapFloatingActionsState extends State<ExploreMapFloatingActions> {
-  bool _isBookmarkPressed = false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -39,32 +37,24 @@ class _ExploreMapFloatingActionsState extends State<ExploreMapFloatingActions> {
             child: Icon(
               Icons.my_location,
               color: widget.canFitBounds
-                  ? const Color(0xFFFFAD35)
+                  ? const Color(0xFFFF6D00)
                   : Colors.grey[600],
             ),
           ),
         ),
         const SizedBox(height: 10),
         GestureDetector(
-          onTapDown: (_) => setState(() => _isBookmarkPressed = true),
-          onTapUp: (_) => setState(() => _isBookmarkPressed = false),
-          onTapCancel: () => setState(() => _isBookmarkPressed = false),
           onTap: widget.onBookmarkTap,
-          child: AnimatedScale(
-            scale: _isBookmarkPressed ? 0.95 : 1.0,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeInOut,
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFF2A2A2A),
-              ),
-              child: const Icon(
-                CupertinoIcons.bookmark_fill,
-                color: Color(0xFFFFAD35),
-              ),
+          child: Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFF2A2A2A),
+            ),
+            child: const Icon(
+              CupertinoIcons.bookmark_fill,
+              color: Color(0xFFFF6D00),
             ),
           ),
         ),

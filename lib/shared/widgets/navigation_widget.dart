@@ -18,7 +18,7 @@ class BottomNavigation extends StatelessWidget {
     return ItemConfig(
       icon: Icon(icon),
       title: title,
-      activeForegroundColor: Color(0xFFFFAD35),
+      activeForegroundColor: Color(0xFFFF6D00),
       textStyle: GoogleFonts.beVietnamPro(fontSize: 14),
     );
   }
@@ -47,11 +47,11 @@ class BottomNavigation extends StatelessWidget {
                 style: GoogleFonts.beVietnamPro(fontSize: 15),
               ),
               isLabelVisible: savedCount.unseenCount > 0,
-              backgroundColor: Color(0xFFFFAD35),
+              backgroundColor: Color(0xFFFF6D00),
               child: Icon(CupertinoIcons.compass),
             ),
             title: 'navigation.explore'.tr(),
-            activeForegroundColor: Color(0xFFFFAD35),
+            activeForegroundColor: Color(0xFFFF6D00),
             textStyle: GoogleFonts.beVietnamPro(fontSize: 14),
           ),
         ),

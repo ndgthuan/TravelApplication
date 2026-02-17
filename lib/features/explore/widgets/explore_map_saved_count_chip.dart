@@ -1,4 +1,4 @@
-// Đếm số lượng destination đã lưu
+﻿// Đếm số lượng destination đã lưu
 import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -21,12 +21,12 @@ class ExploreMapSavedCountChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(CupertinoIcons.location_fill, color: Color(0xFFFFAD35)),
+            const Icon(CupertinoIcons.location_fill, color: Color(0xFFFF6D00)),
             const SizedBox(width: 10),
             Text(
               '$savedCount ${"explore.saved_places".tr()}',
               style: GoogleFonts.beVietnamPro(
-                color: const Color(0xFFFFAD35),
+                color: const Color(0xFFFF6D00),
                 fontSize: 14,
               ),
             ),

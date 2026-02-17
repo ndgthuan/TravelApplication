@@ -16,9 +16,6 @@ class StartScreen extends StatefulWidget {
 
 class _StartScreenState extends State<StartScreen>
     with TickerProviderStateMixin {
-  // Biến để track trạng thái nhấn nút
-  bool _isPressed = false;
-
   // Animation controllers
   late AnimationController _buttonController;
 
@@ -128,69 +125,53 @@ class _StartScreenState extends State<StartScreen>
                   child: Align(
                     alignment: Alignment.bottomRight,
                     // Phương thức chuyển qua trang đăng nhập
-                    child: GestureDetector(
-                      onTapDown: (_) => setState(() => _isPressed = true),
-                      onTapUp: (_) => setState(() => _isPressed = false),
-                      onTapCancel: () => setState(() => _isPressed = false),
-                      child: Center(
-                        child: AnimatedScale(
-                          scale: _isPressed ? 0.95 : 1.0,
-                          duration: const Duration(milliseconds: 100),
-                          curve: Curves.easeInOut,
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 80,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pushReplacement(
-                                  PageRouteBuilder(
-                                    transitionDuration: const Duration(
-                                      milliseconds: 800,
-                                    ),
-                                    pageBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                        ) {
-                                          return const LoginScreen();
-                                        },
-                                    transitionsBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                          child,
-                                        ) {
-                                          return SharedAxisTransition(
-                                            fillColor: Colors.grey.shade900,
-                                            animation: animation,
-                                            secondaryAnimation:
-                                                secondaryAnimation,
-                                            transitionType:
-                                                SharedAxisTransitionType
-                                                    .horizontal,
-                                            child: child,
-                                          );
-                                        },
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFFFAD33),
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(40),
+                    child: Center(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 80,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              PageRouteBuilder(
+                                transitionDuration: const Duration(
+                                  milliseconds: 800,
                                 ),
-                                elevation: 0,
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) {
+                                      return const LoginScreen();
+                                    },
+                                transitionsBuilder:
+                                    (
+                                      context,
+                                      animation,
+                                      secondaryAnimation,
+                                      child,
+                                    ) {
+                                      return SharedAxisTransition(
+                                        fillColor: Colors.grey.shade900,
+                                        animation: animation,
+                                        secondaryAnimation: secondaryAnimation,
+                                        transitionType:
+                                            SharedAxisTransitionType.horizontal,
+                                        child: child,
+                                      );
+                                    },
                               ),
-                              child: Text(
-                                "onboarding.get_started".tr(),
-                                style: GoogleFonts.beVietnamPro(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFF6D00),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Text(
+                            "onboarding.get_started".tr(),
+                            style: GoogleFonts.beVietnamPro(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),

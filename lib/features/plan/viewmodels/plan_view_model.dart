@@ -71,11 +71,38 @@ class PlanViewModel extends ChangeNotifier {
 
   Future<PlanModel?> createPlan(PlanModel plan) async {
     try {
-      final userId =
-          _currentUid ?? (await _userRepository.getCurrentUser())?.uid;
-      final created = await _planRepository.createPlan(userId, plan);
+      final user = await _userRepository.getCurrentUser();
+      final userId = _currentUid ?? user?.uid;
+      var members = List<PlanMember>.from(plan.members);
+      final hasOwner = members.any((m) => m.role == 'owner');
+      if (!hasOwner && user != null) {
+        members.insert(
+          0,
+          PlanMember(
+            email: user.email,
+            avatarUrl: user.avatarUrl ?? '',
+            role: 'owner',
+          ),
+        );
+      }
+      final planToCreate = plan.copyWith(members: members);
+      final created = await _planRepository.createPlan(userId, planToCreate);
       await loadPlans();
       return created;
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+      return null;
+    }
+  }
+
+  Future<PlanModel?> updatePlan(PlanModel plan) async {
+    try {
+      final userId =
+          _currentUid ?? (await _userRepository.getCurrentUser())?.uid;
+      await _planRepository.updatePlan(userId, plan);
+      await loadPlans();
+      return plan;
     } catch (e) {
       _error = e.toString();
       notifyListeners();
@@ -155,7 +182,7 @@ class PlanViewModel extends ChangeNotifier {
   //                        PRIVATE HELPERS                                   //
   //==========================================================================//
   // Format số tiền: cứ 3 chữ số thì thêm dấu chấm
-  // VD: "1000000" → "1.000.000"
+  // VD: "1000000" -> "1.000.000"
   static String formatMoney(String value) {
     // Xoá hết ký tự không phải số
     final digits = value.replaceAll(RegExp(r'[^0-9]'), '');

@@ -23,26 +23,18 @@ class LanguageCardWidget extends StatefulWidget {
 }
 
 class _LanguageCardWidgetState extends State<LanguageCardWidget> {
-  bool isClick = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: GestureDetector(
-        onTapDown: (_) => setState(() => isClick = true),
-        onTapUp: (_) => setState(() => isClick = false),
-        onTapCancel: () => setState(() => isClick = false),
         onTap: widget.onTap,
-        child: AnimatedScale(
-          scale: isClick ? 0.95 : 1.0,
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeInOut,
-          child: Container(
+        child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
               color: Color(0xFF1C1C1D),
               border: widget.isSelected
-                  ? Border.all(color: Color(0xFFFFAD35), width: 2)
+                  ? Border.all(color: Color(0xFFFF6D00), width: 2)
                   : null,
               borderRadius: BorderRadius.circular(10),
             ),
@@ -92,7 +84,6 @@ class _LanguageCardWidgetState extends State<LanguageCardWidget> {
                 ],
               ),
             ),
-          ),
         ),
       ),
     );

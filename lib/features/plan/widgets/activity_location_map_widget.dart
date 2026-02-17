@@ -131,7 +131,6 @@ class _ActivityLocationMapWidgetState extends State<ActivityLocationMapWidget> {
                       AppTextFieldWidget(
                         controller: widget.locationSearchController,
                         hintText: 'Địa chỉ cụ thể...',
-                        showLabel: false,
                         horizontalPadding: 0,
                         prefixIcon: Icons.search,
                         suffixIcon: widget.isSearchingLocation

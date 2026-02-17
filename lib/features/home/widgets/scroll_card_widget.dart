@@ -1,4 +1,4 @@
-import 'package:google_fonts/google_fonts.dart';
+﻿import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:travel_app/domain/models/home_destination_model.dart';
@@ -23,15 +23,19 @@ class ScrollCardWidget extends StatelessWidget {
     return Row(
       children: List.generate(5, (index) {
         if (index < rating.floor()) {
-          return Icon(CupertinoIcons.star_fill, color: Colors.amber, size: 15);
+          return Icon(
+            CupertinoIcons.star_fill,
+            color: Color(0xFFFF8F00),
+            size: 12,
+          );
         } else if (index < rating) {
           return Icon(
             CupertinoIcons.star_lefthalf_fill,
-            color: Colors.amber,
-            size: 15,
+            color: Color(0xFFFF8F00),
+            size: 12,
           );
         } else {
-          return Icon(CupertinoIcons.star, color: Colors.amber, size: 15);
+          return Icon(CupertinoIcons.star, color: Color(0xFFFF8F00), size: 12);
         }
       }),
     );
@@ -79,7 +83,7 @@ class ScrollCardWidget extends StatelessWidget {
                                 color: const Color(0xFF2A2A2A),
                                 child: const Center(
                                   child: CircularProgressIndicator(
-                                    color: Color(0xFFFFAD35),
+                                    color: Color(0xFFFF6D00),
                                     strokeWidth: 2,
                                   ),
                                 ),
@@ -129,7 +133,7 @@ class ScrollCardWidget extends StatelessWidget {
                           children: [
                             Icon(
                               CupertinoIcons.location_fill,
-                              color: Color(0xFFFFAD35),
+                              color: Color(0xFFFF6D00),
                               size: 13,
                             ),
                             Expanded(
@@ -150,10 +154,11 @@ class ScrollCardWidget extends StatelessWidget {
                             Text(
                               dest.rating.toString(),
                               style: GoogleFonts.beVietnamPro(
-                                color: Color(0xFFFFAD35),
+                                color: Color(0xFFFF6D00),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            const SizedBox(width: 5),
                             _buildStars(dest.rating),
                             const SizedBox(width: 5),
                             Flexible(

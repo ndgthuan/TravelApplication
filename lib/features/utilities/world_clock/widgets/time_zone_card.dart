@@ -115,7 +115,7 @@ class _TimeZoneCardState extends State<TimeZoneCard> {
                         _formatTime(),
                         style: TextStyle(
                           fontFamily: 'ProductSans',
-                          color: Color(0xFFFFAD35),
+                          color: Color(0xFFFF6D00),
                           fontSize: 40,
                         ),
                       ),
@@ -137,7 +137,7 @@ class _TimeZoneCardState extends State<TimeZoneCard> {
                   width: 100,
                   height: 100,
                   child: PremiumAnalogClock(
-                    accentColor: Color(0xFFFFAD35),
+                    accentColor: Color(0xFFFF6D00),
                     dialColor: Color(0xFF2C2C2E),
                     timezoneOffset: widget.timezoneOffset,
                     showSecondHand: true,

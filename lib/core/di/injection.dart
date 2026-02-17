@@ -42,6 +42,7 @@ import 'package:travel_app/data/repositories/home_repository_impl.dart';
 import 'package:travel_app/domain/repositories/i_language_repository.dart';
 import 'package:travel_app/data/repositories/language_repository_impl.dart';
 import 'package:travel_app/domain/repositories/i_plan_repository.dart';
+import 'package:travel_app/domain/models/plan_model.dart';
 import 'package:travel_app/data/repositories/plan_repository_impl.dart';
 
 // Import viewmodels
@@ -58,7 +59,10 @@ import 'package:travel_app/features/utilities/weather_forecast/viewmodels/weathe
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
 import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
-import 'package:travel_app/features/plan/viewmodels/ongoing_plan_section_view_model.dart';
+import 'package:travel_app/features/plan/viewmodels/plan_section_view_model.dart';
+import 'package:travel_app/features/plan/viewmodels/activity_plan_view_model.dart';
+import 'package:travel_app/domain/services/i_route_service.dart';
+import 'package:travel_app/shared/services/route_service.dart';
 
 // Tạo global instance của GetIt
 final GetIt getIt = GetIt.instance;
@@ -94,6 +98,7 @@ void setupDependencies() {
   getIt.registerLazySingleton<ICloudinaryService>(() => CloudinaryService());
   getIt.registerLazySingleton<IStorageService>(() => StorageService());
   getIt.registerLazySingleton<ITranslationService>(() => TranslationService());
+  getIt.registerLazySingleton<IRouteService>(() => RouteService());
 
   //==========================================================================//
   //           REPOSITORIES (Singleton - chỉ tạo 1 instance duy nhất)         //
@@ -197,11 +202,21 @@ void setupDependencies() {
     ),
   );
 
-  getIt.registerFactory<OngoingPlanSectionViewModel>(
-    () => OngoingPlanSectionViewModel(
+  getIt.registerFactory<PlanSectionViewModel>(
+    () => PlanSectionViewModel(
       getIt<IPlanRepository>(),
       getIt<IUserRepository>(),
       getIt<IGeocodingService>(),
+    ),
+  );
+
+  // ActivityPlanViewModel tạo theo plan (truyền plan khi gọi)
+  getIt.registerFactoryParam<ActivityPlanViewModel, PlanModel, void>(
+    (plan, _) => ActivityPlanViewModel(
+      getIt<IPlanRepository>(),
+      getIt<IUserRepository>(),
+      getIt<IRouteService>(),
+      plan,
     ),
   );
 }

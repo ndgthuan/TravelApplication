@@ -1,9 +1,15 @@
+﻿// Widget hiển thị ongoing plan card
+// Khi plan đang diễn ra, upcoming plan card sẽ tự động chuyển thành ongoing plan card
+// Ongoing plan card hiển thị đầy đủ ngày, thông tin và progress bar
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:travel_app/core/di/injection.dart'; // Sử dụng injection tại đây vì mỗi plan cần viewmodel riêng
 import 'package:travel_app/domain/models/plan_model.dart';
-import 'package:travel_app/features/plan/widgets/activity_plan_widget.dart';
+import 'package:travel_app/features/plan/viewmodels/activity_plan_view_model.dart';
+import 'package:travel_app/features/plan/screens/activity_plan_screen.dart';
 
 class OngoingPlanCardWidget extends StatelessWidget {
   final PlanModel plan;
@@ -25,6 +31,8 @@ class OngoingPlanCardWidget extends StatelessWidget {
             width: 1,
           ),
         ),
+
+        // Phần ảnh được hiển thị khi create plan sheet
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: SizedBox(
@@ -75,6 +83,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Tên của phần mục đã được tạo trước đó trong sheet
                         Text(
                           plan.title,
                           style: GoogleFonts.beVietnamPro(
@@ -84,6 +93,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 5),
+                        // Ngày thực hiện hành động trong khoảng ngày
                         Text(
                           plan.dateRangeText(context.locale.toString()),
                           style: GoogleFonts.beVietnamPro(
@@ -92,6 +102,8 @@ class OngoingPlanCardWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 12),
+
+                        // Đây là thanh progress bar cho biết thời điểm chuyển đi đã được diễn ra bao nhiu ngày
                         Row(
                           children: [
                             Expanded(
@@ -106,7 +118,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                                   widthFactor: progress,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFFFAD35),
+                                      color: Color(0xFFFF6D00),
                                       borderRadius: BorderRadius.circular(3),
                                     ),
                                   ),
@@ -114,6 +126,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 10),
+                            // Số ngày dẵ thực hiện của chuyến đi đó
                             Text(
                               'plan.day_progress'.tr(
                                 namedArgs: {
@@ -154,7 +167,7 @@ class OngoingPlanCardWidget extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
                                             border: Border.all(
-                                              color: Color(0xFFFFAD35),
+                                              color: Color(0xFFFF6D00),
                                               width: 1.5,
                                             ),
                                           ),
@@ -178,8 +191,9 @@ class OngoingPlanCardWidget extends StatelessWidget {
                                 ),
                               ),
                             const Spacer(),
+                            // Phần mục xem chi tiết ấn vào để chuyển sang activity plan screen
                             Material(
-                              color: Color(0xFFFFAD35),
+                              color: Color(0xFFFF6D00),
                               borderRadius: BorderRadius.circular(12),
                               child: InkWell(
                                 onTap: () {
@@ -189,7 +203,19 @@ class OngoingPlanCardWidget extends StatelessWidget {
                                   ).push(
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          ActivityPlanWidget(plan: plan),
+                                          ChangeNotifierProvider(
+                                            create: (_) {
+                                              final vm =
+                                                  getIt<ActivityPlanViewModel>(
+                                                    param1: plan,
+                                                  );
+                                              vm.loadPlan();
+                                              return vm;
+                                            },
+                                            child: ActivityPlanScreen(
+                                              plan: plan,
+                                            ),
+                                          ),
                                     ),
                                   );
                                 },

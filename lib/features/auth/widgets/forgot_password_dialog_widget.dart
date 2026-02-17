@@ -19,7 +19,6 @@ class ForgotPasswordDialogWidget extends StatefulWidget {
 
 class _ForgotPasswordDialogWidgetState
     extends State<ForgotPasswordDialogWidget> {
-  bool _isResetPasswordPress = false;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -54,7 +53,7 @@ class _ForgotPasswordDialogWidgetState
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide(color: Color(0xFFFFAD33), width: 1.5),
+                borderSide: BorderSide(color: Color(0xFFFF6D00), width: 1.5),
               ),
               labelText: "auth.reset_email_instruction".tr(),
               labelStyle: GoogleFonts.beVietnamPro(
@@ -70,9 +69,6 @@ class _ForgotPasswordDialogWidgetState
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 1),
             child: GestureDetector(
-              onTapDown: (_) => setState(() => _isResetPasswordPress = true),
-              onTapUp: (_) => setState(() => _isResetPasswordPress = false),
-              onTapCancel: () => setState(() => _isResetPasswordPress = false),
               onTap: () async {
                 if (widget.controller.text.isNotEmpty) {
                   await widget.onSendResetEmail(
@@ -84,15 +80,11 @@ class _ForgotPasswordDialogWidgetState
                   }
                 }
               },
-              child: AnimatedScale(
-                scale: _isResetPasswordPress ? 0.9 : 1.0,
-                duration: const Duration(milliseconds: 150),
-                curve: Curves.easeInOut,
-                child: Container(
+              child: Container(
                   width: double.infinity,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFAD35),
+                    color: Color(0xFFFF6D00),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -105,7 +97,6 @@ class _ForgotPasswordDialogWidgetState
                     ),
                   ),
                 ),
-              ),
             ),
           ),
         ],

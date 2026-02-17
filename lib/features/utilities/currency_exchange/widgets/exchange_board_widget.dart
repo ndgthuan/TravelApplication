@@ -37,7 +37,7 @@ class ExchangeBoardWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: Color(0xFF1C1C1D),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Color(0xFFFFAD35), width: 1.2),
+            border: Border.all(color: Color(0xFFFF6D00), width: 1.2),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +96,7 @@ class ExchangeBoardWidget extends StatelessWidget {
                   ? TextField(
                       controller: controller,
                       style: GoogleFonts.beVietnamPro(
-                        color: Color(0xFFFFAD35),
+                        color: Color(0xFFFF6D00),
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                       ),
@@ -116,7 +116,7 @@ class ExchangeBoardWidget extends StatelessWidget {
                   : Text(
                       amount,
                       style: GoogleFonts.beVietnamPro(
-                        color: Color(0xFFFFAD35),
+                        color: Color(0xFFFF6D00),
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                       ),

@@ -17,19 +17,11 @@ class UtilityCardWidget extends StatefulWidget {
 }
 
 class _UtilityCardWidgetState extends State<UtilityCardWidget> {
-  bool _isClick = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => setState(() => _isClick = true),
-      onTapUp: (_) => setState(() => _isClick = false),
-      onTapCancel: () => setState(() => _isClick = false),
       onTap: widget.onTap,
-      child: AnimatedScale(
-        scale: _isClick ? 0.95 : 1.0,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeInOut,
-        child: Container(
+      child: Container(
           height: 90,
           decoration: BoxDecoration(
             color: Color(0xFF1E1E1E),
@@ -39,7 +31,7 @@ class _UtilityCardWidgetState extends State<UtilityCardWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Icon của tiện ích đó
-              Icon(widget.icon, color: Color(0xFFFFAD35), size: 30),
+              Icon(widget.icon, color: Color(0xFFFF6D00), size: 30),
               const SizedBox(height: 5),
 
               // Tên của hoạt động
@@ -53,7 +45,6 @@ class _UtilityCardWidgetState extends State<UtilityCardWidget> {
             ],
           ),
         ),
-      ),
     );
   }
 }

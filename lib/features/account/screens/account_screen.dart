@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -22,7 +22,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  bool _isClick = false;
   bool isDarkMode = true;
 
   @override
@@ -76,7 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   decoration: BoxDecoration(
                     // Màu nền khi chưa có ảnh
                     border: Border(
-                      bottom: BorderSide(color: Color(0xFFFFAD35), width: 1),
+                      bottom: BorderSide(color: Color(0xFFFF6D00), width: 1),
                     ),
                     color: Color(0xFF1C1C1D),
                     image: _isValidImageUrl(viewModel.backgroundUrl)
@@ -92,16 +91,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   right: 5,
                   top: 165,
                   child: GestureDetector(
-                    onTapDown: (_) => setState(() => _isClick = true),
-                    onTapUp: (_) => setState(() => _isClick = false),
-                    onTapCancel: () => setState(() => _isClick = false),
                     onTap: _changeBackgroundImage,
-                    child: AnimatedScale(
-                      scale: _isClick ? 0.95 : 1.0,
-                      duration: const Duration(milliseconds: 100),
-                      curve: Curves.easeInOut,
-                      child: Icon(Icons.edit, color: Color(0xFFFFAD35)),
-                    ),
+                    child: Icon(Icons.edit, color: Color(0xFFFF6D00)),
                   ),
                 ),
                 // Avatar
@@ -113,7 +104,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       height: 150,
                       width: 150,
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFFFAD35)),
+                        border: Border.all(color: Color(0xFFFF6D00)),
                         shape: BoxShape.circle,
                         // Thay gradient bằng image
                         image: _isValidImageUrl(viewModel.avatarUrl)

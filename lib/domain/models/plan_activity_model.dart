@@ -9,6 +9,9 @@ class PlanActivityModel {
   final double longitude;
   final String? addressText;
 
+  // Đã check-in tại điểm này chưa. Lưu trên Firestore để thêm/xóa activity không làm lệch trạng thái.
+  final bool isCheckedIn;
+
   PlanActivityModel({
     required this.id,
     required this.planId,
@@ -18,6 +21,7 @@ class PlanActivityModel {
     required this.latitude,
     required this.longitude,
     this.addressText,
+    this.isCheckedIn = false,
   });
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +33,7 @@ class PlanActivityModel {
     'latitude': latitude,
     'longitude': longitude,
     'addressText': addressText,
+    'isCheckedIn': isCheckedIn,
   };
 
   factory PlanActivityModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +46,31 @@ class PlanActivityModel {
       latitude: (json['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (json['longitude'] as num?)?.toDouble() ?? 0,
       addressText: json['addressText'] as String?,
+      isCheckedIn: json['isCheckedIn'] as bool? ?? false,
+    );
+  }
+
+  PlanActivityModel copyWith({
+    String? id,
+    String? planId,
+    String? name,
+    String? type,
+    DateTime? time,
+    double? latitude,
+    double? longitude,
+    String? addressText,
+    bool? isCheckedIn,
+  }) {
+    return PlanActivityModel(
+      id: id ?? this.id,
+      planId: planId ?? this.planId,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      time: time ?? this.time,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      addressText: addressText ?? this.addressText,
+      isCheckedIn: isCheckedIn ?? this.isCheckedIn,
     );
   }
 }

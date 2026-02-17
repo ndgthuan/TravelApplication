@@ -28,7 +28,7 @@ class AccountStatCardWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Icon
-              Icon(icon, color: Color(0xFFFFAD35)),
+              Icon(icon, color: Color(0xFFFF6D00)),
               const SizedBox(width: 3),
               Text(
                 number.toString(),

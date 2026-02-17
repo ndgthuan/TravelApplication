@@ -39,7 +39,7 @@ class DarkModeWidget extends StatelessWidget {
             value: isDarkMode,
             onChanged: onChanged,
             activeThumbColor: Colors.white, // Màu nút tròn khi BẬT
-            activeTrackColor: Color(0xFFFFAD35), // Màu nền khi BẬT (cam)
+            activeTrackColor: Color(0xFFFF6D00), // Màu nền khi BẬT (cam)
             inactiveThumbColor: Colors.white, // Màu nút tròn khi TẮT
             inactiveTrackColor: Colors.grey.shade600, // Màu nền khi TẮT
           ),

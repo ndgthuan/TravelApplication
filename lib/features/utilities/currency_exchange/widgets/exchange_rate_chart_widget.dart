@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -60,7 +60,7 @@ class ExchangeRateChartWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Color(0xFF1C1C1D),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Color(0xFFFFAD35), width: 1.2),
+        border: Border.all(color: Color(0xFFFF6D00), width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,7 @@ class ExchangeRateChartWidget extends StatelessWidget {
               height: 120,
               child: Center(
                 child: CircularProgressIndicator(
-                  color: Color(0xFFFFAD35),
+                  color: Color(0xFFFF6D00),
                   strokeWidth: 2,
                 ),
               ),
@@ -217,7 +217,7 @@ class _ChartContent extends StatelessWidget {
               spots: spots,
               isCurved: true,
               curveSmoothness: 0.3,
-              color: Color(0xFFFFAD35),
+              color: Color(0xFFFF6D00),
               barWidth: 3,
               isStrokeCapRound: true,
               dotData: FlDotData(
@@ -225,7 +225,7 @@ class _ChartContent extends StatelessWidget {
                 getDotPainter: (spot, percent, barData, index) {
                   return FlDotCirclePainter(
                     radius: 4,
-                    color: Color(0xFFFFAD35),
+                    color: Color(0xFFFF6D00),
                     strokeWidth: 2,
                     strokeColor: Colors.white,
                   );
@@ -237,8 +237,8 @@ class _ChartContent extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color(0xFFFFAD35).withValues(alpha: 0.3),
-                    Color(0xFFFFAD35).withValues(alpha: 0.0),
+                    Color(0xFFFF6D00).withValues(alpha: 0.3),
+                    Color(0xFFFF6D00).withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -253,7 +253,7 @@ class _ChartContent extends StatelessWidget {
                   return LineTooltipItem(
                     '${formatRate(spot.y)} $toCurrency',
                     GoogleFonts.beVietnamPro(
-                      color: Color(0xFFFFAD35),
+                      color: Color(0xFFFF6D00),
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),

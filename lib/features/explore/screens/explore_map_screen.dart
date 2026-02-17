@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -196,7 +196,7 @@ class _ExploreMapScreenState extends State<ExploreMapScreen> {
                                   },
                                   child: Icon(
                                     CupertinoIcons.heart_fill,
-                                    color: Color(0xFFFFAD35),
+                                    color: Color(0xFFFF6D00),
                                     size: 30,
                                   ),
                                 ),

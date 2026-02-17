@@ -75,7 +75,7 @@ class AppTextFieldWidget extends StatelessWidget {
             readOnly: readOnly,
             obscureText: obscureText,
             maxLines: obscureText ? 1 : maxLines,
-            cursorColor: const Color(0xFFFFAD35),
+            cursorColor: const Color(0xFFFF6D00),
             inputFormatters: inputFormatters,
             onChanged: onChanged,
             style: GoogleFonts.beVietnamPro(color: Colors.white),
@@ -98,7 +98,7 @@ class AppTextFieldWidget extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(
-                  color: Color(0xFFFFAD33),
+                  color: Color(0xFFFF6D00),
                   width: 1.5,
                 ),
               ),

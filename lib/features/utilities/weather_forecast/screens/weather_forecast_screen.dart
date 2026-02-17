@@ -46,7 +46,7 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
       backgroundColor: Colors.black,
       appBar: AppBarWidget(title: 'weather.title'.tr()),
       body: viewModel.isLoading
-          ? Center(child: CircularProgressIndicator(color: Color(0xFFFFAD35)))
+          ? Center(child: CircularProgressIndicator(color: Color(0xFFFF6D00)))
           : SingleChildScrollView(
               padding: EdgeInsets.all(20),
               child: Column(

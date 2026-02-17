@@ -1,3 +1,4 @@
+﻿// Widget dùng để hiện thị các người sử dụng dùng để add các thành viên vào plan trong lúc tạo plan sheet
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'package:travel_app/domain/models/user_model.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
 import 'package:travel_app/features/plan/widgets/member_search_sheet.dart';
 
-// Widget hiển thị & quản lý danh sách thành viên đồng hành
+// Widget hiển thị và quản lý danh sách thành viên đồng hành
 class MemberSelectorWidget extends StatelessWidget {
   final List<PlanMember> members;
   final VoidCallback onAddPressed;
@@ -44,7 +45,7 @@ class MemberSelectorWidget extends StatelessWidget {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFAD35),
+                    color: Color(0xFFFF6D00),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -75,7 +76,7 @@ class MemberSelectorWidget extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Color(0xFFFFAD35),
+                                  color: Color(0xFFFF6D00),
                                   width: 1.5,
                                 ),
                               ),
@@ -129,6 +130,7 @@ class MemberSelectorWidget extends StatelessWidget {
   //=====================================================================//
   //                          HELPER FUNCTION                            //
   //=====================================================================//
+  // Hiển thị search sheet để tìm kiếm và chọn thành viên khi số lượng người dùng quá nhiều
   static void showSearchSheet({
     required BuildContext context,
     required List<PlanMember> currentMembers,
