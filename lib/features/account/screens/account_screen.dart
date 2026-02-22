@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -31,6 +31,7 @@ class _AccountScreenState extends State<AccountScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<AccountViewModel>().loadUserData();
       context.read<ExploreViewModel>().refreshSavedDestinations();
+      context.read<PlanViewModel>().loadPlans();
     });
   }
 
@@ -191,7 +192,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   Expanded(
                     child: AccountStatCardWidget(
                       title: 'account.past_trips'.tr(),
-                      number: 0,
+                      number: planViewModel.pastPlans.length,
                       icon: CupertinoIcons.checkmark,
                     ),
                   ),
@@ -242,12 +243,12 @@ class _AccountScreenState extends State<AccountScreen> {
               style: AppButtonStyle.outlined,
               outlineColor: Colors.redAccent,
               onTap: () async {
-                await viewModel.signOut();
-                Navigator.of(
-                  // ignore: use_build_context_synchronously
-                  context,
-                  rootNavigator: true,
-                ).pushAndRemoveUntil(
+                final navigator = Navigator.of(context, rootNavigator: true);
+                try {
+                  await viewModel.signOut();
+                } catch (_) {}
+                if (!mounted) return;
+                navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
                   (Route<dynamic> route) => false,
                 );

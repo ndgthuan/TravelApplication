@@ -7,7 +7,8 @@ import os
 from dotenv import load_dotenv
 import json
 
-# Load environment variables from root .env file
+# Load .env: ưu tiên travel_agent/.env, fallback backend/.env
+load_dotenv(dotenv_path=".env")
 load_dotenv(dotenv_path="../.env")
 
 # Create the FastAPI app
@@ -43,10 +44,12 @@ class PlanEditRequest(BaseModel):
         command (str): The user's command describing how to modify the plan.
         trip_id (str): The unique identifier of the trip to edit.
         conversation_history (List[Dict[str, str]]): Recent chat history for context.
+        current_plan (Optional[Dict]): The current plan structure - trip_info + activities - so AI knows what exists.
     """
     command: str
     trip_id: str
     conversation_history: List[Dict[str, str]] = []
+    current_plan: Optional[Dict] = None
 
 # Define the request body model for trip planning
 class TripPlanRequest(BaseModel):
@@ -101,6 +104,7 @@ async def edit_plan(request: PlanEditRequest):
         command = request.command.strip()
         trip_id = request.trip_id.strip()
         conversation_history = request.conversation_history
+        current_plan = request.current_plan
 
         print(f"PLAN_EDIT: Processing command '{command}' for trip {trip_id}")
 
@@ -114,7 +118,7 @@ async def edit_plan(request: PlanEditRequest):
             }
 
         # Use Gemini AI to process the plan modification request
-        from services.llm_utils import get_llm, get_default_prompt
+        from services.llm_utils import get_llm, invoke_with_messages
 
         llm = get_llm()
 
@@ -131,17 +135,56 @@ async def edit_plan(request: PlanEditRequest):
 
         context_str = "\n".join(context_messages) if context_messages else "No previous context"
 
-        system_message = f"""
-        Bạn là một chuyên gia lập kế hoạch du lịch thông minh. Nhiệm vụ của bạn là tạo ra một kế hoạch du lịch hoàn toàn mới dựa trên yêu cầu chỉnh sửa của người dùng.
+        # Build current plan context so AI knows what exists (để hiểu "chỗ này", "điểm thứ 2", v.v.)
+        current_plan_str = "Không có thông tin kế hoạch hiện tại."
+        if current_plan:
+            current_plan_str = json.dumps(current_plan, ensure_ascii=False, indent=2)
 
-        QUY TẮC HOẠT ĐỘNG:
-        1. Khi người dùng muốn SỬA ĐỔI kế hoạch, hãy tạo HOÀN TOÀN kế hoạch mới thay thế kế hoạch cũ
-        2. KHÔNG thêm/bớt/xóa hoạt động cụ thể, mà tạo lại toàn bộ kế hoạch phù hợp với yêu cầu mới
-        3. Phân tích yêu cầu mới và tạo kế hoạch từ đầu với các hoạt động, thời gian, và chi phí mới
+        system_message = f"""
+        Bạn là một chuyên gia lập kế hoạch du lịch thông minh. Nhiệm vụ của bạn là TẠO MỚI hoặc CHỈNH SỬA kế hoạch dựa trên yêu cầu của người dùng.
+
+        === QUY TẮC 1: KHI THIẾU THÔNG TIN - HỎI LẠI ===
+        Khi người dùng TẠO CHUYẾN MỚI hoặc CHỈNH SỬA mà thiếu thông tin quan trọng, BẠN PHẢI HỎI LẠI thay vì đoán mò.
+        Các thông tin thường thiếu:
+        - Ngày đi (start_date, end_date): CHỈ hỏi khi KẾ HOẠCH HIỆN TẠI KHÔNG có sẵn start_date/end_date trong trip_info. Nếu đã có start_date và end_date trong current_plan → TUYỆT ĐỐI KHÔNG hỏi lại "ngày đi từ ngày mấy đến ngày mấy", dùng luôn các ngày đó.
+        - Điểm khởi hành: "Bạn xuất phát từ đâu? (vd: Sài Gòn, Hà Nội)"
+        - Phương tiện ưa thích: "Bạn muốn di chuyển bằng gì? (máy bay, tàu, xe...)"
+
+        Nếu thiếu → trả về action_type: "ask_user" với "questions" là danh sách câu hỏi (1-3 câu), KHÔNG trả new_plan.
+
+        === QUY TẮC 2: KẾ HOẠCH HIỆN TẠI ===
+        Khi có KẾ HOẠCH HIỆN TẠI: "chỗ này", "điểm thứ X", "quán café buổi sáng" → tham chiếu đúng hoạt động.
+        Thực hiện ĐÚNG thay đổi: thay thế, thêm, xóa, đổi thứ tự - GIỮ NGUYÊN những gì không bị yêu cầu.
+
+        === QUY TẮC 2b: ĐẢO THỨ TỰ HOẠT ĐỘNG ===
+        Khi người dùng yêu cầu đảo thứ tự (vd: "đi Văn Miếu trước ăn trưa bún chả Hương Liên", "muốn đi X trước Y"):
+        - Xác định các hoạt động tương ứng (Văn Miếu Quốc Tử Giám, Bún chả Hương Liên, v.v.)
+        - Sắp xếp lại thứ tự trong daily_plans sao cho hoạt động được yêu cầu "trước" nằm trước hoạt động "sau"
+        - Điều chỉnh start_time cho hợp lý (giữ khoảng cách thời gian giữa các hoạt động)
+        - Trả full_replace với new_plan đã đảo thứ tự đúng yêu cầu
+
+        === QUY TẮC 3: TRÁNH TRÙNG LẶP ===
+        - Khi user yêu cầu THÊM hoạt động: kiểm tra kế hoạch hiện tại đã có địa điểm/loại hình tương tự chưa.
+        - Nếu ĐÃ CÓ (vd: đã có bảo tàng, user lại "thêm bảo tàng") → trả action_type: "ask_user" hỏi: "Kế hoạch đã có [X]. Bạn muốn thay thế hay thêm địa điểm khác?"
+        - KHÔNG tạo 2 hoạt động trùng địa điểm, trùng loại hình gần nhau trong cùng ngày.
+
+        === QUY TẮC 4: XÓA/ĐỔI KHI CÓ NHIỀU MỤC TRÙNG LOẠI ===
+        Khi user nói "xóa X" hoặc "đổi X" (vd: xóa ăn trưa) mà có NHIỀU hoạt động khớp (vd: 2 bữa trưa khác nhau) → KHÔNG đoán, trả ask_user kèm "choices" để user chọn:
+        "choices": [{{"order": 1, "label": "Ăn trưa Phở Bát Đàn", "reply_suggestion": "xóa điểm thứ 1"}}, {{"order": 2, "label": "Ăn trưa Bún chả Hương Liên", "reply_suggestion": "xóa điểm thứ 2"}}]
+        App sẽ hiện 2 nút; user bấm nút nào thì gửi lại reply_suggestion tương ứng. Label ngắn gọn, rõ (vd: "Ăn trưa Bát Đàn", "Ăn trưa Hương Liên").
+
+        === QUY TẮC 5: THÊM ĐỊA ĐIỂM - HỎI GIỜ VÀ NGÀY ===
+        Khi user yêu cầu "thêm địa điểm X" (vd: thêm Hồ Hoàn Kiếm) mà chưa nói rõ giờ và ngày → trả ask_user: "Bạn muốn thêm vào mấy giờ, ngày mấy trong chuyến đi?" Chỉ khi có đủ giờ + ngày mới trả full_replace với new_plan.
+
+        === QUY TẮC 6: KHE THỜI GIAN CHẬT (<= 1 TIẾNG) ===
+        Khi thêm hoạt động vào khe giữa hai hoạt động có khoảng cách <= 1 tiếng → trả ask_user: "Khoảng thời gian khá chật. Bạn có chắc muốn thêm? Điều này có thể làm lệch chuyến đi. Bạn có muốn tôi sửa lại lịch trình (tái phân bổ thời gian) sau khi thêm không?" Nếu user xác nhận thêm và muốn sửa lịch → trả new_plan đã tái cấu trúc thời gian cho hợp lý.
+
+        KẾ HOẠCH HIỆN TẠI:
+        {current_plan_str}
 
         THÔNG TIN NGỮ CẢNH:
         - ID chuyến đi: {trip_id}
-        - Lịch sử cuộc trò chuyện gần đây:
+        - Lịch sử cuộc trò chuyện:
         {context_str}
 
         YÊU CẦU ĐẦU RA:
@@ -152,7 +195,18 @@ async def edit_plan(request: PlanEditRequest):
         Tọa độ GPS PHẢI được cung cấp ở định dạng "latitude,longitude" với độ chính xác cao (ví dụ: "11.9404,108.4583" cho Đà Lạt).
         KHÔNG được để trống hoặc dùng placeholder - PHẢI cung cấp tọa độ GPS thực tế và chính xác.
 
-        Cấu trúc JSON chuẩn:
+        Cấu trúc JSON - CHỌN 1 TRONG 2:
+
+        A) Khi thiếu thông tin HOẶC phát hiện trùng lặp cần xác nhận HOẶC nhiều lựa chọn (xóa cái nào) → trả:
+        {{
+            "action_type": "ask_user",
+            "message": "Câu trả lời thân thiện kèm câu hỏi",
+            "questions": ["Câu hỏi 1?", "Câu hỏi 2?"],
+            "choices": [{{"order": 1, "label": "Nhãn hiển thị nút 1", "reply_suggestion": "xóa điểm thứ 1"}}, {{"order": 2, "label": "Nhãn nút 2", "reply_suggestion": "xóa điểm thứ 2"}}]
+        }}
+        (choices chỉ dùng khi user cần chọn 1 trong nhiều mục giống loại, ví dụ xóa ăn trưa nào trong 2 bữa trưa; nếu không có lựa chọn thì bỏ "choices" hoặc để [])
+
+        B) Khi đủ thông tin và tạo được kế hoạch → trả:
         {{
             "action_type": "full_replace",
             "message": "Đã tạo kế hoạch mới dựa trên yêu cầu của bạn",
@@ -178,10 +232,10 @@ async def edit_plan(request: PlanEditRequest):
                                 "start_time": "HH:MM",
                                 "duration_hours": số,
                                 "activity_type": "activity|restaurant|lodging|flight|tour",
-                            "estimated_cost": số,
-                            "location": "Tên địa điểm",
-                            "address": "Địa chỉ đầy đủ cho bản đồ (đường, quận/huyện, thành phố)",
-                            "coordinates": "Tọa độ GPS (latitude,longitude) nếu có thể"
+                                "estimated_cost": số,
+                                "location": "Tên địa điểm",
+                                "address": "Địa chỉ đầy đủ cho bản đồ (đường, quận/huyện, thành phố)",
+                                "coordinates": "Tọa độ GPS (latitude,longitude) nếu có thể"
                             }}
                         ]
                     }}
@@ -195,9 +249,10 @@ async def edit_plan(request: PlanEditRequest):
         }}
 
         QUAN TRỌNG:
-        - Luôn trả về action_type: "full_replace"
-        - Tạo HOÀN TOÀN kế hoạch mới, không phải chỉnh sửa cục bộ
-        - Thời gian bắt đầu tính từ ngày hiện tại + 7 ngày
+        - action_type: "ask_user" khi thiếu info hoặc cần xác nhận (trùng lặp). "full_replace" khi tạo/sửa xong.
+        - GIỮ NGUYÊN trip_info (name, destination, dates) trừ khi người dùng yêu cầu đổi
+        - GIỮ NGUYÊN các hoạt động KHÔNG bị yêu cầu thay đổi - chỉ sửa đúng những gì người dùng chỉ định
+        - Khi có current_plan, ƯU TIÊN giữ cấu trúc và chỉ thay đổi theo yêu cầu cụ thể
         - Chi phí tính bằng VND
         - Hoạt động phải đa dạng và thực tế
 
@@ -206,12 +261,9 @@ async def edit_plan(request: PlanEditRequest):
 
         human_message = f"Yêu cầu chỉnh sửa kế hoạch của người dùng: {command}"
 
-        chat_prompt = get_default_prompt(system_message, human_message)
-        chain = chat_prompt | llm
-
         try:
             print(f"Calling Gemini API for full plan replacement")
-            response = chain.invoke({})
+            response = invoke_with_messages(llm, system_message, human_message)
             print(f"Gemini API call successful for full plan replacement")
         except Exception as api_error:
             print(f"Gemini API error: {api_error}")
@@ -235,11 +287,52 @@ async def edit_plan(request: PlanEditRequest):
 
                 action_type = result.get('action_type', 'full_replace')
                 message = result.get('message', 'Đã tạo kế hoạch mới')
-                new_plan = result.get('new_plan', {})
 
-                # Validate the new plan structure
+                # AI muốn hỏi lại (thiếu info hoặc phát hiện trùng cần xác nhận hoặc nhiều lựa chọn)
+                if action_type == 'ask_user':
+                    questions = result.get('questions', [])
+                    if not isinstance(questions, list):
+                        questions = [str(questions)] if questions else []
+                    choices_raw = result.get('choices', [])
+                    choices = []
+                    if isinstance(choices_raw, list):
+                        for c in choices_raw:
+                            if isinstance(c, dict) and 'order' in c and 'label' in c:
+                                choices.append({
+                                    "order": c.get("order"),
+                                    "label": c.get("label", ""),
+                                    "reply_suggestion": c.get("reply_suggestion", f"điểm thứ {c.get('order')}"),
+                                })
+                    return {
+                        "success": False,
+                        "action": "ask_user",
+                        "message": message,
+                        "questions": questions,
+                        "choices": choices,
+                        "command": command,
+                        "trip_id": trip_id
+                    }
+
+                new_plan = result.get('new_plan', {}) or result.get('newPlan', {})
+                # Chuẩn hóa camelCase -> snake_case
+                if new_plan and 'dailyPlans' in new_plan and 'daily_plans' not in new_plan:
+                    new_plan['daily_plans'] = new_plan.pop('dailyPlans', [])
+                if new_plan and 'tripInfo' in new_plan and 'trip_info' not in new_plan:
+                    new_plan['trip_info'] = new_plan.pop('tripInfo', {})
+
+                # AI trả activities (flat) thay vì daily_plans → chuyển đổi
+                if new_plan and 'activities' in new_plan and 'daily_plans' not in new_plan:
+                    new_plan['daily_plans'] = _activities_to_daily_plans(new_plan.get('activities', []))
+
                 if not new_plan or 'trip_info' not in new_plan or 'daily_plans' not in new_plan:
-                    raise ValueError("Invalid new plan structure")
+                    got_keys = list(result.keys()) if isinstance(result, dict) else []
+                    np_keys = list(new_plan.keys()) if isinstance(new_plan, dict) else []
+                    print(f"PLAN_EDIT_DEBUG: result keys={got_keys}, new_plan keys={np_keys}")
+                    raise ValueError(
+                        f"Invalid new plan structure: need trip_info and daily_plans, got {np_keys}"
+                    )
+
+                new_plan = _enrich_plan_with_flights(new_plan)
 
                 return {
                     "success": True,
@@ -268,6 +361,112 @@ async def edit_plan(request: PlanEditRequest):
             "message": f"Có lỗi xảy ra khi tạo kế hoạch mới: {str(e)}",
             "command": command
         }
+
+# Define flight search endpoint (Amadeus)
+@api.get("/search-flights")
+async def search_flights_endpoint(
+    origin: str,
+    destination: str,
+    departure_date: str,
+    adults: int = 1,
+    max_results: int = 5,
+    debug: int = 0,
+):
+    """
+    Tìm chuyến bay thực tế qua Amadeus (dữ liệu test).
+    Thêm ?debug=1 để xem phản hồi thô từ Amadeus.
+    """
+    try:
+        from services.flights import search_flights_raw
+        offers, raw = search_flights_raw(origin, destination, departure_date, adults, max_results)
+        out = {"success": True, "offers": offers}
+        if debug:
+            out["_debug"] = raw
+        return out
+    except Exception as e:
+        print(f"FLIGHT_SEARCH_ERROR: {e}")
+        return {"success": False, "offers": [], "message": str(e), "_debug": {"error": str(e)}}
+
+
+def _activities_to_daily_plans(activities: list) -> list:
+    """Chuyển danh sách activities phẳng thành daily_plans (nhóm theo ngày)."""
+    if not activities:
+        return []
+    from collections import defaultdict
+    by_date = defaultdict(list)
+    for a in activities:
+        if not isinstance(a, dict):
+            continue
+        date_str = a.get('date') or a.get('dateStr') or ''
+        if not date_str and a.get('time'):
+            # Có thể có DateTime ISO
+            t = a.get('time')
+            if isinstance(t, str) and 'T' in t:
+                date_str = t[:10]
+        if not date_str:
+            continue
+        start_time = a.get('start_time') or '09:00'
+        if isinstance(a.get('time'), str) and ':' in str(a['time'])[:8]:
+            start_time = str(a['time'])[:5]
+        act = {
+            'title': a.get('title') or a.get('name') or a.get('location') or 'Hoạt động',
+            'start_time': start_time,
+            'address': a.get('address') or a.get('location') or '',
+            'coordinates': a.get('coordinates') or '',
+            'activity_type': a.get('activity_type') or a.get('type') or 'activity',
+            'duration_hours': a.get('duration_hours', 1),
+            'estimated_cost': a.get('estimated_cost', 0),
+            'description': a.get('description', ''),
+        }
+        by_date[date_str].append(act)
+    start_dates = sorted(by_date.keys()) if by_date else []
+    return [
+        {'day': i + 1, 'date': d, 'activities': by_date[d]}
+        for i, d in enumerate(start_dates)
+    ]
+
+
+def _enrich_plan_with_flights(trip_plan: dict) -> dict:
+    """
+    Nếu kế hoạch có flight activity và trip_info có origin/dest/date,
+    gọi Amadeus và thay thế bằng dữ liệu chuyến bay thực tế.
+    """
+    try:
+        from services.flights import search_flights, city_to_iata, format_flight_for_activity
+    except ImportError:
+        return trip_plan
+
+    trip_info = trip_plan.get("trip_info") or {}
+    start_date = trip_info.get("start_date") or ""
+    dest_raw = trip_info.get("destination") or trip_info.get("destination_city") or ""
+    origin_raw = trip_info.get("starting_point") or trip_info.get("origin") or ""
+
+    if not all([start_date, dest_raw, origin_raw]):
+        return trip_plan
+
+    origin_code = city_to_iata(origin_raw) or (origin_raw.upper() if len(origin_raw.strip()) == 3 else None)
+    dest_code = city_to_iata(dest_raw) or (dest_raw.upper() if len(dest_raw.strip()) == 3 else None)
+    if not origin_code or not dest_code:
+        return trip_plan
+
+    offers = search_flights(origin_code, dest_code, start_date, adults=1, max_results=1)
+    if not offers:
+        return trip_plan
+
+    # Tìm activity flight đầu tiên trong daily_plans và thay thế
+    daily_plans = trip_plan.get("daily_plans") or []
+    for day_data in daily_plans:
+        activities = day_data.get("activities") or []
+        for i, act in enumerate(activities):
+            if (act.get("activity_type") or "").lower() == "flight":
+                act.update(format_flight_for_activity(offers[0]))
+                break
+        else:
+            continue
+        break
+
+    return trip_plan
+
 
 # Define the trip planning endpoint
 @api.post("/generate-trip-plan")
@@ -448,6 +647,9 @@ async def generate_trip_plan(request: TripPlanRequest):
                 if "trip_info" not in trip_plan or "daily_plans" not in trip_plan:
                     raise ValueError("Invalid trip plan structure")
 
+                # Enrich with real flight data from Amadeus when possible
+                trip_plan = _enrich_plan_with_flights(trip_plan)
+
                 return {
                     "success": True,
                     "trip_plan": trip_plan,
@@ -474,6 +676,7 @@ async def generate_trip_plan(request: TripPlanRequest):
 # No longer need helper functions - Gemini AI handles all plan modifications
 
 # To run this API, use the command:
-# uvicorn main:api --reload
+# uvicorn main:api --reload --port 5001
+# Android emulator: adb reverse tcp:5001 tcp:5001
 if __name__ == "__main__":
-    uvicorn.run(api, host="0.0.0.0", port=5000)
+    uvicorn.run(api, host="0.0.0.0", port=5001)

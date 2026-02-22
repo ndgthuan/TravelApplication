@@ -25,6 +25,7 @@ class PlanSectionViewModel extends ChangeNotifier {
   //                        STATE VARIABLES                                   //
   //==========================================================================//
   String? _planId;
+  String? _planOwnerId; // Khi chỉnh shared plan thì dùng ownerId để ghi activity
   String? _destination;
   String? _countryCode;
   DateTime? _planStartDate;
@@ -66,6 +67,12 @@ class PlanSectionViewModel extends ChangeNotifier {
   void setPlanId(String? value) {
     if (_planId == value) return;
     _planId = value;
+    notifyListeners();
+  }
+
+  void setPlanOwnerId(String? value) {
+    if (_planOwnerId == value) return;
+    _planOwnerId = value;
     notifyListeners();
   }
 
@@ -231,6 +238,7 @@ class PlanSectionViewModel extends ChangeNotifier {
         _errorMessage = 'Chưa đăng nhập';
         return null;
       }
+      final ownerId = _planOwnerId ?? userId;
 
       final planId = _planId ?? '';
       final dateTime = DateTime(
@@ -255,10 +263,10 @@ class PlanSectionViewModel extends ChangeNotifier {
 
       final PlanActivityModel saved;
       if (_editingActivityId != null && _editingActivityId!.isNotEmpty) {
-        saved = await _planRepository.updateActivity(userId, planId, activity);
+        saved = await _planRepository.updateActivity(ownerId, planId, activity);
         _editingActivityId = null;
       } else {
-        saved = await _planRepository.saveActivity(userId, planId, activity);
+        saved = await _planRepository.saveActivity(ownerId, planId, activity);
       }
       _isSaving = false;
       notifyListeners();

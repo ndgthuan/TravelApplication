@@ -1,4 +1,4 @@
-﻿import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -51,28 +51,7 @@ class _PlanScreenState extends State<PlanScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AppHeaderWidget(
-                      title: 'navigation.plan'.tr(),
-                      trailing: Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.3),
-                            ),
-                            color: Colors.white.withValues(alpha: 0.2),
-                          ),
-                          child: Icon(
-                            Icons.insights,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                    ),
+                    AppHeaderWidget(title: 'navigation.plan'.tr()),
 
                     // Error banner
                     if (viewModel.error != null)
@@ -164,17 +143,15 @@ class _PlanScreenState extends State<PlanScreen> {
 
                     HeaderTitleWidget(titleText: 'plan.upcoming'.tr()),
 
-                    // Horizontal list cards
+                    // Horizontal list cards - Upcoming
                     SizedBox(
                       height: 200,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         children: [
-                          // Card tạo plan mới
                           NewPlanCardWidget(),
                           SizedBox(width: 10),
-                          // Các upcoming plans từ ViewModel
                           for (final plan in viewModel.upcomingPlans) ...[
                             GestureDetector(
                               onLongPress: () => _confirmDeletePlan(plan),
@@ -185,6 +162,51 @@ class _PlanScreenState extends State<PlanScreen> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 20),
+                    HeaderTitleWidget(titleText: 'plan.past_trips'.tr()),
+                    viewModel.pastPlans.isEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 16,
+                            ),
+                            child: Container(
+                              height: 120,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.05),
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.15),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'plan.no_past_trips'.tr(),
+                                  style: TextStyle(
+                                    color: Colors.white54,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            height: 200,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              children: [
+                                for (final plan in viewModel.pastPlans) ...[
+                                  GestureDetector(
+                                    onLongPress: () => _confirmDeletePlan(plan),
+                                    child: UpcomingPlanCardWidget(plan: plan),
+                                  ),
+                                  SizedBox(width: 10),
+                                ],
+                              ],
+                            ),
+                          ),
                     SizedBox(height: 15),
                   ],
                 ),

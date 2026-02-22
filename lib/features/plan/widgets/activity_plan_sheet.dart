@@ -1,23 +1,27 @@
 import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:travel_app/domain/models/plan_activity_model.dart';
 import 'package:travel_app/domain/models/plan_model.dart';
 import 'package:travel_app/features/plan/screens/plan_section_screen.dart';
 import 'package:travel_app/features/plan/widgets/activity_timeline_item.dart';
 
 // Bottom sheet để tiêu đề plan, khoảng ngày, timeline các activity.
+// showAddButton, showEditDelete: false cho spectator (chỉ xem map).
 class ActivityPlanSheet extends StatelessWidget {
   final PlanModel plan;
   final List<PlanActivityModel> activities;
   final int currentIndex;
   final ScrollController? scrollController;
   final VoidCallback? onAddTap;
+  final VoidCallback? onFitMap;
   final VoidCallback? onCheckIn;
   final void Function(PlanActivityModel)? onUncheckIn;
   final void Function(PlanActivityModel)? onEditActivity;
   final void Function(PlanActivityModel)? onDeleteActivity;
+  final bool showAddButton;
+  final bool showEditDelete;
 
   const ActivityPlanSheet({
     super.key,
@@ -26,10 +30,13 @@ class ActivityPlanSheet extends StatelessWidget {
     this.currentIndex = 0,
     this.scrollController,
     this.onAddTap,
+    this.onFitMap,
     this.onCheckIn,
     this.onUncheckIn,
     this.onEditActivity,
     this.onDeleteActivity,
+    this.showAddButton = true,
+    this.showEditDelete = true,
   });
 
   static final _timeFormat = DateFormat('HH:mm');
@@ -39,7 +46,7 @@ class ActivityPlanSheet extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF1E1E1E),
-        title: const Text('Xóa điểm đến'),
+        title: Text('plan.delete_activity_title'.tr()),
         content: Text(
           'Bạn có chắc muốn xóa "${activity.name}"?',
           style: const TextStyle(color: Colors.white70),
@@ -140,13 +147,31 @@ class ActivityPlanSheet extends StatelessWidget {
                 ),
               ),
             ),
-            IconButton(
-              onPressed: onAddTap ?? () => _openAddDestination(context),
-              icon: const Icon(
-                CupertinoIcons.add,
-                color: Colors.white,
-                size: 20,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (onFitMap != null)
+                  GestureDetector(
+                    onTap: onFitMap,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: Icon(
+                        Icons.my_location,
+                        color: Color(0xFFFF6D00),
+                        size: 26,
+                      ),
+                    ),
+                  ),
+                if (showAddButton)
+                  IconButton(
+                    onPressed: onAddTap ?? () => _openAddDestination(context),
+                    icon: const Icon(
+                      CupertinoIcons.add,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+              ],
             ),
           ],
         ),
@@ -164,6 +189,7 @@ class ActivityPlanSheet extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => OngoingPlanSectionScreen(
           planId: plan.id,
+          planOwnerId: plan.ownerId,
           destination: plan.destination,
           planStartDate: plan.startDate,
           planEndDate: plan.endDate,
@@ -174,8 +200,21 @@ class ActivityPlanSheet extends StatelessWidget {
 
   List<Widget> _buildTimeline(BuildContext context) {
     final list = <Widget>[];
+    String? lastDateStr;
     for (int i = 0; i < activities.length; i++) {
       final activity = activities[i];
+      final dateStr = '${activity.time.day}/${activity.time.month}';
+      if (lastDateStr != null && lastDateStr != dateStr) {
+        list.add(
+          _buildDayDivider('Ngày ${activity.time.day}/${activity.time.month}'),
+        );
+      } else if (lastDateStr == null) {
+        list.add(
+          _buildDayDivider('Ngày ${activity.time.day}/${activity.time.month}'),
+        );
+      }
+      lastDateStr = dateStr;
+
       final isCurrent = i == currentIndex;
       final isPast = i < currentIndex;
       final timeStr = _timeFormat.format(activity.time);
@@ -195,7 +234,7 @@ class ActivityPlanSheet extends StatelessWidget {
       // Container lúc đó sẽ được dài ra và ngược lại
       final lineHeight = i >= activities.length - 1
           ? 30.0
-          : (isCurrent ? 186.0 : 120.0);
+          : (isCurrent ? 160.0 : 90.0);
       // Đoạn dọc nối với item tiếp theo nếu đã được check in thì màu xanh lá còn không thì ngược lại
       final lineColor = isPast
           ? Colors.green
@@ -209,15 +248,40 @@ class ActivityPlanSheet extends StatelessWidget {
           timeStr: timeStr,
           textColor: textColor,
           timeColor: timeColor,
-          lineHeight: i >= activities.length - 1 ? 30.0 : lineHeight,
+          lineHeight: i >= activities.length - 1 ? 0.0 : lineHeight,
           lineColor: lineColor,
-          onUncheckIn: onUncheckIn,
-          onEditActivity: onEditActivity,
-          onDeleteActivity: (a) => _confirmDelete(context, a),
+          onUncheckIn: showEditDelete ? onUncheckIn : null,
+          onEditActivity: showEditDelete ? onEditActivity : null,
+          onDeleteActivity: showEditDelete
+              ? (a) => _confirmDelete(context, a)
+              : null,
           onCheckIn: onCheckIn,
         ),
       );
     }
     return list;
+  }
+
+  Widget _buildDayDivider(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 8),
+      child: Row(
+        children: [
+          Expanded(child: Container(height: 1, color: Colors.white24)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              label,
+              style: GoogleFonts.beVietnamPro(
+                color: Colors.white70,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Expanded(child: Container(height: 1, color: Colors.white24)),
+        ],
+      ),
+    );
   }
 }

@@ -61,8 +61,11 @@ import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_section_view_model.dart';
 import 'package:travel_app/features/plan/viewmodels/activity_plan_view_model.dart';
+import 'package:travel_app/features/notification/viewmodels/notification_view_model.dart';
 import 'package:travel_app/domain/services/i_route_service.dart';
+import 'package:travel_app/domain/services/i_travel_agent_service.dart';
 import 'package:travel_app/shared/services/route_service.dart';
+import 'package:travel_app/shared/services/travel_agent_service.dart';
 
 // Tạo global instance của GetIt
 final GetIt getIt = GetIt.instance;
@@ -99,6 +102,7 @@ void setupDependencies() {
   getIt.registerLazySingleton<IStorageService>(() => StorageService());
   getIt.registerLazySingleton<ITranslationService>(() => TranslationService());
   getIt.registerLazySingleton<IRouteService>(() => RouteService());
+  getIt.registerLazySingleton<ITravelAgentService>(() => TravelAgentService());
 
   //==========================================================================//
   //           REPOSITORIES (Singleton - chỉ tạo 1 instance duy nhất)         //
@@ -210,12 +214,22 @@ void setupDependencies() {
     ),
   );
 
+  getIt.registerFactory<NotificationViewModel>(
+    () => NotificationViewModel(
+      getIt<IPlanRepository>(),
+      getIt<IUserRepository>(),
+      getIt<IGeocodingService>(),
+      getIt<IWeatherService>(),
+    ),
+  );
+
   // ActivityPlanViewModel tạo theo plan (truyền plan khi gọi)
   getIt.registerFactoryParam<ActivityPlanViewModel, PlanModel, void>(
     (plan, _) => ActivityPlanViewModel(
       getIt<IPlanRepository>(),
       getIt<IUserRepository>(),
       getIt<IRouteService>(),
+      getIt<ITravelAgentService>(),
       plan,
     ),
   );

@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.messages import SystemMessage, HumanMessage
 
 load_dotenv()
 
@@ -32,7 +33,19 @@ def get_default_prompt(system_message: str, human_message: str) -> ChatPromptTem
   return ChatPromptTemplate.from_messages([
     ("system", system_message),
     ("human", human_message)
-  ]) 
+  ])
+
+
+def invoke_with_messages(llm, system_message: str, human_message: str):
+  """
+  Invoke LLM with raw messages (no template parsing).
+  Use this when the prompt contains literal { } (e.g. JSON examples) to avoid ChatPromptTemplate treating them as variables.
+  """
+  messages = [
+    SystemMessage(content=system_message),
+    HumanMessage(content=human_message),
+  ]
+  return llm.invoke(messages) 
 
 def make_system_prompt(instruction:str)->str:
     """

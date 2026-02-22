@@ -1,5 +1,4 @@
-﻿// Màn hình hiển thị form để điền thông tin tạo plan mới hoặc chỉnh sửa plan
-// Logic xử lý được quản lý bởi PlanViewModel, UI chỉ hiển thị và gọi ViewModel
+// Form tạo hoặc sửa chuyến đi - UI gọi PlanViewModel xử lý logic
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,10 +32,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
   DateTime? _endDate;
   bool _isCreating = false;
 
-  // Ảnh bìa
   String? _coverImageUrl;
-
-  // Danh sách member bao gồm email và avatarUrl
   final List<PlanMember> _members = [];
 
   bool get _isEditMode => widget.initialPlan != null;
@@ -111,7 +107,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
     }
   }
 
-  // Xử lý format tiền khi nhập
   void _onBudgetChanged(String value) {
     final formatted = PlanViewModel.formatMoney(value);
     if (formatted != value) {
@@ -149,6 +144,7 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
           double.tryParse(_budgetController.text.trim().replaceAll('.', '')) ??
           0,
       members: List.from(_members),
+      bannedEmails: widget.initialPlan?.bannedEmails ?? [],
     );
 
     final vm = context.read<PlanViewModel>();
@@ -182,7 +178,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AppBar để hiển tên của phần appbar
       appBar: AppBarWidget(
         title: _isEditMode ? 'Chỉnh sửa chuyến đi' : 'plan.add_plan_title'.tr(),
         icon: CupertinoIcons.xmark,
@@ -197,7 +192,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  // Mục nội dung tên điểm đến
                   AppTextFieldWidget(
                     labelText: 'plan.destination'.tr(),
                     showLabel: true,
@@ -205,7 +199,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                     controller: _destinationController,
                   ),
                   const SizedBox(height: 20),
-                  // Mục nội dung của tên chuyến đi
                   AppTextFieldWidget(
                     labelText: 'plan.trip_name'.tr(),
                     showLabel: true,
@@ -213,7 +206,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                     controller: _titleController,
                   ),
                   const SizedBox(height: 20),
-                  // Field này là field dùng để chỉnh thời gian
                   GestureDetector(
                     onTap: _pickDateRange,
                     child: AbsorbPointer(
@@ -231,7 +223,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Mục nội dung để nhập vào số tiền dự kiến cho chuyến đi
                   AppTextFieldWidget(
                     labelText: 'plan.budget'.tr(),
                     showLabel: true,
@@ -243,7 +234,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Ảnh bìa
                   CoverImagePickerWidget(
                     coverImageUrl: _coverImageUrl,
                     onImageChanged: (url) {
@@ -253,13 +243,14 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
 
                   const SizedBox(height: 20),
 
-                  // Mục đồng hành để chọn thêm thành viên
                   MemberSelectorWidget(
                     members: _members,
+                    bannedEmails: widget.initialPlan?.bannedEmails ?? [],
                     onAddPressed: () {
                       MemberSelectorWidget.showSearchSheet(
                         context: context,
                         currentMembers: _members,
+                        bannedEmails: widget.initialPlan?.bannedEmails ?? [],
                         onConfirm: (selectedUsers) {
                           setState(() {
                             _members.clear();
@@ -284,7 +275,6 @@ class _PlanCreatedFormSheetState extends State<PlanCreatedFormSheet> {
               ),
             ),
           ),
-          // Nút Lên kế hoạch ngay
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
             child: _isCreating
