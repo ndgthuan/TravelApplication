@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:travel_app/domain/models/plan_invite_model.dart';
 import 'package:travel_app/domain/models/plan_model.dart';
 import 'package:travel_app/domain/models/user_model.dart';
 import 'package:travel_app/domain/repositories/i_plan_repository.dart';
@@ -24,6 +25,7 @@ class PlanViewModel extends ChangeNotifier {
   //==========================================================================//
   List<PlanModel> _ongoingPlans = [];
   List<PlanModel> _upcomingPlans = [];
+  List<PlanModel> _pastPlans = [];
   bool _isLoading = false;
   String? _error;
 
@@ -41,6 +43,7 @@ class PlanViewModel extends ChangeNotifier {
   //==========================================================================//
   List<PlanModel> get ongoingPlans => _ongoingPlans;
   List<PlanModel> get upcomingPlans => _upcomingPlans;
+  List<PlanModel> get pastPlans => _pastPlans;
   bool get isLoading => _isLoading;
   String? get error => _error;
   String? get currentUid => _currentUid;
@@ -61,6 +64,7 @@ class PlanViewModel extends ChangeNotifier {
 
       _ongoingPlans = await _planRepository.getOngoingPlans(userId);
       _upcomingPlans = await _planRepository.getUpcomingPlans(userId);
+      _pastPlans = await _planRepository.getPastPlans(userId);
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -100,13 +104,63 @@ class PlanViewModel extends ChangeNotifier {
     try {
       final userId =
           _currentUid ?? (await _userRepository.getCurrentUser())?.uid;
-      await _planRepository.updatePlan(userId, plan);
+      final targetUserId = plan.ownerId ?? userId;
+      if (targetUserId == null || targetUserId.isEmpty) return null;
+      final latest = await _planRepository.getPlan(targetUserId, plan.id);
+      if (latest == null) return null;
+      final toSave = latest.version == plan.version
+          ? plan
+          : latest.copyWith(
+              members: plan.members,
+              bannedEmails: plan.bannedEmails,
+              pendingInviteEmails: plan.pendingInviteEmails,
+            );
+      final ok = await _planRepository.updatePlan(targetUserId, toSave);
+      if (!ok) {
+        _error = 'Plan đã bị thay đổi bởi người khác. Vui lòng thử lại.';
+        notifyListeners();
+        return null;
+      }
       await loadPlans();
-      return plan;
+      return toSave;
     } catch (e) {
       _error = e.toString();
       notifyListeners();
       return null;
+    }
+  }
+
+  // Gửi lời mời tham gia plan. Lưu plan_invites và thêm email vào plan.pendingInviteEmails.
+  Future<bool> sendInvite(PlanModel plan, UserModel toUser) async {
+    try {
+      final user = await _userRepository.getCurrentUser();
+      final fromUserId = user?.uid;
+      if (fromUserId == null || fromUserId.isEmpty) return false;
+      if (toUser.email.isEmpty) return false;
+      final invite = PlanInviteModel(
+        id: '',
+        fromUserId: fromUserId,
+        fromUserName: user!.name.isNotEmpty ? user.name : user.email,
+        toUserId: toUser.uid,
+        planId: plan.id,
+        planOwnerId: fromUserId,
+        tripName: plan.title,
+        destination: plan.destination,
+        status: 'pending',
+        createdAt: DateTime.now(),
+      );
+      await _planRepository.createInvite(invite);
+      final latest = await _planRepository.getPlan(fromUserId, plan.id);
+      final base = latest ?? plan;
+      final updated = base.copyWith(
+        pendingInviteEmails: [...base.pendingInviteEmails, toUser.email],
+      );
+      final ok = await _planRepository.updatePlan(fromUserId, updated);
+      return ok;
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+      return false;
     }
   }
 

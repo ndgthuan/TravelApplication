@@ -8,6 +8,7 @@ import 'package:travel_app/features/explore/viewmodels/explore_view_model.dart';
 import 'package:travel_app/features/home/viewmodels/home_view_model.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_view_model.dart';
 import 'package:travel_app/features/plan/viewmodels/plan_section_view_model.dart';
+import 'package:travel_app/features/notification/viewmodels/notification_view_model.dart';
 import 'package:travel_app/features/utilities/currency_exchange/viewmodels/currency_exchange_view_model.dart';
 import 'package:travel_app/features/utilities/text_translation/viewmodels/text_translation_view_model.dart';
 import 'package:travel_app/features/utilities/weather_forecast/viewmodels/weather_forecast_view_model.dart';
@@ -22,8 +23,6 @@ import 'package:travel_app/features/support/viewmodels/contact_support_view_mode
 import 'package:travel_app/shared/providers/saved_count_provider.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import 'features/onboarding/screens/start_screen.dart';
-import 'package:flutter/foundation.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
@@ -157,9 +156,8 @@ void main() async {
           ChangeNotifierProvider(
             create: (_) => getIt<PlanViewModel>(),
           ), // Gọi Plan parent state
-          ChangeNotifierProvider(
-            create: (_) => getIt<PlanSectionViewModel>(),
-          ), // Gọi OngoingPlanSection (Thêm điểm đến) state
+          ChangeNotifierProvider(create: (_) => getIt<PlanSectionViewModel>()),
+          ChangeNotifierProvider(create: (_) => getIt<NotificationViewModel>()),
         ],
         child: MyApp(),
       ),

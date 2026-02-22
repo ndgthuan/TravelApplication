@@ -36,8 +36,14 @@ class PlanModel {
   final DateTime endDate;
   final String imageUrl;
   final List<PlanMember> members;
+  final List<String> bannedEmails;
   final double budget;
   final String destination;
+  final String? ownerId;
+  // Optimistic locking: mỗi lần update tăng version; ghi phải khớp version hiện tại.
+  final int version;
+  // Email người được mời (chưa chấp nhận). Firestore rules dùng để cho phép họ update plan khi chấp nhận.
+  final List<String> pendingInviteEmails;
   PlanModel({
     required this.id,
     required this.title,
@@ -45,10 +51,23 @@ class PlanModel {
     required this.endDate,
     required this.imageUrl,
     this.members = const [],
+    this.bannedEmails = const [],
     this.budget = 0,
     this.destination = '',
+    this.ownerId,
+    this.version = 1,
+    this.pendingInviteEmails = const [],
   });
   int get totalDays => endDate.difference(startDate).inDays + 1;
+
+  // Trả về role của user theo email. Nếu không có trong members → null.
+  String? getRoleForEmail(String email) {
+    if (email.isEmpty) return null;
+    for (final m in members) {
+      if (m.email == email) return m.role;
+    }
+    return null;
+  }
 
   // currentDay tính khi hiển thị, không lưu trong Firestore
   int get currentDay {
@@ -81,8 +100,19 @@ class PlanModel {
               ?.map((e) => PlanMember.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
+      bannedEmails:
+          (json['bannedEmails'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
       budget: (json['budget'] as num?)?.toDouble() ?? 0,
       destination: json['destination'] as String? ?? '',
+      version: (json['version'] as num?)?.toInt() ?? 1,
+      pendingInviteEmails:
+          (json['pendingInviteEmails'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
     );
   }
 
@@ -93,8 +123,12 @@ class PlanModel {
     'endDate': endDate.toIso8601String(),
     'imageUrl': imageUrl,
     'members': members.map((m) => m.toJson()).toList(),
+    'bannedEmails': bannedEmails,
     'budget': budget,
     'destination': destination,
+    'version': version,
+    'memberEmails': members.map((m) => m.email).toList(),
+    'pendingInviteEmails': pendingInviteEmails,
   };
 
   PlanModel copyWith({
@@ -104,8 +138,12 @@ class PlanModel {
     DateTime? endDate,
     String? imageUrl,
     List<PlanMember>? members,
+    List<String>? bannedEmails,
     double? budget,
     String? destination,
+    String? ownerId,
+    int? version,
+    List<String>? pendingInviteEmails,
   }) {
     return PlanModel(
       id: id ?? this.id,
@@ -114,8 +152,12 @@ class PlanModel {
       endDate: endDate ?? this.endDate,
       imageUrl: imageUrl ?? this.imageUrl,
       members: members ?? this.members,
+      bannedEmails: bannedEmails ?? this.bannedEmails,
       budget: budget ?? this.budget,
       destination: destination ?? this.destination,
+      ownerId: ownerId ?? this.ownerId,
+      version: version ?? this.version,
+      pendingInviteEmails: pendingInviteEmails ?? this.pendingInviteEmails,
     );
   }
 }

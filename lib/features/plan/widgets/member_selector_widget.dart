@@ -1,4 +1,4 @@
-﻿// Widget dùng để hiện thị các người sử dụng dùng để add các thành viên vào plan trong lúc tạo plan sheet
+// Widget dùng để hiện thị các người sử dụng dùng để add các thành viên vào plan trong lúc tạo plan sheet
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +14,14 @@ class MemberSelectorWidget extends StatelessWidget {
   final List<PlanMember> members;
   final VoidCallback onAddPressed;
   final ValueChanged<int> onRemoveMember;
+  final List<String> bannedEmails;
 
   const MemberSelectorWidget({
     super.key,
     required this.members,
     required this.onAddPressed,
     required this.onRemoveMember,
+    this.bannedEmails = const [],
   });
 
   @override
@@ -135,6 +137,7 @@ class MemberSelectorWidget extends StatelessWidget {
     required BuildContext context,
     required List<PlanMember> currentMembers,
     required ValueChanged<List<UserModel>> onConfirm,
+    List<String> bannedEmails = const [],
   }) async {
     final vm = context.read<PlanViewModel>();
     if (vm.allUsers.isEmpty) {
@@ -143,8 +146,12 @@ class MemberSelectorWidget extends StatelessWidget {
 
     if (!context.mounted) return;
 
+    final excludedEmails = {
+      ...currentMembers.map((m) => m.email),
+      ...bannedEmails,
+    };
     final availableUsers = vm.allUsers
-        .where((u) => u.uid != vm.currentUid)
+        .where((u) => u.uid != vm.currentUid && !excludedEmails.contains(u.email))
         .toList();
 
     showModalBottomSheet(

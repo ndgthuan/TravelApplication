@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,7 @@ class OngoingPlanSectionScreen extends StatefulWidget {
   const OngoingPlanSectionScreen({
     super.key,
     this.planId,
+    this.planOwnerId,
     this.destination,
     this.planStartDate,
     this.planEndDate,
@@ -25,11 +27,11 @@ class OngoingPlanSectionScreen extends StatefulWidget {
   });
 
   final String? planId;
+  final String? planOwnerId;
   final String? destination;
   final DateTime? planStartDate;
   final DateTime? planEndDate;
 
-  // Mở màn ở chế độ sửa pre-fill ở chế độ này
   final PlanActivityModel? initialActivity;
 
   @override
@@ -50,6 +52,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
       if (!mounted) return;
       final vm = context.read<PlanSectionViewModel>();
       vm.setPlanId(widget.planId);
+      vm.setPlanOwnerId(widget.planOwnerId);
       vm.setDestination(widget.destination);
       vm.setPlanDateRange(widget.planStartDate, widget.planEndDate);
       vm.clearPlaceSearch(); // Xoá kết quả khi mở lại màn
@@ -101,7 +104,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
     final viewModel = context.watch<PlanSectionViewModel>();
     return Scaffold(
       appBar: AppBarWidget(
-        title: viewModel.isEditing ? 'Sửa điểm đến' : 'Thêm điểm đến',
+        title: viewModel.isEditing ? 'plan.edit_activity'.tr() : 'plan.add_activity'.tr(),
       ),
       backgroundColor: Color(0xFF000000),
       body: Column(
@@ -116,7 +119,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
                   AppTextFieldWidget(
                     labelText: 'Tên hoạt động',
                     showLabel: true,
-                    hintText: 'VD: Ăn tối...',
+                    hintText: 'plan.activity_name_hint'.tr(),
                     labelFontSize: 17,
                     controller: _activityNameController,
                   ),
@@ -124,7 +127,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
-                      'Loại hoạt động',
+                      'plan.activity_type_label'.tr(),
                       style: GoogleFonts.beVietnamPro(
                         color: Colors.white,
                         fontSize: 17,
@@ -142,7 +145,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
                       itemBuilder: (context, index) {
                         final item = kActivityTypes[index];
                         return ActivityTypeChipWidget(
-                          label: item.label,
+                          label: item.labelKey.tr(),
                           type: item.type,
                           isSelected: viewModel.activityType == item.type,
                           onTap: () => viewModel.setActivityType(item.type),
@@ -153,9 +156,9 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
                   if (viewModel.activityType == 'other') ...[
                     const SizedBox(height: 16),
                     AppTextFieldWidget(
-                      labelText: 'Loại hoạt động (tùy chỉnh)',
+                      labelText: 'plan.activity_type_custom'.tr(),
                       showLabel: true,
-                      hintText: 'VD: Lễ hội, Họp mặt, Chụp ảnh...',
+                      hintText: 'plan.activity_type_custom_hint'.tr(),
                       labelFontSize: 17,
                       controller: _customActivityTypeController,
                     ),
@@ -164,7 +167,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
-                      'Thời gian',
+                      'plan.time'.tr(),
                       style: GoogleFonts.beVietnamPro(
                         color: Colors.white,
                         fontSize: 17,
@@ -192,7 +195,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
-                      'Vị trí',
+                      'plan.location'.tr(),
                       style: GoogleFonts.beVietnamPro(
                         color: Colors.white,
                         fontSize: 17,
@@ -232,7 +235,7 @@ class _OngoingPlanSectionScreenState extends State<OngoingPlanSectionScreen> {
               16 + MediaQuery.paddingOf(context).bottom,
             ),
             child: AppButtonWidget(
-              buttonText: 'Lưu điểm đến',
+              buttonText: 'plan.save_activity'.tr(),
               onTap: _saveActivity,
               height: 53,
               isLoading: viewModel.isSaving,

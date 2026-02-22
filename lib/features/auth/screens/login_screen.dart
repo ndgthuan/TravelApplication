@@ -6,8 +6,8 @@ import 'package:travel_app/features/auth/widgets/auth_logo_widget.dart';
 import 'package:travel_app/features/auth/widgets/social_login_widget.dart';
 import 'package:travel_app/shared/widgets/navigation_widget.dart';
 import '../widgets/forgot_password_dialog_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'register_screen.dart';
 import '../widgets/auth_switch_button_widget.dart';
 import 'package:animations/animations.dart';
@@ -39,14 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
     final viewModel = context.read<LoginViewModel>();
     showModal(
       context: context,
-      configuration: const FadeScaleTransitionConfiguration(
-        transitionDuration: Duration(milliseconds: 500), // Thời gian mở
-        reverseTransitionDuration: Duration(
-          milliseconds: 300,
-        ), // Thời gian đóng
-        barrierDismissible: true, // Tap ngoài để đóng
-        barrierColor: Colors.black54, // Màu overlay
-        barrierLabel: 'Dismiss',
+      configuration: FadeScaleTransitionConfiguration(
+        transitionDuration: const Duration(milliseconds: 500),
+        reverseTransitionDuration: const Duration(milliseconds: 300),
+        barrierDismissible: true,
+        barrierColor: Colors.black54,
+        barrierLabel: 'general.dismiss'.tr(),
       ),
       builder: (context) {
         return ForgotPasswordDialogWidget(
@@ -62,11 +60,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _loadSaveCredentials();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadSaveCredentials());
   }
 
   Future<void> _loadSaveCredentials() async {
     final viewModel = context.read<LoginViewModel>();
+    viewModel.clearError();
     final credentials = await viewModel.getSavedCredentials();
 
     if (credentials['email'] != null && credentials['password'] != null) {

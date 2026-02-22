@@ -1,4 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,7 @@ import 'package:travel_app/features/plan/viewmodels/activity_plan_view_model.dar
 import 'package:travel_app/features/plan/widgets/activity_plan_app_bar.dart';
 import 'package:travel_app/features/plan/widgets/activity_plan_map_layer.dart';
 import 'package:travel_app/features/plan/widgets/activity_plan_sheet.dart';
+import 'package:travel_app/features/plan/widgets/travel_agent_chat_sheet.dart';
 import 'package:travel_app/features/plan/widgets/plan_created_form_sheet.dart';
 
 // Màn hình chi tiết chuyến đi
@@ -24,13 +27,36 @@ class ActivityPlanScreen extends StatefulWidget {
 
 class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
   final _mapController = MapController();
+  StreamSubscription<void>? _remoteUpdateSub;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ActivityPlanViewModel>().loadPlan();
+      final vm = context.read<ActivityPlanViewModel>();
+      vm.loadPlan();
+      _remoteUpdateSub = vm.onRemoteUpdate.listen((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'plan.updated_by_member'.tr(),
+                style: GoogleFonts.beVietnamPro(fontSize: 14),
+              ),
+              backgroundColor: const Color(0xFF2A2A2A),
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _remoteUpdateSub?.cancel();
+    super.dispose();
   }
 
   void _fitMapToCurrentAndNext() {
@@ -132,25 +158,38 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
           ),
           ActivityPlanAppBar(
             title: vm.plan.title,
-            onMenu: () => _showAppBarMenu(context, vm),
+            presenceSubtitle: vm.viewerNames.isEmpty
+                ? null
+                : '${vm.viewerNames.join(', ')} đang trong chuyến đi',
+            onMenu: vm.currentUserRole == 'owner'
+                ? () => _showAppBarMenu(context, vm)
+                : null,
           ),
           DraggableScrollableSheet(
             initialChildSize: 0.5,
             minChildSize: 0.25,
             maxChildSize: 0.9,
             builder: (context, scrollController) {
+              final role = vm.currentUserRole;
+              final isSpectator = role == 'spectator';
               return ActivityPlanSheet(
                 plan: vm.plan,
                 activities: vm.activities,
                 currentIndex: vm.currentIndex,
                 scrollController: scrollController,
+                onFitMap: vm.routePoints.isEmpty
+                    ? null
+                    : _fitMapToInitialBounds,
                 onCheckIn: () => vm.checkIn(),
                 onUncheckIn: (activity) => vm.uncheckIn(activity),
-                onAddTap: () async {
+                showAddButton: !isSpectator,
+                showEditDelete: !isSpectator,
+                onAddTap: isSpectator ? null : () async {
                   await Navigator.of(context, rootNavigator: true).push(
                     MaterialPageRoute(
                       builder: (context) => OngoingPlanSectionScreen(
                         planId: vm.plan.id,
+                        planOwnerId: vm.plan.ownerId,
                         destination: vm.plan.destination,
                         planStartDate: vm.plan.startDate,
                         planEndDate: vm.plan.endDate,
@@ -159,11 +198,12 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
                   );
                   if (mounted) vm.loadPlan();
                 },
-                onEditActivity: (activity) async {
+                onEditActivity: isSpectator ? null : (activity) async {
                   await Navigator.of(context, rootNavigator: true).push(
                     MaterialPageRoute(
                       builder: (context) => OngoingPlanSectionScreen(
                         planId: vm.plan.id,
+                        planOwnerId: vm.plan.ownerId,
                         destination: vm.plan.destination,
                         planStartDate: vm.plan.startDate,
                         planEndDate: vm.plan.endDate,
@@ -173,29 +213,42 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
                   );
                   if (mounted) vm.loadPlan();
                 },
-                onDeleteActivity: (activity) async {
+                onDeleteActivity: isSpectator ? null : (activity) async {
+                  final messenger = ScaffoldMessenger.of(context);
                   final ok = await vm.deleteActivity(activity.id);
                   if (!mounted) return;
-                  ScaffoldMessenger.of(this.context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(
-                      content: Text(ok ? 'Đã xóa điểm đến' : 'Không xóa được'),
+                      content: Text(ok ? 'plan.activity_deleted'.tr() : 'plan.delete_failed'.tr()),
                     ),
                   );
                 },
               );
             },
           ),
-          Positioned(
-            bottom: 24,
-            right: 16,
-            child: GestureDetector(
-              onTap: vm.routePoints.isEmpty ? null : _fitMapToInitialBounds,
-              child: Container(
-                height: 56,
-                width: 56,
+          if (vm.currentUserRole != 'spectator')
+            Positioned(
+              right: 20,
+              bottom: 24,
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    backgroundColor: Colors.transparent,
+                    isScrollControlled: true,
+                    builder: (ctx) =>
+                        TravelAgentChatSheet(plan: vm.plan, viewModel: vm),
+                  );
+                },
+                child: Container(
+                width: 72,
+                height: 72,
                 decoration: BoxDecoration(
+                  shape: BoxShape.circle,
                   color: const Color(0xFF2A2A2A),
-                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.2),
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withValues(alpha: 0.3),
@@ -204,12 +257,10 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
                     ),
                   ],
                 ),
-                child: Icon(
-                  Icons.my_location,
-                  color: vm.routePoints.isNotEmpty
-                      ? const Color(0xFFFF6D00)
-                      : Colors.grey.shade600,
-                  size: 28,
+                clipBehavior: Clip.antiAlias,
+                child: Image.asset(
+                  'lib/assets/images/chatbot.png',
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -223,6 +274,8 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
   //                          HELPER FUNCTION                            //
   //=====================================================================//
   void _showAppBarMenu(BuildContext context, ActivityPlanViewModel vm) {
+    final role = vm.currentUserRole;
+    final isOwner = role == 'owner';
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: const Color(0xFF1E1E1E),
@@ -235,28 +288,30 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                leading: const Icon(Icons.edit, color: Color(0xFFFF6D00)),
-                title: Text(
-                  'Chỉnh sửa chuyến đi',
-                  style: GoogleFonts.beVietnamPro(color: Colors.white),
+              if (isOwner)
+                ListTile(
+                  leading: const Icon(Icons.edit, color: Color(0xFFFF6D00)),
+                  title: Text(
+                    'plan.edit_trip'.tr(),
+                    style: GoogleFonts.beVietnamPro(color: Colors.white),
+                  ),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _openEditPlan(ctx, vm.plan);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _openEditPlan(ctx, vm.plan);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.people, color: Color(0xFFFF6D00)),
-                title: Text(
-                  'Quản lý quyền',
-                  style: GoogleFonts.beVietnamPro(color: Colors.white),
+              if (isOwner)
+                ListTile(
+                  leading: const Icon(Icons.people, color: Color(0xFFFF6D00)),
+                  title: Text(
+                    'plan.manage_roles'.tr(),
+                    style: GoogleFonts.beVietnamPro(color: Colors.white),
+                  ),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _openRoleManagement(ctx, vm.plan);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  _openRoleManagement(ctx, vm.plan);
-                },
-              ),
             ],
           ),
         ),
@@ -265,6 +320,7 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
   }
 
   void _openEditPlan(BuildContext context, PlanModel plan) {
+    final vm = context.read<ActivityPlanViewModel>();
     Navigator.of(context)
         .push<PlanModel>(
           MaterialPageRoute(
@@ -272,13 +328,13 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
           ),
         )
         .then((updatedPlan) {
-          if (updatedPlan != null && mounted) {
-            this.context.read<ActivityPlanViewModel>().updatePlan(updatedPlan);
-          }
+          if (!mounted || updatedPlan == null) return;
+          vm.updatePlan(updatedPlan);
         });
   }
 
   void _openRoleManagement(BuildContext context, PlanModel plan) {
+    final vm = context.read<ActivityPlanViewModel>();
     Navigator.of(context)
         .push<PlanModel>(
           MaterialPageRoute(
@@ -286,9 +342,8 @@ class _ActivityPlanScreenState extends State<ActivityPlanScreen> {
           ),
         )
         .then((updatedPlan) {
-          if (updatedPlan != null && mounted) {
-            this.context.read<ActivityPlanViewModel>().updatePlan(updatedPlan);
-          }
+          if (!mounted || updatedPlan == null) return;
+          vm.updatePlan(updatedPlan);
         });
   }
 }
