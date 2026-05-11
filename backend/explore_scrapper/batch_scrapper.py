@@ -4,13 +4,7 @@ import os
 import sys
 from explore_scrapper import ApifyGoogleMapsScraper, save_to_json
 
-API_TOKENS = [
-    "apify_api_hmL1M0rA4tI2AmllBnvWBR1MU6niu026kBJy",
-    "apify_api_i5sxpWYasepA0z60XDN7gj1v7bZSTu3LLWFl",
-    "apify_api_0YaxjGbdgKjiLvfTiGsTHKl0HRJpb40rWQFk",
-    "apify_api_tNO88dS3xvc0Td6H6e8e5obPoXUi7o4eCKMu",
-    "apify_api_XwPr3Ygd97xrCHCX5DKeRWrnMg2gLx2goDMk",
-]
+API_TOKENS = []
 
 PROVINCES = [
     "Bac Lieu", "Ca Mau"
